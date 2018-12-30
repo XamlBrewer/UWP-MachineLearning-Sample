@@ -1,0 +1,120 @@
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.ClusteringPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:oxy="using:OxyPlot.Windows"
+      mc:Ignorable="d"
+      Foreground="{StaticResource PageForegroundBrush}">
+
+    <Grid Background="Transparent"
+          Padding="48 34 0 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Foreground="{StaticResource PageTitleBrush}"
+                   FontSize="48"
+                   FontWeight="Light"
+                   HorizontalAlignment="Left"
+                   Margin="6 0 0 0"
+                   TextLineBounds="TrimToCapHeight"
+                   FontFamily="Segoe UI">
+                <Run Text="Clustering" />
+        </TextBlock>
+
+        <Path Data="{StaticResource ClusteringIcon}"
+              Fill="{StaticResource PageTitleBrush}"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Right"
+              Height="48"
+              Width="48"
+              Margin="0 0 20 0"
+              Stretch="Uniform" />
+
+        <TextBlock Grid.Row="1"
+                   FontSize="24"
+                   TextWrapping="WrapWholeWords">Reads a list of shopping mall customers and divides these in 5 clusters, based on annual income and spending score.</TextBlock>
+
+        <!-- Main -->
+        <Grid Grid.Row="2"
+              ColumnSpacing="20"
+              RowSpacing="20"
+              Margin="0 40 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0"
+                  ColumnSpacing="20"
+                  RowSpacing="20"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0">Setting up the model</TextBlock>
+                <CheckBox x:Name="SettingUpBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="0"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="1">Loading the data</TextBlock>
+                <CheckBox x:Name="LoadingBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="1"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="2">Training the model</TextBlock>
+                <CheckBox x:Name="TrainingBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="2"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="3">Calculating the result</TextBlock>
+                <CheckBox x:Name="CalculatingBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="3"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="4">Plotting the result</TextBlock>
+                <CheckBox x:Name="PlottingBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="4"
+                          Grid.Column="1" />
+                <Button Click="ClusteringPage_Loaded"
+                        Grid.Row="5">Restart</Button>
+                <TextBox x:Name="AnnualIncomeInput"
+                         Header="Annual Income in K$"
+                         Margin="0 40 0 0"
+                         Grid.Row="6" />
+                <TextBox x:Name="SpendingScoreInput"
+                         Header="Spending Score (0-100)"
+                         Margin="0 40 0 0"
+                         Grid.Row="6"
+                         Grid.Column="1" />
+                <Button Click="Calculate_Click"
+                        Grid.Row="7">Assign Cluster</Button>
+            </Grid>
+            <oxy:PlotView x:Name="Diagram"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Margin="0 0 40 40"
+                          Grid.Column="1" />
+        </Grid>
+    </Grid>
+</Page>

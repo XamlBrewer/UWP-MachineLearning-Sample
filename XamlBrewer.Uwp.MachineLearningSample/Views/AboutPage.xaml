@@ -1,0 +1,87 @@
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Foreground="{StaticResource PageForegroundBrush}">
+
+    <Grid Background="Transparent"
+          Padding="48 34 0 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Foreground="{StaticResource PageTitleBrush}"
+                   FontSize="48"
+                   FontWeight="Light"
+                   HorizontalAlignment="Left"
+                   Margin="6 0 0 0"
+                   TextLineBounds="TrimToCapHeight"
+                   FontFamily="Segoe UI">
+                <Run Text="About" />
+        </TextBlock>
+
+        <Path Data="{StaticResource InfoIcon}"
+              Fill="{StaticResource PageTitleBrush}"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Right"
+              Height="48"
+              Width="48"
+              Margin="0 0 20 0"
+              Stretch="Uniform" />
+
+        <TextBlock TextWrapping="WrapWholeWords"
+                   Foreground="{StaticResource PageForegroundBrush}"
+                   FontSize="20"
+                   Margin="0"
+                   Grid.Row="1"
+                   FontFamily="Segoe UI">
+            <Run FontFamily="Segoe UI">This app shows how to use ML.NET to implement some Machine Learning use cases in UWP.</Run>
+            <!--<LineBreak />
+            <LineBreak />
+            <Run>Credits:</Run>
+            <LineBreak />
+            <Run>Background image designed by </Run>
+            <Hyperlink NavigateUri="http://www.freepik.com">BiZkettE1 / Freepik</Hyperlink>
+            <Run>.</Run>
+            <LineBreak />
+            <Run>'Square' icon by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Artem  Kovyazin from the Noun Project</Hyperlink>
+            <Run>.</Run>
+            <LineBreak />
+            <Run>'Rectangle' icon by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Asif Shirazi from the Noun Project</Hyperlink>
+            <Run>.</Run>
+            <LineBreak />
+            <Run>'tiles' icon for the café wall by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Brand Mania from the Noun Project</Hyperlink>
+            <Run>.</Run>
+            <LineBreak />
+            <Run>'Square Pattern' icon for the checkerboard by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com"
+                       FontFamily="Segoe UI">Ates Evren Aydinel from the Noun Project</Hyperlink>
+            <Run>.</Run>
+            <LineBreak />            
+            <Run>'abstract' icon for the spiral by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Danil Polshin from the Noun Project</Hyperlink>
+            <Run>.</Run> 
+            <Run>'Rhombuses' icon for motion binding by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Andrejs Kirma from the Noun Project</Hyperlink>
+            <Run>.</Run>             
+            <LineBreak />
+            <LineBreak />
+            <Run>Inspiration:</Run>
+            <LineBreak />
+            <Run>Michael Bach's 134 </Run>
+            <Hyperlink NavigateUri="http://www.michaelbach.de/ot/">Visual Phenomena &amp; Optical Illusions</Hyperlink>
+            <Run>.</Run>    
+            <LineBreak />
+            <Run>Dr. Biangio Pinna's </Run>
+            <Hyperlink NavigateUri="http://www.scholarpedia.org/article/Pinna_illusion"
+                       FontFamily="Segoe UI">Intertwining Illusion</Hyperlink>
+            <Run>.</Run>-->
+        </TextBlock>
+    </Grid>
+</Page>

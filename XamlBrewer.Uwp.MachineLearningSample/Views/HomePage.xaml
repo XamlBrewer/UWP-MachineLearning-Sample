@@ -1,0 +1,61 @@
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Foreground="{StaticResource PageForegroundBrush}"
+      FontFamily="Segoe UI">
+
+    <Grid Background="Transparent"
+          Padding="48 34 0 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="74" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Foreground="{StaticResource PageTitleBrush}"
+                   FontSize="48"
+                   FontWeight="Light"
+                   HorizontalAlignment="Left"
+                   Margin="6 0 0 0"
+                   TextLineBounds="TrimToCapHeight"
+                   FontFamily="Segoe UI">
+                <Run Text="Home" />
+        </TextBlock>
+        <Path Data="{StaticResource HomeIcon}"
+              Fill="{StaticResource PageTitleBrush}"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Right"
+              Height="48"
+              Width="48"
+              Margin="0 0 20 0"
+              Stretch="Uniform" />
+        <TextBlock TextWrapping="WrapWholeWords"
+                   Foreground="{StaticResource PageForegroundBrush}"
+                   FontSize="20"
+                   Grid.Row="1"
+                   Margin="0"
+                   FontFamily="Segoe UI">
+            <Run FontFamily="Segoe UI">This app shows how to use ML.NET to implement some Machine Learning use cases in UWP.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run FontFamily="Segoe UI">Samples include:</Run>
+            <LineBreak />
+            <Run>* Clustering, </Run>
+            <LineBreak />
+            <Run>* ..., </Run>
+            <LineBreak />
+            <Run>* ...,</Run>
+            <LineBreak />
+            <Run>* ..., and</Run>
+            <LineBreak />
+            <Run>* ...</Run>            
+            <LineBreak />
+            <LineBreak />
+            <Run>Enjoy!</Run>
+        </TextBlock>
+    </Grid>
+</Page>
