@@ -46,13 +46,22 @@
             <LineBreak />
             <Run>* Clustering, </Run>
             <LineBreak />
-            <Run>* ..., </Run>
+            <Run>* Binary Classification (TODO), </Run>
             <LineBreak />
-            <Run>* ...,</Run>
+            <Run>* Multiclass Classification (TODO)</Run>
             <LineBreak />
-            <Run>* ..., and</Run>
+            <Run>* Regression (TODO), and</Run>
             <LineBreak />
-            <Run>* ...</Run>            
+            <Run>* Recommendation (TODO).</Run>            
+            <LineBreak />
+            <LineBreak />
+            <Run Foreground="LightCoral">Safety Instructions:</Run>            
+            <LineBreak />
+            <Run Foreground="LightCoral">* Run on Windows 10 Version 1809 or higher,</Run>            
+            <LineBreak />
+            <Run Foreground="LightCoral">* run in x64 mode, and </Run>            
+            <LineBreak />
+            <Run Foreground="LightCoral">* run with ML.NET 0.6 only (don't upgrade).</Run>            
             <LineBreak />
             <LineBreak />
             <Run>Enjoy!</Run>

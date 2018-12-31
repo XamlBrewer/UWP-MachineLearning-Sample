@@ -49,8 +49,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             CalculatingBox.IsChecked = false;
             PlottingBox.IsChecked = false;
 
-            //Create the MLContext to share across components for deterministic results
-            // MLContext mlContext = new MLContext(seed: 1);  //Seed set to any number so you have a deterministic environment
+            //Create the MLContext
             SettingUpBox.IsChecked = true;
             _mlContext = new LocalEnvironment(seed: null); // v0.6
             var reader = new TextLoader(_mlContext,
@@ -76,8 +75,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             //var file = mlContext.OpenInputFile(@"ms-appx:///Assets/Mall_Customers.csv");
             //var src = new FileHandleSource(file);
             //var trainingDataView = reader.Read(src);
-            //LearningModel.LoadFromFilePath
-            //var trainData = mlContext.CreateStreamingDataView(churnData);
             LoadingBox.IsChecked = true;
             StorageFile modelFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///Assets/Mall_Customers.csv"));
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
@@ -121,9 +118,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var enu = outp.GetEnumerator();
             while (enu.MoveNext())
             {
-                var xxx = enu.Current;
-                Debug.WriteLine("{0} {1} {2}", xxx.AnnualIncome, xxx.SpendingScore, (int)xxx.PredictedCluster);
-                var annotation = new PointAnnotation { Shape = MarkerType.Circle, X = xxx.SpendingScore, Y = xxx.AnnualIncome, Fill = _colors[(int)xxx.PredictedCluster] };
+                var prediction = enu.Current;
+                Debug.WriteLine("{0} {1} {2}", prediction.AnnualIncome, prediction.SpendingScore, (int)prediction.PredictedCluster);
+                var annotation = new PointAnnotation { Shape = MarkerType.Circle, X = prediction.SpendingScore, Y = prediction.AnnualIncome, Fill = _colors[(int)prediction.PredictedCluster] };
                 plotModel.Annotations.Add(annotation);
             }
 
@@ -140,7 +137,5 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             Diagram.Model.Annotations.Add(annotation);
             Diagram.InvalidatePlot();
         }
-
-
     }
 }

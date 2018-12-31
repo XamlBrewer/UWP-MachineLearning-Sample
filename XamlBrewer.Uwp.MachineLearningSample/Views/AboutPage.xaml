@@ -39,49 +39,29 @@
                    Grid.Row="1"
                    FontFamily="Segoe UI">
             <Run FontFamily="Segoe UI">This app shows how to use ML.NET to implement some Machine Learning use cases in UWP.</Run>
-            <!--<LineBreak />
+            <LineBreak />
             <LineBreak />
             <Run>Credits:</Run>
             <LineBreak />
             <Run>Background image designed by </Run>
-            <Hyperlink NavigateUri="http://www.freepik.com">BiZkettE1 / Freepik</Hyperlink>
+            <Hyperlink NavigateUri="http://www.freepik.com">Freepik</Hyperlink>
             <Run>.</Run>
             <LineBreak />
-            <Run>'Square' icon by </Run>
-            <Hyperlink NavigateUri="http://www.thenounproject.com">Artem  Kovyazin from the Noun Project</Hyperlink>
-            <Run>.</Run>
-            <LineBreak />
-            <Run>'Rectangle' icon by </Run>
-            <Hyperlink NavigateUri="http://www.thenounproject.com">Asif Shirazi from the Noun Project</Hyperlink>
-            <Run>.</Run>
-            <LineBreak />
-            <Run>'tiles' icon for the café wall by </Run>
-            <Hyperlink NavigateUri="http://www.thenounproject.com">Brand Mania from the Noun Project</Hyperlink>
-            <Run>.</Run>
-            <LineBreak />
-            <Run>'Square Pattern' icon for the checkerboard by </Run>
-            <Hyperlink NavigateUri="http://www.thenounproject.com"
-                       FontFamily="Segoe UI">Ates Evren Aydinel from the Noun Project</Hyperlink>
-            <Run>.</Run>
-            <LineBreak />            
-            <Run>'abstract' icon for the spiral by </Run>
-            <Hyperlink NavigateUri="http://www.thenounproject.com">Danil Polshin from the Noun Project</Hyperlink>
-            <Run>.</Run> 
-            <Run>'Rhombuses' icon for motion binding by </Run>
-            <Hyperlink NavigateUri="http://www.thenounproject.com">Andrejs Kirma from the Noun Project</Hyperlink>
-            <Run>.</Run>             
+            <Run>'circles' icon for the Clustering page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Wenjie Jiang from the Noun Project</Hyperlink>
+            <Run>.</Run>       
             <LineBreak />
             <LineBreak />
-            <Run>Inspiration:</Run>
+            <Run>Resources:</Run>
             <LineBreak />
-            <Run>Michael Bach's 134 </Run>
-            <Hyperlink NavigateUri="http://www.michaelbach.de/ot/">Visual Phenomena &amp; Optical Illusions</Hyperlink>
+            <Run>ML.NET source and samples on </Run>
+            <Hyperlink NavigateUri="https://github.com/dotnet/machinelearning">GitHub</Hyperlink>
             <Run>.</Run>    
             <LineBreak />
-            <Run>Dr. Biangio Pinna's </Run>
-            <Hyperlink NavigateUri="http://www.scholarpedia.org/article/Pinna_illusion"
-                       FontFamily="Segoe UI">Intertwining Illusion</Hyperlink>
-            <Run>.</Run>-->
+            <Run>Oxyplot graph plotting library on </Run>
+            <Hyperlink NavigateUri="https://github.com/oxyplot/oxyplot"
+                       FontFamily="Segoe UI">GitHub</Hyperlink>
+            <Run>.</Run>
         </TextBlock>
     </Grid>
 </Page>
