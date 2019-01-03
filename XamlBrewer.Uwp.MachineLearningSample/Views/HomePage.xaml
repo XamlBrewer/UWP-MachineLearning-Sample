@@ -48,7 +48,7 @@
             <LineBreak />
             <Run>* Binary Classification (TODO), </Run>
             <LineBreak />
-            <Run>* Multiclass Classification (TODO)</Run>
+            <Run>* Multiclass Classification (Almost there)</Run>
             <LineBreak />
             <Run>* Regression (TODO), and</Run>
             <LineBreak />
@@ -59,9 +59,11 @@
             <LineBreak />
             <Run Foreground="LightCoral">* Run on Windows 10 Version 1809 or higher,</Run>            
             <LineBreak />
-            <Run Foreground="LightCoral">* run in x64 mode, and </Run>            
+            <Run Foreground="LightCoral">* run in x64 mode,</Run>            
             <LineBreak />
-            <Run Foreground="LightCoral">* run with ML.NET 0.6 only (don't upgrade).</Run>            
+            <Run Foreground="LightCoral">* run with ML.NET 0.6 only (don't upgrade), and</Run>            
+            <LineBreak />
+            <Run Foreground="LightCoral">* only run in Debug mode.</Run>  
             <LineBreak />
             <LineBreak />
             <Run>Enjoy!</Run>

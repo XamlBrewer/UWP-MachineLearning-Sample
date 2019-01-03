@@ -62,6 +62,18 @@
             <Hyperlink NavigateUri="https://github.com/oxyplot/oxyplot"
                        FontFamily="Segoe UI">GitHub</Hyperlink>
             <Run>.</Run>
+            <LineBreak />
+            <Run>Mall Customers dataset for Clustering page on </Run>
+            <Hyperlink NavigateUri="https://www.kaggle.com/vjchoudhary7/customer-segmentation-tutorial-in-python">Kaggle</Hyperlink>
+            <Run>.</Run>
+            <!--<LineBreak />
+            <Run>Car Data dataset for MultiClassification page on </Run>
+            <Hyperlink NavigateUri="https://archive.ics.uci.edu/ml/datasets/Car+Evaluation">UC Irvine Machine Learning Repository</Hyperlink>
+            <Run>.</Run>-->
+            <LineBreak />
+            <Run>Language Prediction datasets for MultiClassification page on </Run>
+            <Hyperlink NavigateUri="https://www.codeproject.com/Articles/1249611/%2fArticles%2f1249611%2fMachine-Learning-with-ML-Net-and-Csharp-VB-Net">CodeProject</Hyperlink>
+            <Run>.</Run>
         </TextBlock>
     </Grid>
 </Page>

@@ -38,6 +38,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async void ClusteringPage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            // Dataset:
+            // https://www.kaggle.com/vjchoudhary7/customer-segmentation-tutorial-in-python
+
             // https://github.com/dotnet/machinelearning-samples/commit/24ccd37c1f3671b3a3ea709d59449a52550b6aef#diff-398ac923421ec3fef2555299173117ba
             // https://blogs.msdn.microsoft.com/dotnet/2018/10/08/announcing-ml-net-0-6-machine-learning-net/
             // https://www.c-sharpcorner.com/article/getting-started-with-machine-learning-net-for-clustering-model/
@@ -48,7 +51,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             TrainingBox.IsChecked = false;
             CalculatingBox.IsChecked = false;
             PlottingBox.IsChecked = false;
-
             //Create the MLContext
             SettingUpBox.IsChecked = true;
             _mlContext = new LocalEnvironment(seed: null); // v0.6
