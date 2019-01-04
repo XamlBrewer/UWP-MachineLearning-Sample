@@ -2,7 +2,7 @@
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
-    public class ClusterPrediction
+    public class ClusteringPrediction
     {
         [ColumnName("PredictedLabel")]
         public uint PredictedCluster;

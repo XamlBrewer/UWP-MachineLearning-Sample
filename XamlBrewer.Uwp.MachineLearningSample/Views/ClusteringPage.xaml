@@ -36,7 +36,7 @@
 
         <TextBlock Grid.Row="1"
                    FontSize="24"
-                   TextWrapping="WrapWholeWords">Reads a list of shopping mall customers and divides these in 5 clusters, based on annual income and spending score.</TextBlock>
+                   TextWrapping="WrapWholeWords">Divides shopping mall customers in 5 clusters, based on annual income and spending score.</TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"
@@ -66,14 +66,14 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0">Setting up the model</TextBlock>
-                <CheckBox x:Name="SettingUpBox"
+                <TextBlock Grid.Row="0">Preparing the data</TextBlock>
+                <CheckBox x:Name="DatasetBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="0"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="1">Loading the data</TextBlock>
-                <CheckBox x:Name="LoadingBox"
+                <TextBlock Grid.Row="1">Setting up the model</TextBlock>
+                <CheckBox x:Name="SettingUpBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="1"

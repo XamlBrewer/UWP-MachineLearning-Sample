@@ -1,6 +1,6 @@
 ﻿namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
-    public class ClusterInput
+    public class ClusteringData
     {
         public float AnnualIncome;
 

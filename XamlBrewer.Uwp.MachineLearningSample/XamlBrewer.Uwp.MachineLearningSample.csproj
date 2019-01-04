@@ -119,16 +119,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClassificationData.cs" />
-    <Compile Include="Models\ClassPrediction.cs" />
-    <Compile Include="Models\ClusterInput.cs" />
-    <Compile Include="Models\ClusterPrediction.cs" />
+    <Compile Include="Models\MulticlassClassificationData.cs" />
+    <Compile Include="Models\MulticlassClassificationPrediction.cs" />
+    <Compile Include="Models\ClusteringData.cs" />
+    <Compile Include="Models\ClusteringPrediction.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Activation\Activation.cs" />
     <Compile Include="Services\Activation\ActivationExtensions.cs" />
     <Compile Include="Services\Icons\Icon.cs" />
+    <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
@@ -154,13 +155,13 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Assets\Mall_Customers.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\training.tsv">
+    <Content Include="Data\Mall_Customers.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\test.tsv">
+    <Content Include="Data\training.tsv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\test.tsv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="XamlBrewer.Uwp.MachineLearningSample_TemporaryKey.pfx" />
