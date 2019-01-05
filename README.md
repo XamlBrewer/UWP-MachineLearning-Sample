@@ -13,7 +13,7 @@ So a lot can go wrong, but we believe this situation is temporary.
 The UWP app demonstrates the following Machine Learning scenarios. Focus is currently on the ML.NET core functionality, not on its latest API:
 * Clustering
 * Multiclass Classification
-* Binary Classification (todo)
+* Binary Classification (in progress)
 * Regression (todo)
 * Recommendation (todo)
 
@@ -22,3 +22,5 @@ The UWP app demonstrates the following Machine Learning scenarios. Focus is curr
 ![Screenshot](Assets/Clustering.png?raw=true)
 
 ![Screenshot](Assets/MulticlassClassification.png?raw=true)
+
+![Screenshot](Assets/BinaryClassification.png?raw=true)
