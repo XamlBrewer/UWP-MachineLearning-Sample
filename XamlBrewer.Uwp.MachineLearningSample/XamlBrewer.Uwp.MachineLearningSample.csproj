@@ -119,10 +119,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BinaryClassification\ModelBuilder.cs" />
+    <Compile Include="Helpers\BinaryClassification\ModelEvaluator.cs" />
     <Compile Include="Models\MulticlassClassificationData.cs" />
     <Compile Include="Models\MulticlassClassificationPrediction.cs" />
     <Compile Include="Models\ClusteringData.cs" />
     <Compile Include="Models\ClusteringPrediction.cs" />
+    <Compile Include="Models\BinaryClassificationPrediction.cs" />
+    <Compile Include="Models\BinaryClassificationData.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -135,6 +139,9 @@
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\BinaryClassificationPage.xaml.cs">
+      <DependentUpon>BinaryClassificationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ClassificationPage.xaml.cs">
       <DependentUpon>ClassificationPage.xaml</DependentUpon>
     </Compile>
@@ -164,6 +171,12 @@
     <Content Include="Data\test.tsv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\winequality_white_test.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\winequality_white_train.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="XamlBrewer.Uwp.MachineLearningSample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +200,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Theming\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BinaryClassificationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

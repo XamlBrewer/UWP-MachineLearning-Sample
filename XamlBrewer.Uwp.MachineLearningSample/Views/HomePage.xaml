@@ -46,7 +46,7 @@
             <LineBreak />
             <Run>* Clustering, </Run>
             <LineBreak />
-            <Run>* Binary Classification (TODO), </Run>
+            <Run>* Binary Classification (in progress), </Run>
             <LineBreak />
             <Run>* Multiclass Classification,</Run>
             <LineBreak />

@@ -32,10 +32,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         public ClusteringPage()
         {
             this.InitializeComponent();
-            Loaded += ClusteringPage_Loaded;
+            Loaded += Page_Loaded;
         }
 
-        private async void ClusteringPage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             DatasetBox.IsChecked = false;
             SettingUpBox.IsChecked = false;

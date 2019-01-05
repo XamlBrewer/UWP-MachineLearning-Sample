@@ -96,7 +96,7 @@
                           IsChecked="False"
                           Grid.Row="4"
                           Grid.Column="1" />
-                <Button Click="ClusteringPage_Loaded"
+                <Button Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
                 <TextBox x:Name="AnnualIncomeInput"
                          Header="Annual Income in K$"

@@ -17,24 +17,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     public sealed partial class ClassificationPage : Page
     {
         private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> _model;
-        private List<OxyColor> _colors = new List<OxyColor>
-                {
-                    OxyColors.Black,
-                    OxyColors.Red,
-                    OxyColors.Yellow,
-                    OxyColors.White,
-                    OxyColors.Green,
-                    OxyColors.Blue,
-                    OxyColors.HotPink
-                };
 
         public ClassificationPage()
         {
             this.InitializeComponent();
-            Loaded += ClusteringPage_Loaded;
+            Loaded += Page_Loaded;
         }
 
-        private async void ClusteringPage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             DatasetBox.IsChecked = false;    
             SettingUpBox.IsChecked = false;
