@@ -136,6 +136,7 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\ClusteringPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -177,6 +178,7 @@
     <Content Include="Data\winequality_white_train.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Assets\loading.json" />
     <None Include="XamlBrewer.Uwp.MachineLearningSample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
