@@ -4,7 +4,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using Windows.UI.Xaml.Controls;
-using XamlBrewer.Uwp.MachineLearningSample.Helpers;
+using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
 namespace XamlBrewer.Uwp.MachineLearningSample
 {
@@ -13,8 +13,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         public BinaryClassificationPage()
         {
             this.InitializeComponent();
+            this.DataContext = new BinaryClassificationPageViewModel();
+
             Loaded += Page_Loaded;
         }
+
+        private BinaryClassificationPageViewModel ViewModel => DataContext as BinaryClassificationPageViewModel;
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -30,6 +34,61 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var testDataLocation = await MlDotNet.FilePath(@"ms-appx:///Data/winequality_white_test.csv");
 
             // Prepare diagram.
+            PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries);
+
+            // Perceptron
+            PerceptronBox.IsChecked = true;
+            var perceptronBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, new AveragedPerceptronBinaryClassifier());
+            var metrics = await ViewModel.Evaluate(perceptronBinaryModel, testDataLocation);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
+
+            // Update diagram
+            Diagram.InvalidatePlot();
+
+            //// These raise an exception on System.Diagnostics.Process
+            //// 'PlatformNotSupportedException: Retrieving information about local processes is not supported on this platform.'
+            ////
+            //// var fastForestBinaryModel = new ModelBuilder(trainingDataLocation, new FastForestBinaryClassifier()).BuildAndTrain();
+            //// var fastTreeBinaryModel = new ModelBuilder(trainingDataLocation, new FastTreeBinaryClassifier()).BuildAndTrain();
+
+            // Linear SVM
+            LinearSvmBox.IsChecked = true;
+            var linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, new LinearSvmBinaryClassifier());
+            metrics = await ViewModel.Evaluate(linearSvmModel, testDataLocation);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.F1Score });
+
+            // Update diagram
+            Diagram.InvalidatePlot();
+
+            // Logistic Regression
+            LogisticRegressionBox.IsChecked = true;
+            var logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, new LogisticRegressionBinaryClassifier());
+            metrics = await ViewModel.Evaluate(logisticRegressionModel, testDataLocation);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.F1Score });
+
+            // Update diagram
+            Diagram.InvalidatePlot();
+
+            // Stochastic Dual Coordinate Ascent
+            SdcaBox.IsChecked = true;
+            var sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, new StochasticDualCoordinateAscentBinaryClassifier());
+            metrics = await ViewModel.Evaluate(sdcabModel, testDataLocation);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.F1Score });
+
+            // Update diagram
+            Diagram.InvalidatePlot();
+        }
+
+        private void PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries)
+        {
             var foreground = OxyColors.LightSteelBlue;
             var plotModel = new PlotModel
             {
@@ -43,7 +102,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 LegendPosition = LegendPosition.TopCenter,
                 LegendOrientation = LegendOrientation.Horizontal
             };
-
             plotModel.Axes.Add(new CategoryAxis
             {
                 Position = AxisPosition.Bottom,
@@ -69,7 +127,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
             plotModel.Axes.Add(linearAxis);
 
-            var accuracySeries = new ColumnSeries
+            accuracySeries = new ColumnSeries
             {
                 Title = "Accuracy",
                 LabelPlacement = LabelPlacement.Inside,
@@ -78,7 +136,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
             plotModel.Series.Add(accuracySeries);
 
-            var entropySeries = new ColumnSeries
+            entropySeries = new ColumnSeries
             {
                 Title = "Entropy",
                 LabelPlacement = LabelPlacement.Inside,
@@ -87,7 +145,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
             plotModel.Series.Add(entropySeries);
 
-            var f1ScoreSeries = new ColumnSeries
+            f1ScoreSeries = new ColumnSeries
             {
                 Title = "F1 Score",
                 LabelPlacement = LabelPlacement.Inside,
@@ -97,49 +155,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.Series.Add(f1ScoreSeries);
 
             Diagram.Model = plotModel;
-
-            var modelEvaluator = new ModelEvaluator();
-
-            // Perceptron
-            PerceptronBox.IsChecked = true;
-            var perceptronBinaryModel = new ModelBuilder(trainingDataLocation, new AveragedPerceptronBinaryClassifier()).BuildAndTrain();
-            var metrics = modelEvaluator.Evaluate(perceptronBinaryModel, testDataLocation);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
-
-            //// These raise an exception on System.Diagnostics.Process
-            //// 'PlatformNotSupportedException: Retrieving information about local processes is not supported on this platform.'
-            ////
-            //// var fastForestBinaryModel = new ModelBuilder(trainingDataLocation, new FastForestBinaryClassifier()).BuildAndTrain();
-            //// var fastTreeBinaryModel = new ModelBuilder(trainingDataLocation, new FastTreeBinaryClassifier()).BuildAndTrain();
-
-            // Linear SVM
-            LinearSvmBox.IsChecked = true;
-            var linearSvmModel = new ModelBuilder(trainingDataLocation, new LinearSvmBinaryClassifier()).BuildAndTrain();
-            metrics = modelEvaluator.Evaluate(linearSvmModel, testDataLocation);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.F1Score });
-
-            // Logistic Regression
-            LogisticRegressionBox.IsChecked = true;
-            var logisticRegressionModel = new ModelBuilder(trainingDataLocation, new LogisticRegressionBinaryClassifier()).BuildAndTrain();
-            metrics = modelEvaluator.Evaluate(logisticRegressionModel, testDataLocation);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.F1Score });
-
-            // Stochastic Dual Coordinate Ascent
-            SdcaBox.IsChecked = true;
-            var sdcabModel = new ModelBuilder(trainingDataLocation, new StochasticDualCoordinateAscentBinaryClassifier()).BuildAndTrain();
-            metrics = modelEvaluator.Evaluate(sdcabModel, testDataLocation);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.F1Score });
-
-            // Update diagram
-            plotModel.InvalidatePlot(true);
         }
 
         private void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

@@ -119,8 +119,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\BinaryClassification\ModelBuilder.cs" />
-    <Compile Include="Helpers\BinaryClassification\ModelEvaluator.cs" />
     <Compile Include="Models\MulticlassClassificationData.cs" />
     <Compile Include="Models\MulticlassClassificationPrediction.cs" />
     <Compile Include="Models\ClusteringData.cs" />
@@ -136,6 +134,7 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\BinaryClassificationPageViewModel.cs" />
     <Compile Include="ViewModels\ClassificationPageViewModel.cs" />
     <Compile Include="ViewModels\ClusteringPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
