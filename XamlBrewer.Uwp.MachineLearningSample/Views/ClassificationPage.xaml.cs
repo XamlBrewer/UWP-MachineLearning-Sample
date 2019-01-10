@@ -31,6 +31,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             TrainingBox.IsChecked = false;
             TestingBox.IsChecked = false;
             PlottingBox.IsChecked = false;
+            RestartButton.IsEnabled = false;
+            PredictButton.IsEnabled = false;
+
+            BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            BusyIndicator.PlayAnimation();
 
             // Prepare the input files
             DatasetBox.IsChecked = true;
@@ -109,6 +114,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.Axes.Add(linearAxisX);
 
             Diagram.Model = plotModel;
+
+            BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            BusyIndicator.PauseAnimation();
+            RestartButton.IsEnabled = true;
+            PredictButton.IsEnabled = true;
         }
 
         private async void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

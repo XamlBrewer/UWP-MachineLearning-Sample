@@ -178,7 +178,7 @@
     <Content Include="Data\winequality_white_train.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\loading.json" />
+    <Content Include="Assets\loading.json" />
     <None Include="XamlBrewer.Uwp.MachineLearningSample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +231,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="LottieUWP">
+      <Version>2.8.2</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.ML">
       <Version>0.6.0</Version>
     </PackageReference>
