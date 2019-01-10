@@ -21,9 +21,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
         public ClusteringPageViewModel()
         { }
 
-        public async Task<IDataView> Load(string trainingDataPath)
+        public Task<IDataView> Load(string trainingDataPath)
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
                 var reader = new TextLoader(_mlContext,
                                             new TextLoader.Arguments()
@@ -46,18 +46,18 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public async Task Build()
+        public Task Build()
         {
-            await Task.Run(() =>
+            return Task.Run(() =>
             {
                 Pipeline = new ConcatEstimator(_mlContext, "Features", "AnnualIncome", "SpendingScore")
                     .Append(new KMeansPlusPlusTrainer(_mlContext, "Features", clustersCount: 5));
             });
         }
 
-        public async Task Train(IDataView trainingDataView)
+        public Task Train(IDataView trainingDataView)
         {
-            await Task.Run(() =>
+            return Task.Run(() =>
             {
                 Model = Pipeline.Fit(trainingDataView);
             });
@@ -72,9 +72,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public async Task<ClusteringPrediction> Predict(ClusteringData clusteringData)
+        public Task<ClusteringPrediction> Predict(ClusteringData clusteringData)
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
                 var predictionFunc = Model.MakePredictionFunction<ClusteringData, ClusteringPrediction>(_mlContext);
                 return predictionFunc.Predict(clusteringData);

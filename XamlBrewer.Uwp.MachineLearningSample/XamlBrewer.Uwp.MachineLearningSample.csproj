@@ -136,6 +136,7 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\ClassificationPageViewModel.cs" />
     <Compile Include="ViewModels\ClusteringPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

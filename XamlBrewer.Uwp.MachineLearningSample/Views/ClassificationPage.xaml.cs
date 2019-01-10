@@ -1,16 +1,12 @@
 ﻿using Microsoft.ML.Legacy;
-using Microsoft.ML.Legacy.Models;
-using Microsoft.ML.Legacy.Trainers;
-using Microsoft.ML.Legacy.Transforms;
 using Mvvm.Services;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
-using System.Linq;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
-using TextLoader = Microsoft.ML.Legacy.Data.TextLoader; // !!! There's more than one TextLoader
+using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
 namespace XamlBrewer.Uwp.MachineLearningSample
 {
@@ -21,8 +17,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         public ClassificationPage()
         {
             this.InitializeComponent();
+            this.DataContext = new ClassificationPageViewModel();
+
             Loaded += Page_Loaded;
         }
+
+        private ClassificationPageViewModel ViewModel => DataContext as ClassificationPageViewModel;
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -34,42 +34,23 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Prepare the input files
             DatasetBox.IsChecked = true;
-            var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/training.tsv");
             var testDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/test.tsv");
 
             // Configure data transformations.
             SettingUpBox.IsChecked = true;
-            var pipeline = new LearningPipeline();
-            pipeline.Add(new TextLoader(trainingDataPath).CreateFrom<MulticlassClassificationData>());
-
-            // Create buckets.
-            pipeline.Add(new Dictionarizer("Label"));
-
-            // Transform the text into a feature vector.
-            pipeline.Add(new TextFeaturizer("Features", "Text"));
-
-            pipeline.Add(new StochasticDualCoordinateAscentClassifier());
-
-            // Alternative algorithms:
-            //pipeline.Add(new LogisticRegressionClassifier());
-            //pipeline.Add(new NaiveBayesClassifier());
-
-            pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
+            var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/training.tsv");
+            await ViewModel.Build(trainingDataPath);
 
             // Create and train the model      
             TrainingBox.IsChecked = true;
-            _model = pipeline.Train<MulticlassClassificationData, MulticlassClassificationPrediction>();
+            await ViewModel.Train();
 
             // Could save the model here.
             // ...
 
             // Test and evaluate the model
             TestingBox.IsChecked = true;
-            var testData = new TextLoader(testDataPath).CreateFrom<MulticlassClassificationData>();
-
-            // Computes the quality metrics for the PredictionModel using the specified dataset.
-            var evaluator = new ClassificationEvaluator();
-            var metrics = evaluator.Evaluate(_model, testData);
+            var metrics = await ViewModel.Evaluate(testDataPath);
 
             // Diagram
             PlottingBox.IsChecked = true;
@@ -130,16 +111,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             Diagram.Model = plotModel;
         }
 
-        private void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // Predict
-            var result = _model.Predict(new List<MulticlassClassificationData> {
-                new MulticlassClassificationData
-                {
-                    Text = TextInput.Text
-                }
-            }).First();
-
+            var result = await ViewModel.Predict(TextInput.Text);
             TextPrediction.Text = string.Format("{1}% sure this is {0}.", result.PredictedLanguage, result.Confidence);
         }
     }
