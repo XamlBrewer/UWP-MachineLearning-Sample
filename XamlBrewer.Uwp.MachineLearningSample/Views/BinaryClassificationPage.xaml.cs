@@ -39,6 +39,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Perceptron
             PerceptronBox.IsChecked = true;
             var perceptronBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, new AveragedPerceptronBinaryClassifier());
+            await ViewModel.Save(perceptronBinaryModel, "perceptronModel.zip");
             var metrics = await ViewModel.Evaluate(perceptronBinaryModel, testDataLocation);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
             entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
@@ -56,6 +57,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Linear SVM
             LinearSvmBox.IsChecked = true;
             var linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, new LinearSvmBinaryClassifier());
+            await ViewModel.Save(linearSvmModel, "linearSvmModel.zip");
             metrics = await ViewModel.Evaluate(linearSvmModel, testDataLocation);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Accuracy });
             entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Entropy });
@@ -67,6 +69,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Logistic Regression
             LogisticRegressionBox.IsChecked = true;
             var logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, new LogisticRegressionBinaryClassifier());
+            await ViewModel.Save(logisticRegressionModel, "logisticRegressionModel.zip");
             metrics = await ViewModel.Evaluate(logisticRegressionModel, testDataLocation);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
             entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Entropy });
@@ -78,6 +81,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Stochastic Dual Coordinate Ascent
             SdcaBox.IsChecked = true;
             var sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, new StochasticDualCoordinateAscentBinaryClassifier());
+            await ViewModel.Save(sdcabModel, "sdcabModel.zip");
             metrics = await ViewModel.Evaluate(sdcabModel, testDataLocation);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
             entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });

@@ -3,7 +3,9 @@ using Microsoft.ML.Legacy.Data;
 using Microsoft.ML.Legacy.Models;
 using Microsoft.ML.Legacy.Transforms;
 using Mvvm;
+using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
@@ -33,6 +35,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 pipeline.Add(algorithm);
 
                 return pipeline.Train<BinaryClassificationData, BinaryClassificationPrediction>();
+            });
+        }
+
+        public Task Save(PredictionModel model, string modelName)
+        {
+            return Task.Run(() =>
+            {
+                var storageFolder = ApplicationData.Current.LocalFolder;
+                using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
+                    model.WriteAsync(fs);
             });
         }
 

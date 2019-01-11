@@ -50,8 +50,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             TrainingBox.IsChecked = true;
             await ViewModel.Train();
 
-            // Could save the model here.
-            // ...
+            // Save the model.
+            await ViewModel.Save("classificationModel.zip");
 
             // Test and evaluate the model
             TestingBox.IsChecked = true;

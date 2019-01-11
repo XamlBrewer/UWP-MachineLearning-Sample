@@ -4,8 +4,10 @@ using Microsoft.ML.Runtime.Data;
 using Microsoft.ML.Runtime.KMeans;
 using Mvvm;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
@@ -60,6 +62,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             return Task.Run(() =>
             {
                 Model = Pipeline.Fit(trainingDataView);
+            });
+        }
+
+        public Task Save(string modelName)
+        {
+            return Task.Run(() =>
+            {
+                var storageFolder = ApplicationData.Current.LocalFolder;
+                using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
+                    Model.SaveTo(_mlContext, fs);
             });
         }
 

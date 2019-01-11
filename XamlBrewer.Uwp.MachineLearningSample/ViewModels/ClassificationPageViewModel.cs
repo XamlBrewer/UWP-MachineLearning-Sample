@@ -4,8 +4,10 @@ using Microsoft.ML.Legacy.Trainers;
 using Microsoft.ML.Legacy.Transforms;
 using Mvvm;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 using TextLoader = Microsoft.ML.Legacy.Data.TextLoader; // !!! There's more than one TextLoader
 
@@ -45,6 +47,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             return Task.Run(() =>
             {
                 Model = Pipeline.Train<MulticlassClassificationData, MulticlassClassificationPrediction>();
+            });
+        }
+
+        public Task Save(string modelName)
+        {
+            return Task.Run(() =>
+            {
+                var storageFolder = ApplicationData.Current.LocalFolder;
+                using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
+                    Model.WriteAsync(fs);
             });
         }
 

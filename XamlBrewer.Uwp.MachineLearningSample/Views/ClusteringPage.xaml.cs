@@ -56,8 +56,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             TrainingBox.IsChecked = true;
             await ViewModel.Train(trainingDataView);
 
-            // Could save the model here.
-            // ...
+            // Save the model.
+            await ViewModel.Save("clusteringModel.zip");
 
             // Run the model on a set of data.
             CalculatingBox.IsChecked = true;
