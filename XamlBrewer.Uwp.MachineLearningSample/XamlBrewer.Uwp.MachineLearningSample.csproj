@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClusteringRawData.cs" />
     <Compile Include="Models\MulticlassClassificationData.cs" />
     <Compile Include="Models\MulticlassClassificationPrediction.cs" />
     <Compile Include="Models\ClusteringData.cs" />
@@ -134,12 +135,16 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\BoxPlotPageViewModel.cs" />
     <Compile Include="ViewModels\BinaryClassificationPageViewModel.cs" />
     <Compile Include="ViewModels\ClassificationPageViewModel.cs" />
     <Compile Include="ViewModels\ClusteringPageViewModel.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\BoxPlotPage.xaml.cs">
+      <DependentUpon>BoxPlotPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BinaryClassificationPage.xaml.cs">
       <DependentUpon>BinaryClassificationPage.xaml</DependentUpon>
     </Compile>
@@ -202,6 +207,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Theming\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BoxPlotPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

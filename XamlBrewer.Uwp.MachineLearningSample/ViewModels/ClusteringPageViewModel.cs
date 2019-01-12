@@ -79,7 +79,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
         {
             return await Task.Run(() =>
             {
-                var result = Model.Transform(dataView).AsEnumerable<ClusteringPrediction>(_mlContext, false); ;
+                var result = Model.Transform(dataView).AsEnumerable<ClusteringPrediction>(_mlContext, false);
                 return result;
             });
         }
