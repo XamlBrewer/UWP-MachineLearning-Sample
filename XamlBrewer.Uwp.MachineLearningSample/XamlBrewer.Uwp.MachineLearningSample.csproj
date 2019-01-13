@@ -135,6 +135,8 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\RegressionPageViewModel.cs" />
+    <Compile Include="ViewModels\HeatMapPageViewModel.cs" />
     <Compile Include="ViewModels\BoxPlotPageViewModel.cs" />
     <Compile Include="ViewModels\BinaryClassificationPageViewModel.cs" />
     <Compile Include="ViewModels\ClassificationPageViewModel.cs" />
@@ -142,6 +144,12 @@
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\RegressionPage.xaml.cs">
+      <DependentUpon>RegressionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HeatMapPage.xaml.cs">
+      <DependentUpon>HeatMapPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BoxPlotPage.xaml.cs">
       <DependentUpon>BoxPlotPage.xaml</DependentUpon>
     </Compile>
@@ -163,6 +171,7 @@
     <Compile Include="Views\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\MachineLearning\Statistics.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -207,6 +216,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Theming\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RegressionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\HeatMapPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

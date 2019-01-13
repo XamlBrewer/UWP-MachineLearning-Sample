@@ -1,4 +1,4 @@
-﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.BoxPlotPage"
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.HeatMapPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,10 +22,10 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Feature Distribution Analysis" />
+                <Run Text="Feature Correlation Analysis" />
         </TextBlock>
 
-        <Path Data="{StaticResource BoxPlotIcon}"
+        <Path Data="{StaticResource HeatMapIcon}"
               Fill="{StaticResource PageTitleBrush}"
               VerticalAlignment="Top"
               HorizontalAlignment="Right"
@@ -36,7 +36,7 @@
 
         <TextBlock Grid.Row="1"
                    FontSize="24"
-                   TextWrapping="WrapWholeWords">Reads the raw data and creates a Box and Whiskers diagram on the distribution of feature values. Ranges with outliers appear in red.</TextBlock>
+                   TextWrapping="WrapWholeWords">Reads the data and creates a Heat Map diagram on the correlation of feature values. ...</TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"

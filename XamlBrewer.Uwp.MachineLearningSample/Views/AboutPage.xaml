@@ -57,6 +57,18 @@
             <LineBreak />
             <Run>'Yin and yang' icon for the Binary Classification page by </Run>
             <Hyperlink NavigateUri="http://www.thenounproject.com">Lloyd Humphreys from the Noun Project</Hyperlink>
+            <Run>.</Run>  
+            <LineBreak />
+            <Run>'linear regression' icon for the Regression page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Knut M. Synstad from the Noun Project</Hyperlink>
+            <Run>.</Run>       
+            <LineBreak />
+            <Run>'Box Plot' icon for the Feature Distribution Analysis page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Kirby Wu from the Noun Project</Hyperlink>
+            <Run>.</Run>      
+            <LineBreak />
+            <Run>'Data Matrix' icon for the Feature Correlation Analysis page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Viktor Vorobye from the Noun Project</Hyperlink>
             <Run>.</Run>              
             <LineBreak />
             <LineBreak />
@@ -80,7 +92,7 @@
             <Run>.</Run>
             <LineBreak />
             <Run>Wine Quality project and datasets for Binary Classification page on </Run>
-            <Hyperlink NavigateUri="https://rubikscode.net/2018/07/02/machine-learning-with-ml-net-solving-real-world-classification-problem-wine-quality/">RubiksCode</Hyperlink>
+            <Hyperlink NavigateUri="https://rubikscode.net/2018/07/02/machine-learning-with-ml-net-solving-real-world-classification-problem-wine-quality/">Rubik's Code</Hyperlink>
             <Run>.</Run>            
         </TextBlock>
     </Grid>

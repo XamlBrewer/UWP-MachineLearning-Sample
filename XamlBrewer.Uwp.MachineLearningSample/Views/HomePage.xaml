@@ -39,7 +39,7 @@
                    Grid.Row="1"
                    Margin="0"
                    FontFamily="Segoe UI">
-            <Run FontFamily="Segoe UI">This app shows how to use ML.NET to implement some Machine Learning use cases in UWP.</Run>
+            <Run FontFamily="Segoe UI">This app uses ML.NET and Oxyplot to implement some Machine Learning use cases in UWP.</Run>
             <LineBreak />
             <LineBreak />
             <Run FontFamily="Segoe UI">Samples include:</Run>
@@ -50,9 +50,13 @@
             <LineBreak />
             <Run>* Multiclass Classification,</Run>
             <LineBreak />
-            <Run>* Regression (TODO), and</Run>
+            <Run>* Regression (TODO),</Run>
             <LineBreak />
-            <Run>* Recommendation (TODO).</Run>            
+            <Run>* Recommendation (TODO),</Run>   
+            <LineBreak />
+            <Run>* Feature Distribution Analysis, and</Run>   
+            <LineBreak />
+            <Run>* Feature Correlation Analysis with heat maps (TODO).</Run>               
             <LineBreak />
             <LineBreak />
             <Run Foreground="LightCoral">Safety Instructions:</Run>            
