@@ -2,6 +2,7 @@
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
+using OxyPlot.Series;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
@@ -13,13 +14,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     {
         private List<OxyColor> _colors = new List<OxyColor>
                 {
-                    OxyColors.Black,
                     OxyColors.LightCoral,
                     OxyColors.Khaki,
                     OxyColors.SlateBlue,
                     OxyColors.DarkCyan,
-                    OxyColors.LightSkyBlue,
-                    OxyColors.HotPink
+                    OxyColors.LightSkyBlue
                 };
 
         public ClusteringPage()
@@ -67,14 +66,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             PlottingBox.IsChecked = true;
             foreach (var prediction in predictions)
             {
-                Diagram.Model.Annotations.Add(
-                    new PointAnnotation
-                    {
-                        Shape = MarkerType.Circle,
-                        X = prediction.SpendingScore,
-                        Y = prediction.AnnualIncome,
-                        Fill = _colors[(int)prediction.PredictedCluster]
-                    });
+                (Diagram.Model.Series[(int)prediction.PredictedCluster - 1] as ScatterSeries).Points.Add(
+                    new ScatterPoint
+                    (
+                        prediction.SpendingScore,
+                        prediction.AnnualIncome
+                    ));
             }
 
             Diagram.InvalidatePlot();
@@ -108,6 +105,18 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 TitleColor = foreground
             };
             plotModel.Axes.Add(linearAxisY);
+
+            for (int i = 0; i < 5; i++)
+            {
+                var series = new ScatterSeries
+                {
+                    MarkerType = MarkerType.Circle,
+                    MarkerFill = _colors[i]
+                };
+
+                plotModel.Series.Add(series);
+            }
+
             Diagram.Model = plotModel;
             linearAxisY.Reset();
         }
@@ -117,7 +126,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             int.TryParse(AnnualIncomeInput.Text, out int annualIncome);
             int.TryParse(SpendingScoreInput.Text, out int spendingScore);
             var output = await ViewModel.Predict(new ClusteringData { AnnualIncome = annualIncome, SpendingScore = spendingScore });
-            var annotation = new PointAnnotation { Shape = MarkerType.Diamond, X = output.SpendingScore, Y = output.AnnualIncome, Fill = _colors[(int)output.PredictedCluster], TextColor = OxyColors.LightSteelBlue, Text = "Here" };
+            var annotation = new PointAnnotation { Shape = MarkerType.Diamond, X = output.SpendingScore, Y = output.AnnualIncome, Fill = _colors[(int)output.PredictedCluster - 1], TextColor = OxyColors.LightSteelBlue, Text = "Here" };
             Diagram.Model.Annotations.Add(annotation);
             Diagram.InvalidatePlot();
         }
