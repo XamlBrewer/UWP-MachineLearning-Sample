@@ -104,7 +104,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.Axes.Add(new LinearColorAxis
             {
                 // Pearson color scheme from blue over white to red.
-                Palette = OxyPalettes.BlueWhiteRed31
+                Palette = OxyPalettes.BlueWhiteRed31,
+                Position = AxisPosition.Top,
+                Minimum = -1,
+                Maximum = 1,
+                TicklineColor = OxyColors.Transparent
             });
 
             var heatMapSeries = new HeatMapSeries

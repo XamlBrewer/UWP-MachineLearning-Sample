@@ -52,10 +52,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private void AddItem(PlotModel plotModel, List<double> values, int slot)
         {
             values.Sort();
-            var median = values.Median(true);
+
+            var sorted = values.ToArray();
+
+            var median = sorted.Median();
             int r = values.Count % 2;
-            var firstQuartile = values.Take((values.Count + r) / 2).Median(true);
-            var thirdQuartile = values.Skip((values.Count - r) / 2).Median(true);
+            var firstQuartile = sorted.LowerQuartile();
+            var thirdQuartile = sorted.UpperQuartile();
 
             var interQuartileRange = thirdQuartile - firstQuartile;
             var step = interQuartileRange * 1.5;
