@@ -120,7 +120,7 @@
                         Click="Calculate_Click"
                         Grid.Row="7">Predict</Button>
                 <TextBlock x:Name="TextPrediction"
-                           Foreground="LightCoral"
+                           Foreground="Coral"
                            Grid.Row="7"
                            Grid.Column="1"
                            HorizontalAlignment="Right" />

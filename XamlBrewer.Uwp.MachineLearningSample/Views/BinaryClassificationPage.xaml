@@ -107,7 +107,8 @@
                            Grid.Row="6"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
-                           FontFamily="Courier New" />
+                           FontFamily="Courier New"
+                           FontWeight="SemiBold" />
             </Grid>
             <oxy:PlotView x:Name="Diagram"
                           Background="Transparent"

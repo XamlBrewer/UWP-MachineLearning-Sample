@@ -7,7 +7,7 @@
     <!-- Theme Resources -->
 
     <!-- Default Accent Color -->
-    <Color x:Key="DefaultAccentColor">LightSteelBlue</Color>
+    <Color x:Key="DefaultAccentColor">SteelBlue</Color>
 
     <!-- General Purpose -->
     <SolidColorBrush x:Key="DarkeningBrush"
@@ -17,13 +17,13 @@
                      Color="White"
                      Opacity=".2" />
     <SolidColorBrush x:Key="HighlightBrush"
-                     Color="LightSteelBlue" />
+                     Color="SteelBlue" />
 
     <!-- Header -->
     <Color x:Key="TitlebarButtonForegroundColor">LightSlateGray</Color>
     <Color x:Key="TitlebarTextForegroundColor">LightSlateGray</Color>
     <SolidColorBrush x:Key="HamburgerForegroundBrush"
-                     Color="LightSteelBlue" />
+                     Color="SteelBlue" />
 
     <!-- Splitview Pane -->
     <AcrylicBrush x:Key="SplitViewInlineBackgroundBrush"
@@ -40,11 +40,11 @@
     <!-- Splitview Content -->
     <Color x:Key="PageBackgroundColor">#FF003E49</Color>
     <SolidColorBrush x:Key="PageBackgroundBrush"
-                     Color="#FF003E49" />
+                     Color="Wheat" />
     <SolidColorBrush x:Key="PageTitleBrush"
-                     Color="White" />
+                     Color="SteelBlue" />
     <SolidColorBrush x:Key="PageForegroundBrush"
-                     Color="White" />
+                     Color="SteelBlue" />
 
     <!-- Hamburger Button -->
     <Style x:Key="HamburgerButtonStyle"

@@ -52,7 +52,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private PlotModel PrepareDiagram()
         {
-            var foreground = OxyColors.LightSteelBlue;
+            var foreground = OxyColors.SteelBlue;
 
             var plotModel = new PlotModel
             {

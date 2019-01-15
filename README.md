@@ -5,11 +5,11 @@ Demonstrates how to use ML.NET and Oxyplot to implement some Machine Learning us
 The UWP app demonstrates the following Machine Learning scenarios. Focus is currently on the ML.NET core functionality, not on its latest API:
 * Clustering
 * Multiclass Classification
-* Binary Classification (in progress)
-* Regression (todo)
+* Binary Classification
+* Regression (in progress)
 * Recommendation (todo)
 * Feature Distribution Analysis with Boxplot Diagrams
-* Feature Correlation Analysis with Heatmap Diagrams (todo)
+* Feature Correlation Analysis with Heatmap Diagrams (in progress)
 
 ## Seeing is believing
 
@@ -20,6 +20,8 @@ The UWP app demonstrates the following Machine Learning scenarios. Focus is curr
 ![Screenshot](Assets/BinaryClassification.png?raw=true)
 
 ![Screenshot](Assets/BoxPlot.png?raw=true)
+
+![Screenshot](Assets/HeatMap.png?raw=true)
 
 ## What could possibly go wrong?
 We had to implement some workarounds because today's ML.NET release is in beta and temporarily not very UWP-friendly: 

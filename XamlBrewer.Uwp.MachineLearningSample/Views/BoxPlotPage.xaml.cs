@@ -85,7 +85,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private PlotModel PrepareDiagram()
         {
-            var foreground = OxyColors.LightSteelBlue;
+            var foreground = OxyColors.SteelBlue;
 
             var plotModel = new PlotModel
             {
@@ -99,7 +99,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var series = new BoxPlotSeries
             {
                 Stroke = foreground,
-                Fill = OxyColors.DarkGoldenrod
+                Fill = OxyColors.DarkOrange
             };
             plotModel.Series.Add(series);
 

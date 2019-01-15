@@ -55,7 +55,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Diagram
             PlottingBox.IsChecked = true;
-            var foreground = OxyColors.LightSteelBlue;
+            var foreground = OxyColors.SteelBlue;
             var plotModel = new PlotModel
             {
                 PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1),

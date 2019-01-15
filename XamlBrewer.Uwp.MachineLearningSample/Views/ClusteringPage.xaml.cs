@@ -14,10 +14,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     {
         private List<OxyColor> _colors = new List<OxyColor>
                 {
-                    OxyColors.LightCoral,
-                    OxyColors.Khaki,
-                    OxyColors.SlateBlue,
-                    OxyColors.DarkCyan,
+                    OxyColors.Firebrick,
+                    OxyColors.Gold,
+                    OxyColors.LightGreen,
+                    OxyColors.MidnightBlue,
                     OxyColors.LightSkyBlue
                 };
 
@@ -79,7 +79,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private void PrepareDiagram()
         {
-            var foreground = OxyColors.LightSteelBlue;
+            var foreground = OxyColors.SteelBlue;
             var plotModel = new PlotModel
             {
                 PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1),
@@ -126,7 +126,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             int.TryParse(AnnualIncomeInput.Text, out int annualIncome);
             int.TryParse(SpendingScoreInput.Text, out int spendingScore);
             var output = await ViewModel.Predict(new ClusteringData { AnnualIncome = annualIncome, SpendingScore = spendingScore });
-            var annotation = new PointAnnotation { Shape = MarkerType.Diamond, X = output.SpendingScore, Y = output.AnnualIncome, Fill = _colors[(int)output.PredictedCluster - 1], TextColor = OxyColors.LightSteelBlue, Text = "Here" };
+            var annotation = new PointAnnotation { Shape = MarkerType.Diamond, X = output.SpendingScore, Y = output.AnnualIncome, Fill = _colors[(int)output.PredictedCluster - 1], TextColor = OxyColors.SteelBlue, Text = "Here" };
             Diagram.Model.Annotations.Add(annotation);
             Diagram.InvalidatePlot();
         }

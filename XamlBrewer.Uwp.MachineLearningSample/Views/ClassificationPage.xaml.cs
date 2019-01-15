@@ -26,7 +26,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            DatasetBox.IsChecked = false;    
+            DatasetBox.IsChecked = false;
             SettingUpBox.IsChecked = false;
             TrainingBox.IsChecked = false;
             TestingBox.IsChecked = false;
@@ -59,7 +59,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Diagram
             PlottingBox.IsChecked = true;
-            var foreground = OxyColors.LightSteelBlue;
+            var foreground = OxyColors.SteelBlue;
             var plotModel = new PlotModel
             {
                 Subtitle = "Model Quality",
@@ -80,8 +80,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             {
                 ItemsSource = bars,
                 LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:0.00} ",
-                FillColor = OxyColors.DarkCyan
+                TextColor = OxyColors.Wheat,
+                LabelFormatString = "{0:0.00}",
+                FillColor = OxyColors.Firebrick
             };
             plotModel.Series.Add(barSeries);
 

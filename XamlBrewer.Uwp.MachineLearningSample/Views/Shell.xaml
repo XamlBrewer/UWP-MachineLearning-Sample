@@ -97,7 +97,7 @@
                            Stretch="UniformToFill"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Opacity=".2" />
+                           Opacity=".6" />
 
                     <!-- Logo -->
                     <Viewbox Grid.Row="2"
@@ -133,7 +133,8 @@
                                            VerticalAlignment="Bottom"
                                            Padding="0"
                                            Margin="48 0 8 12">
-                                    <Run Text="XAML" />
+                                    <Run Text="XAML"
+                                         Foreground="Firebrick" />
                                     <Run Text="Brewer"
                                          Foreground="{StaticResource PageTitleBrush}"
                                          FontWeight="Light" />

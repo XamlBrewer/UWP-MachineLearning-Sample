@@ -104,7 +104,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private void PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries)
         {
-            var foreground = OxyColors.LightSteelBlue;
+            var foreground = OxyColors.SteelBlue;
             var plotModel = new PlotModel
             {
                 Subtitle = "Model Comparison",
@@ -147,7 +147,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Title = "Accuracy",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.DarkGoldenrod
+                FillColor = OxyColors.DarkOrange,
+                TextColor = OxyColors.Wheat
             };
             plotModel.Series.Add(accuracySeries);
 
@@ -156,7 +157,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Title = "Entropy",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.Firebrick
+                FillColor = OxyColors.Firebrick,
+                TextColor = OxyColors.Wheat
             };
             plotModel.Series.Add(entropySeries);
 
@@ -165,7 +167,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Title = "F1 Score",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.Teal
+                FillColor = OxyColors.MidnightBlue,
+                TextColor = OxyColors.Wheat
             };
             plotModel.Series.Add(f1ScoreSeries);
 
