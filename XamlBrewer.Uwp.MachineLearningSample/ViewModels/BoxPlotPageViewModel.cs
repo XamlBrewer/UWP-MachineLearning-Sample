@@ -32,7 +32,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
                 var file = _mlContext.OpenInputFile(trainingDataPath);
                 var src = new FileHandleSource(file);
-                return reader.Read(src).AsEnumerable<ClusteringRawData>(_mlContext, false); ;
+                return reader.Read(src).AsEnumerable<ClusteringRawData>(_mlContext, false);
             });
         }
     }

@@ -6,5 +6,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
     {
         [ColumnName("PredictedLabel")]
         public bool PredictedLabel;
+
+        public int LabelAsNumber => PredictedLabel ? 1 : 0;
     }
 }

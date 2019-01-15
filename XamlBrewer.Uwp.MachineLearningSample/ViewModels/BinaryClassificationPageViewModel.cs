@@ -2,16 +2,22 @@
 using Microsoft.ML.Legacy.Data;
 using Microsoft.ML.Legacy.Models;
 using Microsoft.ML.Legacy.Transforms;
+using Microsoft.ML.Runtime.Data;
 using Mvvm;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
+using TextLoader = Microsoft.ML.Legacy.Data.TextLoader;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 {
     internal class BinaryClassificationPageViewModel : ViewModelBase
     {
+        private LocalEnvironment _mlContext = new LocalEnvironment(seed: null); // v0.6;
+
         public Task<PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>> BuildAndTrain(string trainingDataPath, ILearningPipelineItem algorithm)
         {
             return Task.Run(() =>
@@ -55,6 +61,39 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 var testData = new TextLoader(testDataLocation).CreateFrom<BinaryClassificationData>(useHeader: true, separator: ';');
                 var metrics = new BinaryClassificationEvaluator().Evaluate(model, testData);
                 return metrics;
+            });
+        }
+
+        public Task<IEnumerable<BinaryClassificationPrediction>> Predict(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, IEnumerable<BinaryClassificationData> data)
+        {
+            return Task.Run(() =>
+            {
+                return model.Predict(data);
+            });
+        }
+
+        public Task<IEnumerable<BinaryClassificationData>> GetSample(string sampleDataPath)
+        {
+            return Task.Run(() =>
+            {
+                return File.ReadAllLines(sampleDataPath)
+                   .Skip(1)
+                   .Select(x => x.Split(';'))
+                   .Select(x => new BinaryClassificationData
+                   {
+                       FixedAcidity = float.Parse(x[0]),
+                       VolatileAcidity = float.Parse(x[1]),
+                       CitricAcid = float.Parse(x[2]),
+                       ResidualSugar = float.Parse(x[3]),
+                       Chlorides = float.Parse(x[4]),
+                       FreeSulfurDioxide = float.Parse(x[5]),
+                       TotalSulfurDioxide = float.Parse(x[6]),
+                       Density = float.Parse(x[7]),
+                       Ph = float.Parse(x[8]),
+                       Sulphates = float.Parse(x[9]),
+                       Alcohol = float.Parse(x[10]),
+                       Label = float.Parse(x[11])
+                   });
             });
         }
 
