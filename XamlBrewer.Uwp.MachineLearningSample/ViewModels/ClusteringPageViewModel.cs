@@ -61,7 +61,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                             {
                                 // a.AccelMemBudgetMb = 1;
                                 // a.MaxIterations = 1;
-                                // a. ..
+                                // a. ...
                             } 
                         ));
             });
