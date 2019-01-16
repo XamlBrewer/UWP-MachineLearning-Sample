@@ -53,9 +53,21 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             return Task.Run(() =>
             {
                 Pipeline = new ConcatEstimator(_mlContext, "Features", "AnnualIncome", "SpendingScore")
-                    .Append(new KMeansPlusPlusTrainer(_mlContext, "Features", clustersCount: 5));
+                    .Append(new KMeansPlusPlusTrainer(
+                        env: _mlContext,
+                        featureColumn: "Features",
+                        clustersCount: 5,
+                        advancedSettings: (a) => 
+                            {
+                                // a.AccelMemBudgetMb = 1;
+                                // a.MaxIterations = 1;
+                                // a. ..
+                            } 
+                        ));
             });
         }
+
+
 
         public Task Train(IDataView trainingDataView)
         {
