@@ -119,13 +119,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClusteringRawData.cs" />
-    <Compile Include="Models\MulticlassClassificationData.cs" />
-    <Compile Include="Models\MulticlassClassificationPrediction.cs" />
-    <Compile Include="Models\ClusteringData.cs" />
-    <Compile Include="Models\ClusteringPrediction.cs" />
-    <Compile Include="Models\BinaryClassificationPrediction.cs" />
-    <Compile Include="Models\BinaryClassificationData.cs" />
+    <Compile Include="Models\BinaryClassification\BinaryClassificationModel.cs" />
+    <Compile Include="Models\Clustering\ClusteringModel.cs" />
+    <Compile Include="Models\Clustering\ClusteringRawData.cs" />
+    <Compile Include="Models\MulticlassClassification\MulticlassClassificationModel.cs" />
+    <Compile Include="Models\MulticlassClassification\MulticlassClassificationData.cs" />
+    <Compile Include="Models\MulticlassClassification\MulticlassClassificationPrediction.cs" />
+    <Compile Include="Models\Clustering\ClusteringData.cs" />
+    <Compile Include="Models\Clustering\ClusteringPrediction.cs" />
+    <Compile Include="Models\BinaryClassification\BinaryClassificationPrediction.cs" />
+    <Compile Include="Models\BinaryClassification\BinaryClassificationData.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
