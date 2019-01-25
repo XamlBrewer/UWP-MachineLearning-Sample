@@ -40,7 +40,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             PlottingBox.IsChecked = false;
             PrepareDiagram();
 
-            // Preparing the files.
+            // Prepare the files.
             DatasetBox.IsChecked = true;
             var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/Mall_Customers.csv");
 
@@ -88,6 +88,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var linearAxisX = new LinearAxis
             {
+                Minimum = 0,
+                Maximum = 100,
                 Position = AxisPosition.Bottom,
                 Title = "Spending Score",
                 TextColor = foreground,
@@ -98,6 +100,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.Axes.Add(linearAxisX);
             var linearAxisY = new LinearAxis
             {
+                Minimum = 0,
                 Maximum = 140,
                 Title = "Annual Income",
                 TextColor = foreground,
@@ -118,7 +121,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             }
 
             Diagram.Model = plotModel;
-            linearAxisY.Reset();
         }
 
         private async void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -126,7 +128,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             int.TryParse(AnnualIncomeInput.Text, out int annualIncome);
             int.TryParse(SpendingScoreInput.Text, out int spendingScore);
             var output = await ViewModel.Predict(new ClusteringData { AnnualIncome = annualIncome, SpendingScore = spendingScore });
-            var annotation = new PointAnnotation { Shape = MarkerType.Diamond, X = output.SpendingScore, Y = output.AnnualIncome, Fill = _colors[(int)output.PredictedCluster - 1], TextColor = OxyColors.SteelBlue, Text = "Here" };
+            var annotation = new PointAnnotation
+            {
+                Shape = MarkerType.Diamond,
+                X = output.SpendingScore,
+                Y = output.AnnualIncome,
+                Fill = _colors[(int)output.PredictedCluster - 1],
+                TextColor = OxyColors.SteelBlue,
+                Text = "Here"
+            };
             Diagram.Model.Annotations.Add(annotation);
             Diagram.InvalidatePlot();
         }

@@ -66,8 +66,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
+            using (var fs = new FileStream(
+                    Path.Combine(storageFolder.Path, modelName),
+                    FileMode.Create,
+                    FileAccess.Write,
+                    FileShare.Write))
+            {
                 Model.SaveTo(_mlContext, fs);
+            }
         }
 
         public IEnumerable<ClusteringPrediction> Predict(IDataView dataView)
