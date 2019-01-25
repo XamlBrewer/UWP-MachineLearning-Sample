@@ -4,7 +4,7 @@
 
     public class MulticlassClassificationPrediction
     {
-        string[] classNames = { "German", "English", "French", "Italian", "Romanian", "Spanish" };
+        private readonly string[] classNames = { "German", "English", "French", "Italian", "Romanian", "Spanish" };
 
         [ColumnName("PredictedLabel")]
         public float Class;

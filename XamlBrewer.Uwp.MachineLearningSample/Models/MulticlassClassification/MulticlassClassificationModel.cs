@@ -3,11 +3,9 @@ using Microsoft.ML.Legacy.Models;
 using Microsoft.ML.Legacy.Trainers;
 using Microsoft.ML.Legacy.Transforms;
 using Mvvm;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Windows.Storage;
-using TextLoader = Microsoft.ML.Legacy.Data.TextLoader; // !!! There's more than one TextLoader
+using TextLoader = Microsoft.ML.Legacy.Data.TextLoader; // !!! This is the old TextLoader
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
@@ -22,18 +20,20 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             Pipeline = new LearningPipeline();
             Pipeline.Add(new TextLoader(trainingDataPath).CreateFrom<MulticlassClassificationData>());
 
-            // Create buckets.
+            // Create a dictionary for the languages. (no pun intended)
             Pipeline.Add(new Dictionarizer("Label"));
 
             // Transform the text into a feature vector.
             Pipeline.Add(new TextFeaturizer("Features", "Text"));
 
+            // Main algorithm
             Pipeline.Add(new StochasticDualCoordinateAscentClassifier());
+            // or
+            // Pipeline.Add(new LogisticRegressionClassifier());
+            // or
+            // Pipeline.Add(new NaiveBayesClassifier()); // yields weird metrics...
 
-            // Alternative algorithms:
-            //Pipeline.Add(new LogisticRegressionClassifier());
-            //Pipeline.Add(new NaiveBayesClassifier());
-
+            // Convert the predicted value back into a language.
             Pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
         }
 
@@ -45,7 +45,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
+            using (var fs = new FileStream(
+                Path.Combine(storageFolder.Path, modelName),
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.Write))
                 Model.WriteAsync(fs);
         }
 
@@ -53,21 +57,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         {
             var testData = new TextLoader(testDataPath).CreateFrom<MulticlassClassificationData>();
 
-            // Computes the quality metrics for the PredictionModel using the specified dataset.
             var evaluator = new ClassificationEvaluator();
-            var metrics = evaluator.Evaluate(Model, testData);
-            return metrics;
+            return evaluator.Evaluate(Model, testData);
         }
 
         public MulticlassClassificationPrediction Predict(string text)
         {
-            return Model.Predict(new List<MulticlassClassificationData>
-                {
-                    new MulticlassClassificationData
-                    {
-                        Text = text
-                    }
-                }).First();
+            return Model.Predict(new MulticlassClassificationData(text));
         }
     }
 }

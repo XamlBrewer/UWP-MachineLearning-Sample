@@ -9,5 +9,10 @@
 
         [Column(ordinal: "1")]
         public string Text;
+
+        public MulticlassClassificationData(string text)
+        {
+            Text = text;
+        }
     }
 }
