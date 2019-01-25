@@ -14,6 +14,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> _model;
 
         private OxyColor OxyForeground => OxyColors.SteelBlue;
+
+        private OxyColor OxyText => OxyColors.Wheat;
+
+        private OxyColor OxyFill => OxyColors.Firebrick;
+
         private string[] Languages => new[]
                 {
                     "German",
@@ -81,16 +86,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 bars.Add(new BarItem { Value = logloss });
             }
 
-            var barSeries = new BarSeries
-            {
-                ItemsSource = bars,
-                LabelPlacement = LabelPlacement.Inside,
-                TextColor = OxyColors.Wheat,
-                LabelFormatString = "{0:0.00}",
-                FillColor = OxyColors.Firebrick
-            };
-            plotModel.Series.Add(barSeries);
-
+            (plotModel.Series[0] as BarSeries).ItemsSource = bars;
             plotModel.InvalidatePlot(true);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;

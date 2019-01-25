@@ -7,6 +7,7 @@
       xmlns:oxy="using:OxyPlot.Windows"
       xmlns:oxyplot="using:OxyPlot"
       xmlns:axes="using:OxyPlot.Axes"
+      xmlns:series="using:OxyPlot.Series"
       mc:Ignorable="d"
       Foreground="{StaticResource PageForegroundBrush}">
 
@@ -150,6 +151,12 @@
                                              TicklineColor="{x:Bind OxyForeground}"
                                              TitleColor="{x:Bind OxyForeground}" />
                         </oxyplot:PlotModel.Axes>
+                        <oxyplot:PlotModel.Series>
+                            <series:BarSeries LabelPlacement="Inside"
+                                              LabelFormatString="{}{0:0.00}"
+                                              TextColor="{x:Bind OxyText}"
+                                              FillColor="{x:Bind OxyFill}" />
+                        </oxyplot:PlotModel.Series>
                     </oxyplot:PlotModel>
                 </oxy:PlotView.Model>
             </oxy:PlotView>
