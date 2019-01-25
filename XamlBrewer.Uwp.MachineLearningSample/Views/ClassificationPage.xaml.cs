@@ -1,7 +1,6 @@
 ﻿using Microsoft.ML.Legacy;
 using Mvvm.Services;
 using OxyPlot;
-using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
@@ -13,6 +12,17 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     public sealed partial class ClassificationPage : Page
     {
         private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> _model;
+
+        private OxyColor OxyForeground => OxyColors.SteelBlue;
+        private string[] Languages => new[]
+                {
+                    "German",
+                    "English",
+                    "French",
+                    "Italian",
+                    "Romanian",
+                    "Spanish"
+                };
 
         public ClassificationPage()
         {
@@ -37,6 +47,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
 
+            // Prepare diagram
+            var plotModel = Diagram.Model;
+            plotModel.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
+            Diagram.InvalidatePlot();
+
             // Prepare the input files
             DatasetBox.IsChecked = true;
             var testDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/test.tsv");
@@ -59,16 +74,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Diagram
             PlottingBox.IsChecked = true;
-            var foreground = OxyColors.SteelBlue;
-            var plotModel = new PlotModel
-            {
-                Subtitle = "Model Quality",
-                PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1),
-                PlotAreaBorderColor = foreground,
-                TextColor = foreground,
-                TitleColor = foreground,
-                SubtitleColor = foreground
-            };
 
             var bars = new List<BarItem>();
             foreach (var logloss in metrics.PerClassLogLoss)
@@ -86,35 +91,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
             plotModel.Series.Add(barSeries);
 
-            plotModel.Axes.Add(new CategoryAxis
-            {
-                Position = AxisPosition.Left,
-                Key = "LogLossAxis",
-                ItemsSource = new[]
-                    {
-                        "German",
-                        "English",
-                        "French",
-                        "Italian",
-                        "Romanian",
-                        "Spanish"
-                    },
-                TextColor = foreground,
-                TicklineColor = foreground,
-                TitleColor = foreground
-            });
-
-            var linearAxisX = new LinearAxis
-            {
-                Position = AxisPosition.Bottom,
-                Title = "Logarithmic loss per class (lower is better)",
-                TextColor = foreground,
-                TicklineColor = foreground,
-                TitleColor = foreground
-            };
-            plotModel.Axes.Add(linearAxisX);
-
-            Diagram.Model = plotModel;
+            plotModel.InvalidatePlot(true);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             BusyIndicator.PauseAnimation();

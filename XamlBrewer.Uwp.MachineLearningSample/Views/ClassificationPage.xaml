@@ -5,6 +5,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
+      xmlns:oxyplot="using:OxyPlot"
+      xmlns:axes="using:OxyPlot.Axes"
       mc:Ignorable="d"
       Foreground="{StaticResource PageForegroundBrush}">
 
@@ -104,11 +106,11 @@
                 <lottie:LottieAnimationView x:Name="BusyIndicator"
                                             FileName="Assets/loading.json"
                                             Visibility="Collapsed"
-                                            Height="180"
+                                            Height="240"
                                             HorizontalAlignment="Left"
                                             Grid.Row="5"
-                                            Grid.Column="0" 
-                                            Margin="0 -180"
+                                            Grid.Column="0"
+                                            Margin="0 -240"
                                             FontFamily="Segoe UI" />
                 <TextBox x:Name="TextInput"
                          Header="Type some text"
@@ -129,7 +131,28 @@
                           Background="Transparent"
                           BorderThickness="0"
                           Margin="0 0 40 60"
-                          Grid.Column="1" />
+                          Grid.Column="1">
+                <oxy:PlotView.Model>
+                    <oxyplot:PlotModel Subtitle="Model Quality"
+                                       PlotAreaBorderColor="{x:Bind OxyForeground}"
+                                       TextColor="{x:Bind OxyForeground}"
+                                       TitleColor="{x:Bind OxyForeground}"
+                                       SubtitleColor="{x:Bind OxyForeground}">
+                        <oxyplot:PlotModel.Axes>
+                            <axes:CategoryAxis Position="Left"
+                                               ItemsSource="{x:Bind Languages}"
+                                               TextColor="{x:Bind OxyForeground}"
+                                               TicklineColor="{x:Bind OxyForeground}"
+                                               TitleColor="{x:Bind OxyForeground}" />
+                            <axes:LinearAxis Position="Bottom"
+                                             Title="Logarithmic loss per class (lower is better)"
+                                             TextColor="{x:Bind OxyForeground}"
+                                             TicklineColor="{x:Bind OxyForeground}"
+                                             TitleColor="{x:Bind OxyForeground}" />
+                        </oxyplot:PlotModel.Axes>
+                    </oxyplot:PlotModel>
+                </oxy:PlotView.Model>
+            </oxy:PlotView>
         </Grid>
     </Grid>
 </Page>
