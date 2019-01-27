@@ -22,7 +22,7 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Feature Correlation Analysis" />
+                <Run Text="Feature Correlation Analysis (IN PROGRESS)" />
         </TextBlock>
 
         <Path Data="{StaticResource HeatMapIcon}"

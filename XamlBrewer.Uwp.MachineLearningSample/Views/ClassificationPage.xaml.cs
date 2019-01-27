@@ -1,18 +1,14 @@
-﻿using Microsoft.ML.Legacy;
-using Mvvm.Services;
+﻿using Mvvm.Services;
 using OxyPlot;
 using OxyPlot.Series;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
-using XamlBrewer.Uwp.MachineLearningSample.Models;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
 namespace XamlBrewer.Uwp.MachineLearningSample
 {
     public sealed partial class ClassificationPage : Page
     {
-        private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> _model;
-
         private OxyColor OxyForeground => OxyColors.SteelBlue;
 
         private OxyColor OxyText => OxyColors.Wheat;

@@ -129,6 +129,9 @@
     <Compile Include="Models\Clustering\ClusteringPrediction.cs" />
     <Compile Include="Models\BinaryClassification\BinaryClassificationPrediction.cs" />
     <Compile Include="Models\BinaryClassification\BinaryClassificationData.cs" />
+    <Compile Include="Models\Regression\RegressionModel.cs" />
+    <Compile Include="Models\Regression\RegressionData.cs" />
+    <Compile Include="Models\Regression\RegressionPrediction.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\RecommendationPageViewModel.cs" />
     <Compile Include="ViewModels\RegressionPageViewModel.cs" />
     <Compile Include="ViewModels\HeatMapPageViewModel.cs" />
     <Compile Include="ViewModels\BoxPlotPageViewModel.cs" />
@@ -147,6 +151,9 @@
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\RecommendationPage.xaml.cs">
+      <DependentUpon>RecommendationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RegressionPage.xaml.cs">
       <DependentUpon>RegressionPage.xaml</DependentUpon>
     </Compile>
@@ -196,6 +203,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\loading.json" />
+    <Content Include="Data\2017-18_NBA_salary.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Data\LasVegasTripAdvisorReviews.csv" />
     <None Include="XamlBrewer.Uwp.MachineLearningSample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +230,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Theming\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RecommendationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -272,6 +287,9 @@
     <PackageReference Include="OxyPlot.Windows">
       <Version>2.0.0-unstable1035</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Recommendation\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

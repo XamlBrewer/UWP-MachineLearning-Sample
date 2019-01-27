@@ -1,15 +1,15 @@
-﻿using Microsoft.ML.Legacy;
+﻿using Mvvm.Services;
 using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
-using XamlBrewer.Uwp.MachineLearningSample.Models;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
 namespace XamlBrewer.Uwp.MachineLearningSample
 {
     public sealed partial class RegressionPage : Page
     {
-        private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> _model;
-
         public RegressionPage()
         {
             this.InitializeComponent();
@@ -35,23 +35,24 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Prepare the input files
             DatasetBox.IsChecked = true;
-            // var testDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/test.tsv");
+            var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/2017-18_NBA_salary.csv");
+            // Read training data
+            var trainingData = await ViewModel.Load(trainingDataPath);
 
             // Configure data transformations.
             SettingUpBox.IsChecked = true;
-            // var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/training.tsv");
-            // await ViewModel.Build(trainingDataPath);
 
             // Create and train the model      
             TrainingBox.IsChecked = true;
-            // await ViewModel.Train();
+            await ViewModel.BuildAndTrain(trainingDataPath);
 
             // Save the model.
-            // await ViewModel.Save("classificationModel.zip");
+            await ViewModel.Save("regressionModel.zip");
 
-            // Test and evaluate the model
+            // Visual evaluation of the model.
             TestingBox.IsChecked = true;
-            // var metrics = await ViewModel.Evaluate(testDataPath);
+            var predictions = await ViewModel.Predict(trainingData);
+            var result = predictions.OrderBy((p) => p.Salary).ToList();
 
             // Diagram
             PlottingBox.IsChecked = true;
@@ -62,10 +63,56 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 PlotAreaBorderColor = foreground,
                 TextColor = foreground,
                 TitleColor = foreground,
-                SubtitleColor = foreground
+                SubtitleColor = foreground,
+                LegendPosition = LegendPosition.TopCenter,
+                LegendOrientation = LegendOrientation.Horizontal
             };
 
-            // ...
+            var linearAxisX = new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Test Data",
+                TextColor = foreground,
+                TicklineColor = foreground,
+                TitleColor = foreground
+            };
+
+            plotModel.Axes.Add(linearAxisX);
+
+            var linearAxisY = new LinearAxis
+            {
+                Title = "Salary",
+                TextColor = foreground,
+                TicklineColor = foreground,
+                TitleColor = foreground
+            };
+            plotModel.Axes.Add(linearAxisY);
+
+            var realSeries = new ScatterSeries
+            {
+                Title = "Real",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerFill = OxyColors.SteelBlue
+            };
+
+            plotModel.Series.Add(realSeries);
+
+            var predictedSeries = new ScatterSeries
+            {
+                Title = "Predicted",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerFill = OxyColors.Firebrick
+            };
+
+            plotModel.Series.Add(predictedSeries);
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                realSeries.Points.Add(new ScatterPoint(i, result[i].Salary));
+                predictedSeries.Points.Add(new ScatterPoint(i, result[i].PredictedSalary));
+            }
 
             Diagram.Model = plotModel;
 
@@ -75,11 +122,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             PredictButton.IsEnabled = true;
         }
 
-        private async void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // Predict
             // var result = await ViewModel.Predict(TextInput.Text);
-            // TextPrediction.Text = string.Format("{1}% sure this is {0}.", result.PredictedLanguage, result.Confidence);
         }
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.RegressionPage"
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.RecommendationPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -23,10 +23,10 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Regression (IN PROGRESS)" />
+                <Run Text="Recommendation (TODO)" />
         </TextBlock>
 
-        <Path Data="{StaticResource RegressionIcon}"
+        <Path Data="{StaticResource RecommendationIcon}"
               Fill="{StaticResource PageTitleBrush}"
               VerticalAlignment="Top"
               HorizontalAlignment="Right"
@@ -37,8 +37,7 @@
 
         <TextBlock Grid.Row="1"
                    FontSize="24"
-                   TextWrapping="WrapWholeWords"
-                   FontFamily="Segoe UI">Predicts NBA player salary by draft number, age, win shares, and box plus/minus.</TextBlock>
+                   TextWrapping="WrapWholeWords">...</TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"
