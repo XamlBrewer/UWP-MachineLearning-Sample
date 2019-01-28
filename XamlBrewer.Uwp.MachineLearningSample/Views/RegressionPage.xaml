@@ -6,7 +6,8 @@
       xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
       mc:Ignorable="d"
-      Foreground="{StaticResource PageForegroundBrush}">
+      Foreground="{StaticResource PageForegroundBrush}"
+      FontFamily="Segoe UI">
 
     <Grid Background="Transparent"
           Padding="48 34 0 0">

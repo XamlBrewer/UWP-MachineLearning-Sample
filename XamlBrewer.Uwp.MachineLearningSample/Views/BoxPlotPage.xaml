@@ -47,7 +47,12 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <oxy:PlotView x:Name="Diagram"
+            <oxy:PlotView x:Name="RegressionDiagram"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Margin="0 0 40 60"
+                          Grid.Column="0" />
+            <oxy:PlotView x:Name="ClusterDiagram"
                           Background="Transparent"
                           BorderThickness="0"
                           Margin="0 0 40 60"

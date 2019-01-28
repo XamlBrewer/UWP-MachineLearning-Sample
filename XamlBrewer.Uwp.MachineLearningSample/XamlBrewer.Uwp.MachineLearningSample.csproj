@@ -131,6 +131,7 @@
     <Compile Include="Models\BinaryClassification\BinaryClassificationData.cs" />
     <Compile Include="Models\Regression\RegressionModel.cs" />
     <Compile Include="Models\Regression\RegressionData.cs" />
+    <Compile Include="Models\Regression\RegressionPercentage.cs" />
     <Compile Include="Models\Regression\RegressionPrediction.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />

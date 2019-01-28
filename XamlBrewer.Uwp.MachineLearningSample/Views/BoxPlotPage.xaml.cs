@@ -1,5 +1,4 @@
-﻿using Mvvm.Services;
-using OxyPlot;
+﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
@@ -23,30 +22,105 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            // Left: unprepared data.
+
             // Prepare diagram
-            var plotModel = PrepareDiagram();
+            var plotModel = PrepareDiagram(new[]
+                    {
+                        "TS",
+                        "ORB",
+                        "DRB",
+                        "TRB",
+                        "AST",
+                        "STL",
+                        "BLK",
+                        "TOV",
+                        "USG",
+                        "Age"
+                    });
+
+            plotModel.Title = "Regression Sample Input Data";
+            plotModel.Subtitle = "Very dispersed";
 
             // Read data
-            var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/Mall_Customers.csv");
-            var data = await ViewModel.Load(trainingDataPath);
+            var data = await ViewModel.LoadRegressionData();
 
             // Populate diagram
-            var ages = new List<double>();
-            var incomes = new List<double>();
-            var scores = new List<double>();
+            var ts = new List<double>();
+            var orb = new List<double>();
+            var drb = new List<double>();
+            var trb = new List<double>();
+            var ast = new List<double>();
+            var stl = new List<double>();
+            var blk = new List<double>();
+            var tov = new List<double>();
+            var usg = new List<double>();
+            var age = new List<double>();
+
             foreach (var value in data)
             {
-                ages.Add(value.Age);
-                incomes.Add(value.AnnualIncome);
-                scores.Add(value.SpendingScore);
+                ts.Add(value.Ts);
+                orb.Add(value.Orb);
+                drb.Add(value.Drb);
+                trb.Add(value.Trb);
+                ast.Add(value.Ast);
+                stl.Add(value.Stl);
+                blk.Add(value.Blk);
+                tov.Add(value.Tov);
+                usg.Add(value.Usg);
+                age.Add(value.Age);
             }
 
-            AddItem(plotModel, ages, 0);
-            AddItem(plotModel, incomes, 1);
-            AddItem(plotModel, scores, 2);
+            AddItem(plotModel, ts, 0);
+            AddItem(plotModel, orb, 1);
+            AddItem(plotModel, drb, 2);
+            AddItem(plotModel, trb, 3);
+            AddItem(plotModel, ast, 4);
+            AddItem(plotModel, stl, 5);
+            AddItem(plotModel, blk, 6);
+            AddItem(plotModel, tov, 7);
+            AddItem(plotModel, usg, 8);
+            AddItem(plotModel, age, 9);
 
             // Update diagram
-            Diagram.InvalidatePlot();
+            RegressionDiagram.Model = plotModel;
+            RegressionDiagram.InvalidatePlot();
+
+            // Right: prepared data.
+
+            // Prepare diagram
+            plotModel = PrepareDiagram(new[]
+                    {
+                        "Age",
+                        "Annual Income",
+                        "SpendingScore"
+                    });
+
+            plotModel.Title = "Clustering Sample Input Data";
+            plotModel.Subtitle = "Well prepared";
+
+            // Read data
+            var clusteringData = await ViewModel.LoadClusteringData();
+
+            // Populate diagram
+            var age_c = new List<double>();
+            var income = new List<double>();
+            var score = new List<double>();
+
+            foreach (var value in clusteringData)
+            {
+                age_c.Add(value.Age);
+                income.Add(value.AnnualIncome);
+                score.Add(value.SpendingScore);
+            }
+
+            AddItem(plotModel, age_c, 0);
+            AddItem(plotModel, income, 1);
+            AddItem(plotModel, score, 2);
+
+            // Update diagram
+            ClusterDiagram.Model = plotModel;
+            ClusterDiagram.InvalidatePlot();
         }
 
         private void AddItem(PlotModel plotModel, List<double> values, int slot)
@@ -83,7 +157,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             }
         }
 
-        private PlotModel PrepareDiagram()
+        private PlotModel PrepareDiagram(string[] categories)
         {
             var foreground = OxyColors.SteelBlue;
 
@@ -93,6 +167,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 PlotAreaBorderColor = foreground,
                 TextColor = foreground,
                 TitleColor = foreground,
+                TitleFontWeight = 2,
                 SubtitleColor = foreground
             };
 
@@ -122,18 +197,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.Axes.Add(new CategoryAxis
             {
                 Position = AxisPosition.Bottom,
-                ItemsSource = new[]
-                    {
-                        "Age",
-                        "Annual Income",
-                        "Spending Score"
-                    },
+                ItemsSource = categories,
                 TextColor = foreground,
                 TicklineColor = OxyColors.Transparent,
                 TitleColor = foreground
             });
-
-            Diagram.Model = plotModel;
 
             return plotModel;
         }
