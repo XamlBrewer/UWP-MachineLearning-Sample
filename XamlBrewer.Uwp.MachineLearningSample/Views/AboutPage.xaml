@@ -98,7 +98,11 @@
             <LineBreak />
             <Run>Wine Quality project and datasets for Binary Classification page on </Run>
             <Hyperlink NavigateUri="https://rubikscode.net/2018/07/02/machine-learning-with-ml-net-solving-real-world-classification-problem-wine-quality/">Rubik's Code</Hyperlink>
-            <Run>.</Run>            
+            <Run>.</Run>     
+            <LineBreak />
+            <Run>Titanic dataset for Feature Correlation page on </Run>
+            <Hyperlink NavigateUri="https://www.kaggle.com/c/titanic/data">Kaggle</Hyperlink>
+            <Run>.</Run>
         </TextBlock>
     </Grid>
 </Page>

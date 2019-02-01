@@ -22,7 +22,7 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Feature Correlation Analysis (IN PROGRESS)" />
+                <Run Text="Feature Correlation Analysis" />
         </TextBlock>
 
         <Path Data="{StaticResource HeatMapIcon}"
@@ -36,7 +36,8 @@
 
         <TextBlock Grid.Row="1"
                    FontSize="24"
-                   TextWrapping="WrapWholeWords">Reads the data and creates a Heat Map diagram on the correlation of feature values. ...</TextBlock>
+                   TextWrapping="WrapWholeWords"
+                   FontFamily="Segoe UI">Visualizes the correlation of feature values in the "Titanic: Machine Learning from Disaster" dataset as a Heat Map.</TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"

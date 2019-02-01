@@ -1,7 +1,7 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
@@ -19,29 +19,63 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private HeatMapPageViewModel ViewModel => DataContext as HeatMapPageViewModel;
 
-        private void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        // Reference plot at
+        // https://datascienceplus.com/would-you-survive-the-titanic-getting-started-in-python/
+        // which may be on the whole dataset, not on training only. And we did not
+        // compensate missing values.
+
+        private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // Prepare diagram
             var plotModel = PrepareDiagram();
 
             // Read data
-            // var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/Mall_Customers.csv");
-            // var data = await ViewModel.Load(trainingDataPath);
+            var rawData = await ViewModel.LoadCorrelationData();
+
+            // Prepare for calculation
+            var survived = new List<double>();
+            var pclass = new List<double>();
+            var age = new List<double>();
+            var sibsp = new List<double>();
+            var parch = new List<double>();
+            var fare = new List<double>();
+
+            foreach (var d in rawData)
+            {
+                survived.Add(d.Survived);
+                pclass.Add(d.PClass);
+                age.Add(d.Age);
+                sibsp.Add(d.SibSp);
+                parch.Add(d.Parch);
+                fare.Add(d.Fare);
+            }
+
+            var matrix = new List<List<double>>
+            {
+                survived,
+                pclass,
+                age,
+                sibsp,
+                parch,
+                fare
+            };
 
             // Populate diagram
-            var rand = new Random();
-            var data = new double[7, 7];
-            for (int x = 0; x < 7; ++x)
+            var data = new double[6, 6];
+            for (int x = 0; x < 6; ++x)
             {
-                for (int y = 0; y < x; ++y)
+                for (int y = 0; y < 5 - x; ++y)
                 {
-                    // Pearson range from -1 to 1.
-                    var value = (double)rand.Next(200) / 100 - 1;
-                    data[6 - x, y] = value;
-                    data[6 - y, x] = value;
+                    var seriesA = matrix[x];
+                    var seriesB = matrix[5 - y];
+
+                    var value = Statistics.Pearson(seriesA, seriesB);
+
+                    data[x, y] = value;
+                    data[5 - x, 5 - y] = value;
                 }
 
-                data[x, 6 - x] = 1;
+                data[x, 5 - x] = 1;
             }
 
             (plotModel.Series[0] as HeatMapSeries).Data = data;
@@ -69,13 +103,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Key = "HorizontalAxis",
                 ItemsSource = new[]
                 {
-                    "Pride",
-                    "Greed",
-                    "Lust",
-                    "Envy",
-                    "Gluttony",
-                    "Wrath",
-                    "Sloth"
+                    "Survived",
+                    "Class",
+                    "Age",
+                    "Sib / Sp",
+                    "Par / Chi",
+                    "Fare"
                 },
                 TextColor = foreground,
                 TicklineColor = foreground,
@@ -88,13 +121,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Key = "VerticalAxis",
                 ItemsSource = new[]
                 {
-                    "Sloth",
-                    "Wrath",
-                    "Gluttony",
-                    "Envy",
-                    "Lust",
-                    "Greed",
-                    "Pride"
+                    "Fare",
+                    "Parents / Children",
+                    "Siblings / Spouses",
+                    "Age",
+                    "Class",
+                    "Survived"
                 },
                 TextColor = foreground,
                 TicklineColor = foreground,
@@ -114,9 +146,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var heatMapSeries = new HeatMapSeries
             {
                 X0 = 0,
-                X1 = 6,
+                X1 = 5,
                 Y0 = 0,
-                Y1 = 6,
+                Y1 = 5,
                 XAxisKey = "HorizontalAxis",
                 YAxisKey = "VerticalAxis",
                 RenderMethod = HeatMapRenderMethod.Rectangles,

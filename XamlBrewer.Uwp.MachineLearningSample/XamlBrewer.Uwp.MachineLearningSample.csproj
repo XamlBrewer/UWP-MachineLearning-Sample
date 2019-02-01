@@ -121,7 +121,8 @@
     </Compile>
     <Compile Include="Models\BinaryClassification\BinaryClassificationModel.cs" />
     <Compile Include="Models\Clustering\ClusteringModel.cs" />
-    <Compile Include="Models\Clustering\ClusteringRawData.cs" />
+    <Compile Include="Models\FeatureAnalysis\ClusteringRawData.cs" />
+    <Compile Include="Models\FeatureAnalysis\CorrelationData.cs" />
     <Compile Include="Models\MulticlassClassification\MulticlassClassificationModel.cs" />
     <Compile Include="Models\MulticlassClassification\MulticlassClassificationData.cs" />
     <Compile Include="Models\MulticlassClassification\MulticlassClassificationPrediction.cs" />
@@ -131,7 +132,7 @@
     <Compile Include="Models\BinaryClassification\BinaryClassificationData.cs" />
     <Compile Include="Models\Regression\RegressionModel.cs" />
     <Compile Include="Models\Regression\RegressionData.cs" />
-    <Compile Include="Models\Regression\RegressionPercentage.cs" />
+    <Compile Include="Models\FeatureAnalysis\RegressionPercentage.cs" />
     <Compile Include="Models\Regression\RegressionPrediction.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
@@ -208,6 +209,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Data\LasVegasTripAdvisorReviews.csv" />
+    <Content Include="Data\titanic.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="XamlBrewer.Uwp.MachineLearningSample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

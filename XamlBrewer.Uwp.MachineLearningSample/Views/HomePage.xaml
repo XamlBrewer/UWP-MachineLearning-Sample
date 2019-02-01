@@ -46,17 +46,17 @@
             <LineBreak />
             <Run>* Clustering, </Run>
             <LineBreak />
-            <Run>* Binary Classification (in progress), </Run>
+            <Run>* Binary Classification, </Run>
             <LineBreak />
             <Run>* Multiclass Classification,</Run>
             <LineBreak />
-            <Run>* Regression (TODO),</Run>
+            <Run>* Regression (in progress),</Run>
             <LineBreak />
             <Run>* Recommendation (TODO),</Run>   
             <LineBreak />
-            <Run>* Feature Distribution Analysis, and</Run>   
+            <Run>* Feature Distribution Analysis with box plots, and</Run>   
             <LineBreak />
-            <Run>* Feature Correlation Analysis with heat maps (TODO).</Run>               
+            <Run>* Feature Correlation Analysis with heat maps.</Run>               
             <LineBreak />
             <LineBreak />
             <Run Foreground="FireBrick">Safety Instructions:</Run>            

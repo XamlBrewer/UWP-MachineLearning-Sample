@@ -9,7 +9,7 @@ The UWP app demonstrates the following Machine Learning scenarios. Focus is curr
 * Regression (in progress)
 * Recommendation (todo)
 * Feature Distribution Analysis with Boxplot Diagrams
-* Feature Correlation Analysis with Heatmap Diagrams (in progress)
+* Feature Correlation Analysis with Heatmap Diagrams
 
 ## Seeing is believing
 
