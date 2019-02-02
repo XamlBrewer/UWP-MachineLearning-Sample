@@ -9,6 +9,7 @@ using Mvvm;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
@@ -49,7 +50,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             var pipeline = new LearningPipeline();
             pipeline.Add(new Microsoft.ML.Legacy.Data.TextLoader(trainingDataPath).CreateFrom<RegressionData>(useHeader: true, separator: ';'));
-            //pipeline.Add(new MinMaxNormalizer("NBA_DraftNumber", "Age", "Ws", "Bmp"));
+            pipeline.Add(new MissingValueSubstitutor("NBA_DraftNumber") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
+            pipeline.Add(new MissingValueSubstitutor("Age") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
+            pipeline.Add(new MissingValueSubstitutor("Ws") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
+            pipeline.Add(new MissingValueSubstitutor("Bmp") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
+            pipeline.Add(new MinMaxNormalizer("NBA_DraftNumber", "Age", "Ws", "Bmp"));
             pipeline.Add(new ColumnConcatenator("Features",
                                                 "NBA_DraftNumber",
                                                 "Age",
@@ -60,15 +65,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             pipeline.Add(new StochasticDualCoordinateAscentRegressor()
                 {
                     LabelColumn = "Label", 
-                    FeatureColumn = "Features",
-                    NormalizeFeatures = Microsoft.ML.Legacy.Models.NormalizeOption.Warn
+                    FeatureColumn = "Features"
                 }
             );
 
             Model = pipeline.Train<RegressionData, RegressionPrediction>();
         }
 
-        public void Save(string modelName)
+        public async Task Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
             using (var fs = new FileStream(
@@ -77,7 +81,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                     FileAccess.Write,
                     FileShare.Write))
             {
-                // Model.SaveTo(_mlContext, fs); // TODO
+                await Model.WriteAsync(fs);
             }
         }
 

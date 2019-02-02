@@ -27,9 +27,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
         public Task Save(string modelName)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
-                _model.Save(modelName);
+                await _model.Save(modelName);
             });
         }
 
