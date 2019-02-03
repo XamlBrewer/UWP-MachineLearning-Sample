@@ -39,6 +39,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             LogisticRegressionBox.IsChecked = false;
             SdcaBox.IsChecked = false;
 
+            BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            BusyIndicator.PlayAnimation();
+
             // Prepare datasets.
             DatasetBox.IsChecked = true;
             var trainingDataLocation = await MlDotNet.FilePath(@"ms-appx:///Data/winequality_white_train.csv");
@@ -100,6 +103,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Update diagram
             Diagram.InvalidatePlot();
+
+            BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            BusyIndicator.PauseAnimation();
         }
 
         private void PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries)

@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
       mc:Ignorable="d"
       Foreground="{StaticResource PageForegroundBrush}">
@@ -98,6 +99,15 @@
                           Grid.Column="1" />
                 <Button Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
+                <lottie:LottieAnimationView x:Name="BusyIndicator"
+                                            FileName="Assets/loading.json"
+                                            Visibility="Collapsed"
+                                            Height="240"
+                                            HorizontalAlignment="Left"
+                                            Grid.Row="5"
+                                            Grid.Column="0"
+                                            Margin="0 -240"
+                                            FontFamily="Segoe UI" />
                 <Button Click="Calculate_Click"
                         VerticalAlignment="Top"
                         Grid.Row="6">View Disagreements</Button>
