@@ -1,7 +1,4 @@
 ﻿using Microsoft.ML.Core.Data;
-using Microsoft.ML.Legacy;
-using Microsoft.ML.Legacy.Trainers;
-using Microsoft.ML.Legacy.Transforms;
 using Microsoft.ML.Runtime.Api;
 using Microsoft.ML.Runtime.Data;
 using Microsoft.ML.Runtime.FastTree;
@@ -9,7 +6,6 @@ using Mvvm;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
@@ -18,7 +14,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
     {
         private LocalEnvironment _mlContext = new LocalEnvironment(seed: null); // v0.6;
 
-        public PredictionModel<RegressionData, RegressionPrediction> Model { get; private set; }
+        private IDataView trainingData;
+
+        private PredictionFunction<RegressionData, RegressionPrediction> predictionFunction;
+
+        public ITransformer Model { get; private set; }
 
         public IEnumerable<RegressionData> Load(string trainingDataPath)
         {
@@ -39,40 +39,30 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             var file = _mlContext.OpenInputFile(trainingDataPath);
             var src = new FileHandleSource(file);
-            return reader.Read(src).AsEnumerable<RegressionData>(_mlContext, false);
+            trainingData = reader.Read(src);
+            return trainingData.AsEnumerable<RegressionData>(_mlContext, false);
         }
 
         public void BuildAndTrain(string trainingDataPath)
         {
-            // FastTreeRegressionTrainer in v0.6 does not run in debug mode on UWP.
-            // https://stackoverflow.com/questions/50829968/ml-net-fails-to-run-on-uwp
-            // So we're back to the legacy API
+            //var t = new FastTreeRegressionTrainer(_mlContext, "Label", "Features"); // PlatformNotSupportedException
 
-            var pipeline = new LearningPipeline();
-            pipeline.Add(new Microsoft.ML.Legacy.Data.TextLoader(trainingDataPath).CreateFrom<RegressionData>(useHeader: true, separator: ';'));
-            pipeline.Add(new MissingValueSubstitutor("NBA_DraftNumber") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
-            pipeline.Add(new MissingValueSubstitutor("Age") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
-            pipeline.Add(new MissingValueSubstitutor("Ws") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
-            pipeline.Add(new MissingValueSubstitutor("Bmp") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
-            pipeline.Add(new MinMaxNormalizer("NBA_DraftNumber", "Age", "Ws", "Bmp"));
-            pipeline.Add(new ColumnConcatenator("Features",
-                                                "NBA_DraftNumber",
-                                                "Age",
-                                                "Ws",
-                                                "Bmp"
-                                                ));
-            //pipeline.Add(new OnlineGradientDescentRegressor()
-            pipeline.Add(new StochasticDualCoordinateAscentRegressor()
-                {
-                    LabelColumn = "Label", 
-                    FeatureColumn = "Features"
-                }
-            );
+            var pipeline = new NAReplaceEstimator(_mlContext, "Age", "Age", NAReplaceTransform.ColumnInfo.ReplacementMode.Mean)
+                .Append(new NAReplaceEstimator(_mlContext, "Ws", "Ws", NAReplaceTransform.ColumnInfo.ReplacementMode.Mean))
+                .Append(new NAReplaceEstimator(_mlContext, "Bmp", "Bmp", NAReplaceTransform.ColumnInfo.ReplacementMode.Mean))
+                .Append(new NAReplaceEstimator(_mlContext, "NBA_DraftNumber", "NBA_DraftNumber", NAReplaceTransform.ColumnInfo.ReplacementMode.Mean))
+                .Append(new ConcatEstimator(
+                _mlContext,
+                "Features",
+                "NBA_DraftNumber", "Age", "Ws", "Bmp"))
+                .Append(new RegressionGamTrainer(_mlContext, "Label", "Features"));
 
-            Model = pipeline.Train<RegressionData, RegressionPrediction>();
+            Model = pipeline.Fit(trainingData);
+
+            predictionFunction = Model.MakePredictionFunction<RegressionData, RegressionPrediction>(_mlContext);
         }
 
-        public async Task Save(string modelName)
+        public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
             using (var fs = new FileStream(
@@ -81,13 +71,19 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                     FileAccess.Write,
                     FileShare.Write))
             {
-                await Model.WriteAsync(fs);
+                Model.SaveTo(_mlContext, fs);
             }
         }
 
-        public IEnumerable<RegressionPrediction> Predict(IEnumerable<RegressionData> data)
+        public IEnumerable<RegressionPrediction> PredictTrainingData()
         {
-            return Model.Predict(data);
+            var res = Model.Transform(trainingData);
+            return res.AsEnumerable<RegressionPrediction>(_mlContext, false);
+        }
+
+        public RegressionPrediction Predict(RegressionData data)
+        {
+            return predictionFunction.Predict(data);
         }
     }
 }

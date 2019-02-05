@@ -8,6 +8,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public float Salary;
 
         [ColumnName("Score")]
-        public float PredictedSalary;
+        public float Score;
     }
 }

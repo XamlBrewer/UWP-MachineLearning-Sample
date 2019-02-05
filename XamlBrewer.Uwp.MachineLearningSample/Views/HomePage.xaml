@@ -50,7 +50,7 @@
             <LineBreak />
             <Run>* Multiclass Classification,</Run>
             <LineBreak />
-            <Run>* Regression (in progress),</Run>
+            <Run>* Regression,</Run>
             <LineBreak />
             <Run>* Recommendation (TODO),</Run>   
             <LineBreak />

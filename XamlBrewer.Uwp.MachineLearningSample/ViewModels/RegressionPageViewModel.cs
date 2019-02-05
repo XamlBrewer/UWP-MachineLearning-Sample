@@ -27,13 +27,21 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
         public Task Save(string modelName)
         {
-            return Task.Run(async () =>
+            return Task.Run(() =>
             {
-                await _model.Save(modelName);
+                _model.Save(modelName);
             });
         }
 
-        public Task<IEnumerable<RegressionPrediction>> Predict(IEnumerable<RegressionData> data)
+        public Task<IEnumerable<RegressionPrediction>> PredictTrainingData()
+        {
+            return Task.Run(() =>
+            {
+                return _model.PredictTrainingData();
+            });
+        }
+
+        public Task<RegressionPrediction> Predict(RegressionData data)
         {
             return Task.Run(() =>
             {
