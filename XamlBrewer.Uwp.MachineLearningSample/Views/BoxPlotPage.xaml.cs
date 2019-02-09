@@ -22,7 +22,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            //
             // Left: unprepared data.
+            //
 
             // Prepare diagram
             var plotModel = PrepareDiagram(new[]
@@ -43,50 +45,21 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.Subtitle = "Very dispersed";
 
             // Read data
-            var data = await ViewModel.LoadRegressionData();
+            var regressionData = await ViewModel.LoadRegressionData();
 
             // Populate diagram
-            var ts = new List<double>();
-            var orb = new List<double>();
-            var drb = new List<double>();
-            var trb = new List<double>();
-            var ast = new List<double>();
-            var stl = new List<double>();
-            var blk = new List<double>();
-            var tov = new List<double>();
-            var usg = new List<double>();
-            var age = new List<double>();
-
-            foreach (var value in data)
+            for (int i = 0; i < regressionData.Count; i++)
             {
-                ts.Add(value.Ts);
-                orb.Add(value.Orb);
-                drb.Add(value.Drb);
-                trb.Add(value.Trb);
-                ast.Add(value.Ast);
-                stl.Add(value.Stl);
-                blk.Add(value.Blk);
-                tov.Add(value.Tov);
-                usg.Add(value.Usg);
-                age.Add(value.Age);
+                AddItem(plotModel, regressionData[i], i);
             }
-
-            AddItem(plotModel, ts, 0);
-            AddItem(plotModel, orb, 1);
-            AddItem(plotModel, drb, 2);
-            AddItem(plotModel, trb, 3);
-            AddItem(plotModel, ast, 4);
-            AddItem(plotModel, stl, 5);
-            AddItem(plotModel, blk, 6);
-            AddItem(plotModel, tov, 7);
-            AddItem(plotModel, usg, 8);
-            AddItem(plotModel, age, 9);
 
             // Update diagram
             RegressionDiagram.Model = plotModel;
             RegressionDiagram.InvalidatePlot();
 
+            //
             // Right: prepared data.
+            //
 
             // Prepare diagram
             plotModel = PrepareDiagram(new[]
@@ -103,20 +76,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var clusteringData = await ViewModel.LoadClusteringData();
 
             // Populate diagram
-            var age_c = new List<double>();
-            var income = new List<double>();
-            var score = new List<double>();
-
-            foreach (var value in clusteringData)
+            for (int i = 0; i < clusteringData.Count; i++)
             {
-                age_c.Add(value.Age);
-                income.Add(value.AnnualIncome);
-                score.Add(value.SpendingScore);
+                AddItem(plotModel, clusteringData[i], i);
             }
-
-            AddItem(plotModel, age_c, 0);
-            AddItem(plotModel, income, 1);
-            AddItem(plotModel, score, 2);
 
             // Update diagram
             ClusterDiagram.Model = plotModel;
@@ -143,7 +106,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var outliers = values.Where(v => v > upperWhisker || v < lowerWhisker).ToList();
 
-            var item = new BoxPlotItem(slot, lowerWhisker, firstQuartile, median, thirdQuartile, upperWhisker)
+            var item = new BoxPlotItem(
+                slot, 
+                lowerWhisker, 
+                firstQuartile, 
+                median, 
+                thirdQuartile, 
+                upperWhisker)
             {
                 Outliers = outliers
             };

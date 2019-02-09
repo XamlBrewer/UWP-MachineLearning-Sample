@@ -1,10 +1,10 @@
-﻿using Microsoft.ML.Runtime.Api;
+﻿using Microsoft.ML.Data;
 using Microsoft.ML.Runtime.Data;
 using Mvvm;
 using Mvvm.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using XamlBrewer.Uwp.MachineLearningSample.Models;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 {
@@ -12,9 +12,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
     {
         private LocalEnvironment _mlContext = new LocalEnvironment(seed: null); // v0.6;
 
-        public Task<IEnumerable<RegressionPercentage>> LoadRegressionData()
+        public Task<List<List<double>>> LoadRegressionData()
         {
-            return Task.Run(async() =>
+            return Task.Run(async () =>
             {
                 var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/2017-18_NBA_salary.csv");
                 var reader = new TextLoader(_mlContext,
@@ -39,13 +39,21 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
                 var file = _mlContext.OpenInputFile(trainingDataPath);
                 var src = new FileHandleSource(file);
-                return reader.Read(src).AsEnumerable<RegressionPercentage>(_mlContext, false);
+                var dataView = reader.Read(src);
+                var result = new List<List<double>>();
+                for (int i = 0; i < dataView.Schema.ColumnCount; i++)
+                {
+                    var columnName = dataView.Schema.GetColumnName(i);
+                    result.Add(dataView.GetColumn<float>(_mlContext, columnName).Select(f => (double)f).ToList());
+                }
+
+                return result;
             });
         }
 
-        public Task<IEnumerable<ClusteringRawData>> LoadClusteringData()
+        public Task<List<List<double>>> LoadClusteringData()
         {
-            return Task.Run(async() =>
+            return Task.Run(async () =>
             {
                 var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/Mall_Customers.csv");
                 var reader = new TextLoader(_mlContext,
@@ -55,9 +63,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                                                 HasHeader = true,
                                                 Column = new[]
                                                     {
-                                                    new TextLoader.Column("CustomerId", DataKind.I4, 0),
-                                                    new TextLoader.Column("Gender", DataKind.Text, 1),
-                                                    new TextLoader.Column("Age", DataKind.I4, 2),
+                                                    new TextLoader.Column("Age", DataKind.R4, 2),
                                                     new TextLoader.Column("AnnualIncome", DataKind.R4, 3),
                                                     new TextLoader.Column("SpendingScore", DataKind.R4, 4),
                                                     }
@@ -65,7 +71,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
                 var file = _mlContext.OpenInputFile(trainingDataPath);
                 var src = new FileHandleSource(file);
-                return reader.Read(src).AsEnumerable<ClusteringRawData>(_mlContext, false);
+                var dataView = reader.Read(src);
+                var result = new List<List<double>>();
+                for (int i = 0; i < dataView.Schema.ColumnCount; i++)
+                {
+                    var columnName = dataView.Schema.GetColumnName(i);
+                    result.Add(dataView.GetColumn<float>(_mlContext, columnName).Select(f => (double)f).ToList());
+                }
+
+                return result;
             });
         }
     }
