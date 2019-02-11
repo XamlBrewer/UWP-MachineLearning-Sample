@@ -63,9 +63,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                                                 HasHeader = true,
                                                 Column = new[]
                                                     {
-                                                    new TextLoader.Column("Age", DataKind.R4, 2),
-                                                    new TextLoader.Column("AnnualIncome", DataKind.R4, 3),
-                                                    new TextLoader.Column("SpendingScore", DataKind.R4, 4),
+                                    new TextLoader.Column("Age", DataKind.R4, 2),
+                                    new TextLoader.Column("AnnualIncome", DataKind.R4, 3),
+                                    new TextLoader.Column("SpendingScore", DataKind.R4, 4),
                                                     }
                                             });
 

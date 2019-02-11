@@ -89,30 +89,31 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private void AddItem(PlotModel plotModel, List<double> values, int slot)
         {
             values.Sort();
-
             var sorted = values.ToArray();
 
+            // Box: Q1, Q2, Q3
             var median = sorted.Median();
-            int r = values.Count % 2;
             var firstQuartile = sorted.LowerQuartile();
             var thirdQuartile = sorted.UpperQuartile();
 
+            // Whiskers
             var interQuartileRange = thirdQuartile - firstQuartile;
             var step = interQuartileRange * 1.5;
             var upperWhisker = thirdQuartile + step;
-            upperWhisker = values.Where(v => v <= upperWhisker).Max();
+            upperWhisker = sorted.Where(v => v <= upperWhisker).Max();
             var lowerWhisker = firstQuartile - step;
-            lowerWhisker = values.Where(v => v >= lowerWhisker).Min();
+            lowerWhisker = sorted.Where(v => v >= lowerWhisker).Min();
 
-            var outliers = values.Where(v => v > upperWhisker || v < lowerWhisker).ToList();
+            // Outliers
+            var outliers = sorted.Where(v => v < lowerWhisker || v > upperWhisker).ToList();
 
             var item = new BoxPlotItem(
-                slot, 
-                lowerWhisker, 
-                firstQuartile, 
-                median, 
-                thirdQuartile, 
-                upperWhisker)
+                x: slot,
+                lowerWhisker: lowerWhisker,
+                boxBottom: firstQuartile,
+                median: median,
+                boxTop: thirdQuartile,
+                upperWhisker: upperWhisker)
             {
                 Outliers = outliers
             };
@@ -140,12 +141,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 SubtitleColor = foreground
             };
 
-            var series = new BoxPlotSeries
+            var cleanSeries = new BoxPlotSeries
             {
                 Stroke = foreground,
                 Fill = OxyColors.DarkOrange
             };
-            plotModel.Series.Add(series);
+            plotModel.Series.Add(cleanSeries);
 
             var outlinerSeries = new BoxPlotSeries
             {
