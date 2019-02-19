@@ -1,7 +1,6 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
@@ -30,35 +29,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var plotModel = PrepareDiagram();
 
             // Read data
-            var rawData = await ViewModel.LoadCorrelationData();
-
-            // Prepare for calculation
-            var survived = new List<double>();
-            var pclass = new List<double>();
-            var age = new List<double>();
-            var sibsp = new List<double>();
-            var parch = new List<double>();
-            var fare = new List<double>();
-
-            foreach (var d in rawData)
-            {
-                survived.Add(d.Survived);
-                pclass.Add(d.PClass);
-                age.Add(d.Age);
-                sibsp.Add(d.SibSp);
-                parch.Add(d.Parch);
-                fare.Add(d.Fare);
-            }
-
-            var matrix = new List<List<double>>
-            {
-                survived,
-                pclass,
-                age,
-                sibsp,
-                parch,
-                fare
-            };
+            var matrix = await ViewModel.LoadCorrelationData();
 
             // Populate diagram
             var data = new double[6, 6];
@@ -72,7 +43,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                     var value = Statistics.Pearson(seriesA, seriesB);
 
                     data[x, y] = value;
-                    data[5 - x, 5 - y] = value;
+                    data[5 - y, 5 - x] = value;
                 }
 
                 data[x, 5 - x] = 1;

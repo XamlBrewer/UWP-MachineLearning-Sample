@@ -1,10 +1,10 @@
-﻿using Microsoft.ML.Runtime.Api;
+﻿using Microsoft.ML.Data;
 using Microsoft.ML.Runtime.Data;
 using Mvvm;
 using Mvvm.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using XamlBrewer.Uwp.MachineLearningSample.Models;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 {
@@ -12,7 +12,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
     {
         private LocalEnvironment _mlContext = new LocalEnvironment(seed: null); // v0.6;
 
-        public Task<IEnumerable<CorrelationData>> LoadCorrelationData()
+        public Task<List<List<double>>> LoadCorrelationData()
         {
             return Task.Run(async () =>
             {
@@ -35,7 +35,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
                 var file = _mlContext.OpenInputFile(trainingDataPath);
                 var src = new FileHandleSource(file);
-                return reader.Read(src).AsEnumerable<CorrelationData>(_mlContext, false);
+                var dataView = reader.Read(src);
+                var result = new List<List<double>>();
+                for (int i = 0; i < dataView.Schema.ColumnCount; i++)
+                {
+                    var columnName = dataView.Schema.GetColumnName(i);
+                    result.Add(dataView.GetColumn<float>(_mlContext, columnName).Select(f => (double)f).ToList());
+                }
+
+                return result;
             });
         }
     }
