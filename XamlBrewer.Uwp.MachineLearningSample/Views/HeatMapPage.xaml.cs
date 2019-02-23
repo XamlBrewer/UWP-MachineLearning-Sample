@@ -19,9 +19,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private HeatMapPageViewModel ViewModel => DataContext as HeatMapPageViewModel;
 
         // Reference plot at
-        // https://datascienceplus.com/would-you-survive-the-titanic-getting-started-in-python/
-        // which may be on the whole dataset, not on training only. And we did not
-        // compensate missing values.
+        // https://tryolabs.com/blog/2017/03/16/pandas-seaborn-a-guide-to-handle-visualize-data-elegantly/
+        // Minor difference, since we did not compensate missing Age values.
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
