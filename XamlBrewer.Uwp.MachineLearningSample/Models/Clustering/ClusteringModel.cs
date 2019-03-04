@@ -1,7 +1,7 @@
-﻿using Microsoft.ML.Core.Data;
-using Microsoft.ML.Runtime.Api;
-using Microsoft.ML.Runtime.Data;
-using Microsoft.ML.Runtime.KMeans;
+﻿using Microsoft.Data.DataView;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.Trainers.KMeans;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,9 +11,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     internal class ClusteringModel
     {
-        private LocalEnvironment _mlContext = new LocalEnvironment(seed: null); // v0.6;
+        private MLContext _mlContext = new MLContext(seed: null);
 
-        public EstimatorChain<ClusteringPredictionTransformer<KMeansPredictor>> Pipeline { get; private set; }
+        public EstimatorChain<ClusteringPredictionTransformer<KMeansModelParameters>> Pipeline { get; private set; }
 
         public ITransformer Model { get; private set; }
 
@@ -22,40 +22,29 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public IDataView Load(string trainingDataPath)
         {
-            var reader = new TextLoader(_mlContext,
-                                        new TextLoader.Arguments()
-                                        {
-                                            Separator = ",",
-                                            HasHeader = true,
-                                            Column = new[]
-                                                {
-                                                    new TextLoader.Column("CustomerId", DataKind.I4, 0),
-                                                    new TextLoader.Column("Gender", DataKind.Text, 1),
-                                                    new TextLoader.Column("Age", DataKind.I4, 2),
-                                                    new TextLoader.Column("AnnualIncome", DataKind.R4, 3),
-                                                    new TextLoader.Column("SpendingScore", DataKind.R4, 4),
-                                                }
-                                        });
+            var readerOptions =  new TextLoader.Options()
+            {
+                Separators = new[] { ',' },
+                HasHeader = true,
+                Columns = new[]
+                    {
+                        new TextLoader.Column("CustomerId", DataKind.Int32, 0),
+                        new TextLoader.Column("Gender", DataKind.String, 1),
+                        new TextLoader.Column("Age", DataKind.Int32, 2),
+                        new TextLoader.Column("AnnualIncome", DataKind.Single, 3),
+                        new TextLoader.Column("SpendingScore", DataKind.Single, 4),
+                    }
+            };
 
-            var file = _mlContext.OpenInputFile(trainingDataPath);
-            var src = new FileHandleSource(file);
-            return reader.Read(src);
+            return _mlContext.Data.LoadFromTextFile(trainingDataPath, readerOptions);
         }
 
         public void Build()
         {
-            Pipeline = new ConcatEstimator(_mlContext, "Features", "AnnualIncome", "SpendingScore")
-                .Append(new KMeansPlusPlusTrainer(
-                    env: _mlContext,
-                    featureColumn: "Features",
-                    clustersCount: 5,
-                    advancedSettings: (a) =>
-                        {
-                            // a.AccelMemBudgetMb = 1;
-                            // a.MaxIterations = 1;
-                            // a. ...
-                        }
-                    ));
+            Pipeline = _mlContext.Transforms.Concatenate("Features", new[] { "AnnualIncome", "SpendingScore" })
+                .Append(_mlContext.Clustering.Trainers.KMeans(
+                    featureColumnName: "Features",
+                    clustersCount: 5));
         }
 
         public void Train(IDataView trainingDataView)
@@ -78,13 +67,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public IEnumerable<ClusteringPrediction> Predict(IDataView dataView)
         {
-            var result = Model.Transform(dataView).AsEnumerable<ClusteringPrediction>(_mlContext, false);
+            var result = _mlContext.Data.CreateEnumerable<ClusteringPrediction>(Model.Transform(dataView), reuseRowObject: false);
             return result;
         }
 
         public ClusteringPrediction Predict(ClusteringData clusteringData)
         {
-            var predictionFunc = Model.MakePredictionFunction<ClusteringData, ClusteringPrediction>(_mlContext);
+            var predictionFunc = Model.CreatePredictionEngine<ClusteringData, ClusteringPrediction>(_mlContext);
             return predictionFunc.Predict(clusteringData);
         }
     }

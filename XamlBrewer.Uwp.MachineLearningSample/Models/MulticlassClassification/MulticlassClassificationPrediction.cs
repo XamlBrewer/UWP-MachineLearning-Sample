@@ -1,7 +1,7 @@
-﻿namespace XamlBrewer.Uwp.MachineLearningSample.Models
-{
-    using Microsoft.ML.Runtime.Api;
+﻿using Microsoft.ML.Data;
 
+namespace XamlBrewer.Uwp.MachineLearningSample.Models
+{
     public class MulticlassClassificationPrediction
     {
         private readonly string[] classNames = { "German", "English", "French", "Italian", "Romanian", "Spanish" };

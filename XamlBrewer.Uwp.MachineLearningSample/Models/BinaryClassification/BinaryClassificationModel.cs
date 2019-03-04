@@ -1,60 +1,75 @@
-﻿using Microsoft.ML.Legacy;
-using Microsoft.ML.Legacy.Models;
-using Microsoft.ML.Legacy.Transforms;
-using Microsoft.ML.Runtime.Data;
+﻿using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.Transforms;
+using Microsoft.ML.Transforms.Normalizers;
 using Mvvm;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Windows.Storage;
-using TextLoader = Microsoft.ML.Legacy.Data.TextLoader;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     internal class BinaryClassificationModel : ViewModelBase
     {
-        private LocalEnvironment _mlContext = new LocalEnvironment(seed: null); // v0.6;
+        public MLContext MLContext { get; } = new MLContext(seed: null);
 
-        public PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> BuildAndTrain(string trainingDataPath, ILearningPipelineItem algorithm)
+        public PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> BuildAndTrain(string trainingDataPath, IEstimator<ITransformer> algorithm)
         {
-            var pipeline = new LearningPipeline();
-            pipeline.Add(new TextLoader(trainingDataPath).CreateFrom<BinaryClassificationData>(useHeader: true, separator: ';'));
-            pipeline.Add(new MissingValueSubstitutor("FixedAcidity") { ReplacementKind = NAReplaceTransformReplacementKind.Mean });
-            pipeline.Add(MakeNormalizer());
-            pipeline.Add(new ColumnConcatenator("Features",
-                                                 "FixedAcidity",
-                                                 "VolatileAcidity",
-                                                 "CitricAcid",
-                                                 "ResidualSugar",
-                                                 "Chlorides",
-                                                 "FreeSulfurDioxide",
-                                                 "TotalSulfurDioxide",
-                                                 "Density",
-                                                 "Ph",
-                                                 "Sulphates",
-                                                 "Alcohol"));
-            pipeline.Add(algorithm);
+            IEstimator<ITransformer> pipeline =
+                MLContext.Transforms.ReplaceMissingValues("FixedAcidity", replacementKind: MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean)
+                .Append(MakeNormalizer())
+                .Append(MLContext.Transforms.Concatenate("Features",
+                    new[]
+                    {
+                        "FixedAcidity",
+                        "VolatileAcidity",
+                        "CitricAcid",
+                        "ResidualSugar",
+                        "Chlorides",
+                        "FreeSulfurDioxide",
+                        "TotalSulfurDioxide",
+                        "Density",
+                        "Ph",
+                        "Sulphates",
+                        "Alcohol"}))
+                .Append(algorithm);
 
-            return pipeline.Train<BinaryClassificationData, BinaryClassificationPrediction>();
+            var trainData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
+                    trainingDataPath, separatorChar: ';', hasHeader: true);
+
+            ITransformer model =  pipeline.Fit(trainData);
+            return new PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>(MLContext, model);
         }
 
-        public void Save(PredictionModel model, string modelName)
+        public void Save(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
             using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
-                model.WriteAsync(fs);
+                MLContext.Model.Save(model.Transformer, fs);
         }
 
-        public BinaryClassificationMetrics Evaluate(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
+        public CalibratedBinaryClassificationMetrics Evaluate(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
         {
-            var testData = new TextLoader(testDataLocation).CreateFrom<BinaryClassificationData>(useHeader: true, separator: ';');
-            var metrics = new BinaryClassificationEvaluator().Evaluate(model, testData);
-            return metrics;
+            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(testDataLocation, separatorChar: ';', hasHeader: true);
+
+            var scoredData = model.Transformer.Transform(testData);
+            return MLContext.BinaryClassification.Evaluate(scoredData);
+        }
+
+        public BinaryClassificationMetrics EvaluateNonCalibrated(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
+        {
+            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(testDataLocation, separatorChar: ';', hasHeader: true);
+
+            var scoredData = model.Transformer.Transform(testData);
+            return MLContext.BinaryClassification.EvaluateNonCalibrated(scoredData);
         }
 
         public IEnumerable<BinaryClassificationPrediction> Predict(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, IEnumerable<BinaryClassificationData> data)
         {
-            return model.Predict(data);
+            foreach (BinaryClassificationData datum in data)
+                yield return model.Engine.Predict(datum);
         }
 
         public IEnumerable<BinaryClassificationData> GetSample(string sampleDataPath)
@@ -79,15 +94,40 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                });
         }
 
-        private ILearningPipelineItem MakeNormalizer()
+        private IEstimator<ITransformer> MakeNormalizer()
         {
-            var normalizer = new BinNormalizer
-            {
-                NumBins = 2
-            };
-            normalizer.AddColumn("Label");
+            var normalizer = MLContext.Transforms.Normalize(
+                new NormalizingEstimator.BinningColumnOptions("Label", numBins: 2));
 
-            return normalizer;
+            return normalizer.Append(MLContext.Transforms.CustomMapping(new MapFloatToBool().GetMapping(), "MapFloatToBool"));
+        }
+
+        public class LabelInput
+        {
+            public float Label { get; set; }
+        }
+
+        public class LabelOutput
+        {
+            public bool Label { get; set; }
+
+            public static LabelOutput True = new LabelOutput() { Label = true };
+            public static LabelOutput False = new LabelOutput() { Label = false };
+        }
+
+        [CustomMappingFactoryAttribute("MapFloatToBool")]
+        public class MapFloatToBool : CustomMappingFactory<LabelInput, LabelOutput>
+        {
+            public override Action<LabelInput, LabelOutput> GetMapping()
+            {
+                return (input, output) =>
+                {
+                    if (input.Label > 0)
+                        output.Label = true;
+                    else
+                        output.Label = false;
+                };
+            }
         }
     }
 }

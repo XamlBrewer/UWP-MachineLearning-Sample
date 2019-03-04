@@ -1,5 +1,4 @@
-﻿using Microsoft.ML.Legacy;
-using OxyPlot;
+﻿using OxyPlot;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;

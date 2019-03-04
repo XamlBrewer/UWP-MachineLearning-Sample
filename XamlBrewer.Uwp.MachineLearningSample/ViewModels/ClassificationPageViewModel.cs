@@ -1,4 +1,4 @@
-﻿using Microsoft.ML.Legacy.Models;
+﻿using Microsoft.ML.Data;
 using Mvvm;
 using System.Threading.Tasks;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
@@ -9,19 +9,19 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
     {
         private MulticlassClassificationModel _model = new MulticlassClassificationModel();
 
-        public Task Build(string trainingDataPath)
+        public Task Build()
         {
             return Task.Run(() =>
             {
-                _model.Build(trainingDataPath);
+                _model.Build();
             });
         }
 
-        public Task Train()
+        public Task Train(string trainingDataPath)
         {
             return Task.Run(() =>
             {
-                _model.Train();
+                _model.Train(trainingDataPath);
             });
         }
 
@@ -33,7 +33,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public Task<ClassificationMetrics> Evaluate(string testDataPath)
+        public Task<MultiClassClassifierMetrics> Evaluate(string testDataPath)
         {
             return Task.Run(() =>
             {

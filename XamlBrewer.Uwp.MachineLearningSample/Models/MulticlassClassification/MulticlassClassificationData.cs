@@ -1,13 +1,13 @@
-﻿namespace XamlBrewer.Uwp.MachineLearningSample.Models
-{
-    using Microsoft.ML.Runtime.Api;
+﻿using Microsoft.ML.Data;
 
+namespace XamlBrewer.Uwp.MachineLearningSample.Models
+{
     public class MulticlassClassificationData
     {
-        [Column(ordinal: "0", name: "Label")]
+        [LoadColumn(0), ColumnName("Label")]
         public float LanguageClass;
 
-        [Column(ordinal: "1")]
+        [LoadColumn(1)]
         public string Text;
 
         public MulticlassClassificationData(string text)

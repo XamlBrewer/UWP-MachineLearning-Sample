@@ -49,7 +49,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Create and train the model      
             TrainingBox.IsChecked = true;
-            await ViewModel.BuildAndTrain(trainingDataPath);
+            await ViewModel.BuildAndTrain();
 
             // Save the model.
             await ViewModel.Save("regressionModel.zip");

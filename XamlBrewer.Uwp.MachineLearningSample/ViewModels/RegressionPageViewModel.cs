@@ -17,11 +17,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public Task BuildAndTrain(string trainingDataPath)
+        public Task BuildAndTrain()
         {
             return Task.Run(() =>
             {
-                _model.BuildAndTrain(trainingDataPath);
+                _model.BuildAndTrain();
             });
         }
 

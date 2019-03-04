@@ -1,6 +1,5 @@
-﻿using Microsoft.ML.Legacy;
-using Microsoft.ML.Legacy.Models;
-using Microsoft.ML.Legacy.Transforms;
+﻿using Microsoft.ML;
+using Microsoft.ML.Data;
 using Mvvm;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,7 +11,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
     {
         private BinaryClassificationModel _model = new BinaryClassificationModel();
 
-        public Task<PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>> BuildAndTrain(string trainingDataPath, ILearningPipelineItem algorithm)
+        public MLContext MLContext => _model.MLContext;
+
+        public Task<PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>> BuildAndTrain(string trainingDataPath, IEstimator<ITransformer> algorithm)
         {
             return Task.Run(() =>
             {
@@ -20,7 +21,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public Task Save(PredictionModel model, string modelName)
+        public Task Save(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string modelName)
         {
             return Task.Run(() =>
             {
@@ -28,7 +29,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public Task<BinaryClassificationMetrics> Evaluate(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
+        public Task<CalibratedBinaryClassificationMetrics> Evaluate(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
         {
             return Task.Run(() =>
             {
@@ -36,11 +37,19 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
+        public Task<BinaryClassificationMetrics> EvaluateNonCalibrated(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
+        {
+            return Task.Run(() =>
+            {
+                return _model.EvaluateNonCalibrated(model, testDataLocation);
+            });
+        }
+
         public Task<IEnumerable<BinaryClassificationPrediction>> Predict(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, IEnumerable<BinaryClassificationData> data)
         {
             return Task.Run(() =>
             {
-                return model.Predict(data);
+                return _model.Predict(model, data);
             });
         }
 
@@ -50,17 +59,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             {
                 return _model.GetSample(sampleDataPath);
             });
-        }
-
-        private ILearningPipelineItem MakeNormalizer()
-        {
-            var normalizer = new BinNormalizer
-            {
-                NumBins = 2
-            };
-            normalizer.AddColumn("Label");
-
-            return normalizer;
         }
     }
 }
