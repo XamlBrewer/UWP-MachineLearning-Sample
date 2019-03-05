@@ -21,6 +21,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 {
                     Separators = new[] { ',' },
                     HasHeader = true,
+                    AllowQuoting = true,
                     Columns = new[]
                         {
                         new TextLoader.Column("Survived", DataKind.Single, 1),
