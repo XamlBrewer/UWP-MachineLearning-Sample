@@ -24,9 +24,3 @@ The UWP app demonstrates the following Machine Learning scenarios. Focus is curr
 ![Screenshot](Assets/BoxPlot.png?raw=true)
 
 ![Screenshot](Assets/HeatMap.png?raw=true)
-
-## What could possibly go wrong?
-We had to implement some workarounds because today's ML.NET release is in beta and temporarily not very UWP-friendly: 
-* it uses Reflection.Emit (blocked by UWP in Release mode), 
-* it uses the MEF composition container (not exposed to UWP by CoreFX), and
-* it does file and process manipulations on classic API's that are not available in UWP because of the sandbox.
