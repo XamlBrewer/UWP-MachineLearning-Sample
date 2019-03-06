@@ -1,22 +1,22 @@
-﻿using Microsoft.ML.Runtime.Api;
+﻿using Microsoft.ML.Data;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     public class RegressionData
     {
-        [Column("1"), ColumnName("Label")]
+        [LoadColumn(1), ColumnName("Label")]
         public float Salary;
 
-        [Column("3")]
+        [LoadColumn(3)]
         public float NBA_DraftNumber;
 
-        [Column("4")]
+        [LoadColumn(4)]
         public float Age;
 
-        [Column("22")]
+        [LoadColumn(22)]
         public float Ws;
 
-        [Column("26")]
+        [LoadColumn(26)]
         public float Bmp;
     }
 }

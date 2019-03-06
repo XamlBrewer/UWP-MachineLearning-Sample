@@ -1,37 +1,37 @@
-﻿using Microsoft.ML.Runtime.Api;
+﻿using Microsoft.ML.Data;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     public class RegressionPercentage
     {
-        [Column("9")]
+        [LoadColumn(9)]
         public float Ts;
 
-        [Column("12")]
+        [LoadColumn(12)]
         public float Orb;
 
-        [Column("13")]
+        [LoadColumn(13)]
         public float Drb;
 
-        [Column("14")]
+        [LoadColumn(14)]
         public float Trb;
 
-        [Column("15")]
+        [LoadColumn(15)]
         public float Ast;
 
-        [Column("16")]
+        [LoadColumn(16)]
         public float Stl;
 
-        [Column("17")]
+        [LoadColumn(17)]
         public float Blk;
 
-        [Column("18")]
+        [LoadColumn(18)]
         public float Tov;
 
-        [Column("19")]
+        [LoadColumn(19)]
         public float Usg;
 
-        [Column("4")]
+        [LoadColumn(4)]
         public float Age;
     }
 }

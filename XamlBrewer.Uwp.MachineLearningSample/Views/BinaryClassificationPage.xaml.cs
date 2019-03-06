@@ -1,5 +1,4 @@
-﻿using Microsoft.ML.Legacy;
-using Microsoft.ML.Legacy.Trainers;
+﻿using Microsoft.ML;
 using Mvvm.Services;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -52,12 +51,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Perceptron
             PerceptronBox.IsChecked = true;
-            _perceptronBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, new AveragedPerceptronBinaryClassifier());
+            _perceptronBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.AveragedPerceptron());
             await ViewModel.Save(_perceptronBinaryModel, "perceptronModel.zip");
-            var metrics = await ViewModel.Evaluate(_perceptronBinaryModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
+            var nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_perceptronBinaryModel, _testDataPath);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = double.NaN });// metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.F1Score });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -70,21 +69,21 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Linear SVM
             LinearSvmBox.IsChecked = true;
-            _linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, new LinearSvmBinaryClassifier());
+            _linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LinearSupportVectorMachines());
             await ViewModel.Save(_linearSvmModel, "linearSvmModel.zip");
-            metrics = await ViewModel.Evaluate(_linearSvmModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.F1Score });
+            nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_linearSvmModel, _testDataPath);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = double.NaN });// metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.F1Score });
 
             // Update diagram
             Diagram.InvalidatePlot();
 
             // Logistic Regression
             LogisticRegressionBox.IsChecked = true;
-            _logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, new LogisticRegressionBinaryClassifier());
+            _logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LogisticRegression());
             await ViewModel.Save(_logisticRegressionModel, "logisticRegressionModel.zip");
-            metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
+            var metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
             entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Entropy });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.F1Score });
@@ -94,7 +93,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Stochastic Dual Coordinate Ascent
             SdcaBox.IsChecked = true;
-            _sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, new StochasticDualCoordinateAscentBinaryClassifier());
+            _sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.StochasticDualCoordinateAscent());
             await ViewModel.Save(_sdcabModel, "sdcabModel.zip");
             metrics = await ViewModel.Evaluate(_sdcabModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });

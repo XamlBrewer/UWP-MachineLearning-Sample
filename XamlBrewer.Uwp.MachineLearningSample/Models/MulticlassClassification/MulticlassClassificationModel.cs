@@ -1,45 +1,40 @@
-﻿using Microsoft.ML.Legacy;
-using Microsoft.ML.Legacy.Models;
-using Microsoft.ML.Legacy.Trainers;
-using Microsoft.ML.Legacy.Transforms;
+﻿using Microsoft.ML;
+using Microsoft.ML.Data;
 using Mvvm;
 using System.IO;
 using Windows.Storage;
-using TextLoader = Microsoft.ML.Legacy.Data.TextLoader; // !!! This is the old TextLoader
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     internal class MulticlassClassificationModel : ViewModelBase
     {
-        public LearningPipeline Pipeline { get; private set; }
+        private MLContext MLContext { get; } = new MLContext(seed: null);
 
-        public PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> Model { get; private set; }
+        private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> Model { get; set; }
 
-        public void Build(string trainingDataPath)
+        private IEstimator<ITransformer> _pipeline;
+
+        public void Build()
         {
-            Pipeline = new LearningPipeline();
-            Pipeline.Add(new TextLoader(trainingDataPath).CreateFrom<MulticlassClassificationData>());
-
-            // Create a dictionary for the languages. (no pun intended)
-            Pipeline.Add(new Dictionarizer("Label"));
-
-            // Transform the text into a feature vector.
-            Pipeline.Add(new TextFeaturizer("Features", "Text"));
-
+            _pipeline = MLContext.Transforms.Conversion.MapValueToKey("Label")
+                .Append(MLContext.Transforms.Text.FeaturizeText("Features", "Text"))
             // Main algorithm
-            Pipeline.Add(new StochasticDualCoordinateAscentClassifier());
+                .Append(MLContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent())
             // or
-            // Pipeline.Add(new LogisticRegressionClassifier());
+            // MLContext.MulticlassClassification.Trainers.LogisticRegression());
             // or
-            // Pipeline.Add(new NaiveBayesClassifier()); // yields weird metrics...
+            // MLContext.MulticlassClassification.Trainers.NaiveBayes()); // yields weird metrics...
 
+                
             // Convert the predicted value back into a language.
-            Pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
+                .Append(MLContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
         }
 
-        public void Train()
+        public void Train(string trainingDataPath)
         {
-            Model = Pipeline.Train<MulticlassClassificationData, MulticlassClassificationPrediction>();
+            var trainData = MLContext.Data.LoadFromTextFile<MulticlassClassificationData>(trainingDataPath);
+            ITransformer transformer = _pipeline.Fit(trainData);
+            Model = new PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction>(MLContext, transformer);
         }
 
         public void Save(string modelName)
@@ -50,20 +45,20 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.Write))
-                Model.WriteAsync(fs);
+                MLContext.Model.Save(Model.Transformer, fs);
         }
 
-        public ClassificationMetrics Evaluate(string testDataPath)
+        public MultiClassClassifierMetrics Evaluate(string testDataPath)
         {
-            var testData = new TextLoader(testDataPath).CreateFrom<MulticlassClassificationData>();
+            var testData = MLContext.Data.LoadFromTextFile<MulticlassClassificationData>(testDataPath);
 
-            var evaluator = new ClassificationEvaluator();
-            return evaluator.Evaluate(Model, testData);
+            var scoredData = Model.Transformer.Transform(testData);
+            return MLContext.MulticlassClassification.Evaluate(scoredData);
         }
 
         public MulticlassClassificationPrediction Predict(string text)
         {
-            return Model.Predict(new MulticlassClassificationData(text));
+            return Model.Engine.Predict(new MulticlassClassificationData(text));
         }
     }
 }

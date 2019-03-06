@@ -60,11 +60,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Configure data transformations.
             SettingUpBox.IsChecked = true;
             var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/training.tsv");
-            await ViewModel.Build(trainingDataPath);
+            await ViewModel.Build();
 
             // Create and train the model      
             TrainingBox.IsChecked = true;
-            await ViewModel.Train();
+            await ViewModel.Train(trainingDataPath);
 
             // Save the model.
             await ViewModel.Save("classificationModel.zip");
