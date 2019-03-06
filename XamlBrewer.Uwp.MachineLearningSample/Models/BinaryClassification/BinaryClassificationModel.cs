@@ -1,7 +1,6 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Transforms;
-using Microsoft.ML.Transforms.Normalizers;
 using Mvvm;
 using System;
 using System.Collections.Generic;
