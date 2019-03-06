@@ -57,7 +57,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Visual evaluation of the model.
             TestingBox.IsChecked = true;
             var predictions = await ViewModel.PredictTrainingData();
-            var result = predictions.OrderBy((p) => p.Score).ToList();
+            var result = predictions.OrderBy((p) => p.Salary).ToList();
 
             // Diagram
             PlottingBox.IsChecked = true;

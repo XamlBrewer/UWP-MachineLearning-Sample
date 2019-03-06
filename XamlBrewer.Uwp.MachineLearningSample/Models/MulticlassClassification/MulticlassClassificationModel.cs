@@ -19,11 +19,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             _pipeline = MLContext.Transforms.Conversion.MapValueToKey("Label")
                 .Append(MLContext.Transforms.Text.FeaturizeText("Features", "Text"))
             // Main algorithm
-                .Append(MLContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent())
+            // .Append(MLContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent())
             // or
-            // MLContext.MulticlassClassification.Trainers.LogisticRegression());
+                .Append(MLContext.MulticlassClassification.Trainers.LogisticRegression())
             // or
-            // MLContext.MulticlassClassification.Trainers.NaiveBayes()); // yields weird metrics...
+            // .Append(MLContext.MulticlassClassification.Trainers.NaiveBayes()) // yields weird metrics...
 
                 
             // Convert the predicted value back into a language.

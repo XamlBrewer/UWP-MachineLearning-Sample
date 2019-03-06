@@ -10,7 +10,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 {
     internal class HeatMapPageViewModel : ViewModelBase
     {
-        private MLContext _mlContext = new MLContext(seed: null); // v0.6;
+        private MLContext _mlContext = new MLContext(seed: null);
 
         public Task<List<List<double>>> LoadCorrelationData()
         {

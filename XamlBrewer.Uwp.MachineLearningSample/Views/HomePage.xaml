@@ -61,11 +61,7 @@
             <LineBreak />
             <Run Foreground="FireBrick">Safety Instructions:</Run>            
             <LineBreak />
-            <Run Foreground="FireBrick">* Run on Windows 10 Version 1809 or higher,</Run>            
-            <LineBreak />
-            <Run Foreground="FireBrick">* run in x64 mode,</Run>            
-            <LineBreak />
-            <Run Foreground="FireBrick">* run with ML.NET 0.6 only (don't upgrade), and</Run>            
+            <Run Foreground="FireBrick">* Run on Windows 10 Version 1809 or higher,</Run>                   
             <LineBreak />
             <Run Foreground="FireBrick">* only run in Debug mode.</Run>  
             <LineBreak />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.DataView;
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using Mvvm;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     internal class RegressionModel : ViewModelBase
     {
-        private MLContext _mlContext = new MLContext(seed: null); // v0.6;
+        private MLContext _mlContext = new MLContext(seed: null);
 
         private IDataView trainingData;
 
@@ -52,7 +53,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 .Append(_mlContext.Transforms.Concatenate(
                     "Features",
                     new[] { "NBA_DraftNumber", "Age", "Ws", "Bmp" }))
-                .Append(_mlContext.Regression.Trainers.GeneralizedAdditiveModels("Label", "Features"));
+                // .Append(_mlContext.Regression.Trainers.FastTree()); // PlatformNotSupportedException
+                // .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(new OnlineGradientDescentTrainer.Options { })); // InvalidOperationException
+                // .Append(_mlContext.Regression.Trainers.StochasticDualCoordinateAscent());       
+                .Append(_mlContext.Regression.Trainers.PoissonRegression());
+                //.Append(_mlContext.Regression.Trainers.GeneralizedAdditiveModels());
 
             Model = pipeline.Fit(trainingData);
 
