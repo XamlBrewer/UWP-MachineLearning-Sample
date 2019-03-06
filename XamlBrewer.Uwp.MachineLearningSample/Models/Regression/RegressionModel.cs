@@ -44,20 +44,22 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public void BuildAndTrain()
         {
-            //var t = new FastTreeRegressionTrainer(_mlContext, "Label", "Features"); // PlatformNotSupportedException
-
             var pipeline = _mlContext.Transforms.ReplaceMissingValues("Age", "Age", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean)
                 .Append(_mlContext.Transforms.ReplaceMissingValues("Ws", "Ws", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean))
                 .Append(_mlContext.Transforms.ReplaceMissingValues("Bmp", "Bmp", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean))
                 .Append(_mlContext.Transforms.ReplaceMissingValues("NBA_DraftNumber", "NBA_DraftNumber", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean))
+                .Append(_mlContext.Transforms.Normalize("NBA_DraftNumber", "NBA_DraftNumber", NormalizingEstimator.NormalizerMode.Binning))
+                .Append(_mlContext.Transforms.Normalize("Age", "Age", NormalizingEstimator.NormalizerMode.MinMax))
+                .Append(_mlContext.Transforms.Normalize("Ws", "Ws", NormalizingEstimator.NormalizerMode.MeanVariance))
+                .Append(_mlContext.Transforms.Normalize("Bmp", "Bmp", NormalizingEstimator.NormalizerMode.MeanVariance))
                 .Append(_mlContext.Transforms.Concatenate(
                     "Features",
                     new[] { "NBA_DraftNumber", "Age", "Ws", "Bmp" }))
                 // .Append(_mlContext.Regression.Trainers.FastTree()); // PlatformNotSupportedException
-                // .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(new OnlineGradientDescentTrainer.Options { })); // InvalidOperationException
+                // .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(new OnlineGradientDescentTrainer.Options { })); // InvalidOperationException if you don't normalize.
                 // .Append(_mlContext.Regression.Trainers.StochasticDualCoordinateAscent());       
-                .Append(_mlContext.Regression.Trainers.PoissonRegression());
-                //.Append(_mlContext.Regression.Trainers.GeneralizedAdditiveModels());
+                // .Append(_mlContext.Regression.Trainers.PoissonRegression());
+                .Append(_mlContext.Regression.Trainers.GeneralizedAdditiveModels());
 
             Model = pipeline.Fit(trainingData);
 
