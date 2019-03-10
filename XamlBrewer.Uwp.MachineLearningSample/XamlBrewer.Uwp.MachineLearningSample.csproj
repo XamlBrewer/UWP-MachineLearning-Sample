@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\BinaryClassification\BinaryClassificationModel.cs" />
+    <Compile Include="Models\BinaryClassification\MLContextExtensions.cs" />
     <Compile Include="Models\PredictionModel.cs" />
     <Compile Include="Models\Clustering\ClusteringModel.cs" />
     <Compile Include="Models\FeatureAnalysis\ClusteringRawData.cs" />
