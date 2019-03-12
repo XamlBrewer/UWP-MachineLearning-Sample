@@ -72,24 +72,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public IEnumerable<BinaryClassificationData> GetSample(string sampleDataPath)
         {
-            return File.ReadAllLines(sampleDataPath)
-               .Skip(1)
-               .Select(x => x.Split(';'))
-               .Select(x => new BinaryClassificationData
-               {
-                   FixedAcidity = float.Parse(x[0]),
-                   VolatileAcidity = float.Parse(x[1]),
-                   CitricAcid = float.Parse(x[2]),
-                   ResidualSugar = float.Parse(x[3]),
-                   Chlorides = float.Parse(x[4]),
-                   FreeSulfurDioxide = float.Parse(x[5]),
-                   TotalSulfurDioxide = float.Parse(x[6]),
-                   Density = float.Parse(x[7]),
-                   Ph = float.Parse(x[8]),
-                   Sulphates = float.Parse(x[9]),
-                   Alcohol = float.Parse(x[10]),
-                   Label = float.Parse(x[11])
-               });
+            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
+                sampleDataPath, 
+                separatorChar: ';', 
+                hasHeader: true);
+            return MLContext.Data.CreateEnumerable<BinaryClassificationData>(
+                data: testData, 
+                reuseRowObject: false);
         }
     }
 }
