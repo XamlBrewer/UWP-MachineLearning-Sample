@@ -34,8 +34,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                         "Alcohol"}))
                 .Append(algorithm);
 
+            // No TextLoader.
             var trainData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
-                    trainingDataPath, separatorChar: ';', hasHeader: true);
+                    path: trainingDataPath, 
+                    separatorChar: ';', 
+                    hasHeader: true);
 
             ITransformer model =  pipeline.Fit(trainData);
             return new PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>(MLContext, model);

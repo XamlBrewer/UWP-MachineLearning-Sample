@@ -23,7 +23,7 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Recommendation (TODO)" />
+                <Run Text="Recommendation (WORK IN PROGRESS)" />
         </TextBlock>
 
         <Path Data="{StaticResource RecommendationIcon}"
@@ -37,7 +37,11 @@
 
         <TextBlock Grid.Row="1"
                    FontSize="24"
-                   TextWrapping="WrapWholeWords">...</TextBlock>
+                   TextWrapping="WrapWholeWords">
+            <Run>Recommends hotels on the Las Vegas Strip for the selected traveler type, based on 2015 TripAdvisor ratings.</Run>
+            <LineBreak />
+            <Run Foreground="Firebrick">Warning: currently behaves not so good when in x86 mode.</Run>
+        </TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"
@@ -58,6 +62,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -107,23 +112,27 @@
                                             Height="180"
                                             HorizontalAlignment="Left"
                                             Grid.Row="5"
-                                            Grid.Column="0" 
+                                            Grid.Column="0"
                                             Margin="0 -180"
                                             FontFamily="Segoe UI" />
-                <!--<TextBox x:Name="TextInput"
-                         Header="Type some text"
-                         IsSpellCheckEnabled="False"
-                         Margin="0 40 0 0"
-                         Grid.ColumnSpan="2"
-                         Grid.Row="6" />-->
+                <ComboBox Grid.Row="7"
+                          x:Name="HotelsCombo"
+                          Header="Hotel" />
+                <ComboBox x:Name="TravelerTypesCombo"
+                          Grid.Row="7"
+                          Grid.Column="1"
+                          Header="Traveler Type" />
                 <Button x:Name="PredictButton"
                         Click="Calculate_Click"
-                        Grid.Row="7">Predict</Button>
-                <TextBlock x:Name="TextPrediction"
-                           Foreground="Coral"
-                           Grid.Row="7"
-                           Grid.Column="1"
-                           HorizontalAlignment="Right" />
+                        Grid.Row="8"
+                        Grid.Column="0">Predict</Button>
+                <TextBox x:Name="ResultBlock"
+                         Header="Score (0-5)"
+                         Background="Transparent"
+                         Foreground="Firebrick"
+                         IsTabStop="False"
+                         Grid.Row="8"
+                         Grid.Column="1" />
             </Grid>
             <oxy:PlotView x:Name="Diagram"
                           Background="Transparent"

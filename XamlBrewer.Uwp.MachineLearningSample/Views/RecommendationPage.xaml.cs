@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using Mvvm.Services;
+using OxyPlot;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
@@ -7,17 +8,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 {
     public sealed partial class RecommendationPage : Page
     {
-        private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> _model;
-
         public RecommendationPage()
         {
             this.InitializeComponent();
-            this.DataContext = new RegressionPageViewModel();
+            this.DataContext = new RecommendationPageViewModel();
 
             Loaded += Page_Loaded;
         }
 
-        private RegressionPageViewModel ViewModel => DataContext as RegressionPageViewModel;
+        private RecommendationPageViewModel ViewModel => DataContext as RecommendationPageViewModel;
 
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -34,12 +33,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Prepare the input files
             DatasetBox.IsChecked = true;
-            // var testDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/test.tsv");
+            var dataPath = await MlDotNet.FilePath(@"ms-appx:///Data/LasVegasTripAdvisorReviews.csv");
+            var data = await ViewModel.Load(dataPath);
+            HotelsCombo.ItemsSource = ViewModel.Hotels;
+            HotelsCombo.SelectedIndex = 0;
+            TravelerTypesCombo.ItemsSource = ViewModel.TravelerTypes;
+            TravelerTypesCombo.SelectedIndex = 0;
 
             // Configure data transformations.
             SettingUpBox.IsChecked = true;
-            // var trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/training.tsv");
-            // await ViewModel.Build(trainingDataPath);
+            await ViewModel.Build();
 
             // Create and train the model      
             TrainingBox.IsChecked = true;
@@ -77,8 +80,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private async void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // Predict
-            // var result = await ViewModel.Predict(TextInput.Text);
-            // TextPrediction.Text = string.Format("{1}% sure this is {0}.", result.PredictedLanguage, result.Confidence);
+            var recommendationData = new RecommendationData
+            {
+                Hotel = HotelsCombo.SelectedValue.ToString(),
+                TravelerType = TravelerTypesCombo.SelectedValue.ToString()
+            };
+
+            var result = await ViewModel.Predict(recommendationData);
+            ResultBlock.Text = result.Score.ToString();
         }
     }
 }
