@@ -2,7 +2,7 @@
 Demonstrates how to use ML.NET and Oxyplot to implement some Machine Learning use cases in an MVVM UWP app. Currently works against ML.NET v0.11.0.
 
 ## Look mom, no Python
-The UWP app demonstrates the following Machine Learning scenarios. Focus is currently on the ML.NET core functionality, not on its latest API:
+The UWP app demonstrates the following Machine Learning scenarios:
 * Clustering
 * Multiclass Classification
 * Binary Classification
