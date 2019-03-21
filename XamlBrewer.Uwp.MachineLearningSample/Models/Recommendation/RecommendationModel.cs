@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.DataView;
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using Microsoft.ML.Trainers.Recommender;
 using Mvvm;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         private MLContext _mlContext = new MLContext(seed: null);
 
         private IDataView trainingData;
+
+        private ITransformer _model;
 
         private PredictionEngine<RecommendationData, RecommendationPrediction> predictionEngine;
 
@@ -44,7 +47,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                             .Append(_mlContext.Recommendation().Trainers.MatrixFactorization(
                                               labelColumn: DefaultColumnNames.Label,
                                               matrixColumnIndexColumnName: "Hotel",
-                                              matrixRowIndexColumnName: "TravelerType"));
+                                              matrixRowIndexColumnName: "TravelerType"))
+                            .Append(_mlContext.Transforms.Conversion.MapKeyToValue("Hotel"))
+                            .Append(_mlContext.Transforms.Conversion.MapKeyToValue("TravelerType"));
             //approximationRank: 10,
             //learningRate: 0.2,
             //numberOfIterations: 10));
@@ -56,18 +61,26 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             // Throws a System.ArgumentNullException in x86 mode on the 'source' parameter,
             // or a System.ExecutionEngineException,
             // or yields strange scores.
-            var model = pipeline.Fit(trainingData);
+            _model = pipeline.Fit(trainingData);
 
             // Place a breakpoint here to see the Schema.
-            var prediction = model.Transform(trainingData);
+            var prediction = _model.Transform(trainingData);
 
-            predictionEngine = model.CreatePredictionEngine<RecommendationData, RecommendationPrediction>(_mlContext);
+            predictionEngine = _model.CreatePredictionEngine<RecommendationData, RecommendationPrediction>(_mlContext);
         }
 
         public RecommendationPrediction Predict(RecommendationData recommendationData)
         {
-
+            // Single prediction
             return predictionEngine.Predict(recommendationData);
+        }
+
+        public IEnumerable<RecommendationPrediction> Predict(IEnumerable<RecommendationData> recommendationData)
+        {
+            // Group prediction
+            var data = _mlContext.Data.LoadFromEnumerable(recommendationData);
+            var predictions = _model.Transform(data);
+            return _mlContext.Data.CreateEnumerable<RecommendationPrediction>(predictions, reuseRowObject: false);
         }
     }
 }

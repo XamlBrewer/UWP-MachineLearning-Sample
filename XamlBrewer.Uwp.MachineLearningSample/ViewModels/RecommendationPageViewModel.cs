@@ -43,5 +43,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 return _model.Predict(recommendationData);
             });
         }
+
+        public Task<IEnumerable<RecommendationPrediction>> Predict(IEnumerable<RecommendationData> recommendationData)
+        {
+            return Task.Run(() =>
+            {
+                return _model.Predict(recommendationData);
+            });
+        }
     }
 }

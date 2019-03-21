@@ -1,5 +1,7 @@
 ﻿using Mvvm.Services;
 using OxyPlot;
+using System.Collections.Generic;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
@@ -79,7 +81,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async void Calculate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            // Predict
+            // Individual Prediction
             var recommendationData = new RecommendationData
             {
                 Hotel = HotelsCombo.SelectedValue.ToString(),
@@ -88,6 +90,23 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var result = await ViewModel.Predict(recommendationData);
             ResultBlock.Text = result.Score.ToString();
+
+            // Group Prediction
+            var recommendations = new List<RecommendationData>();
+            foreach (var hotel in ViewModel.Hotels)
+            {
+                recommendations.Add(new RecommendationData
+                {
+                    Hotel = hotel,
+                    TravelerType = TravelerTypesCombo.SelectedValue.ToString()
+                });
+            }
+            var predictions = await ViewModel.Predict(recommendations);
+            var recommendationsResult = predictions
+                    .Select(p => p)
+                    .OrderByDescending(p => p.Score)
+                    .ToList()
+                    .Take(10);
         }
     }
 }
