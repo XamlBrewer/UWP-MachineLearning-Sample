@@ -1,11 +1,11 @@
 ﻿using Microsoft.Data.DataView;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-using Microsoft.ML.Trainers.Recommender;
 using Mvvm;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Windows.Storage;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
@@ -67,6 +67,19 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             var prediction = _model.Transform(trainingData);
 
             predictionEngine = _model.CreatePredictionEngine<RecommendationData, RecommendationPrediction>(_mlContext);
+        }
+
+        public void Save(string modelName)
+        {
+            var storageFolder = ApplicationData.Current.LocalFolder;
+            using (var fs = new FileStream(
+                    Path.Combine(storageFolder.Path, modelName),
+                    FileMode.Create,
+                    FileAccess.Write,
+                    FileShare.Write))
+            {
+                _model.SaveTo(_mlContext, fs);
+            }
         }
 
         public RecommendationPrediction Predict(RecommendationData recommendationData)

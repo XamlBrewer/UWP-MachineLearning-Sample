@@ -40,6 +40,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
 
+            // Prepare diagram
+            Diagram.Model.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
+            Diagram.InvalidatePlot();
+
             // Prepare the input files
             DatasetBox.IsChecked = true;
             var dataPath = await MlDotNet.FilePath(@"ms-appx:///Data/LasVegasTripAdvisorReviews.csv");
@@ -58,7 +62,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // await ViewModel.Train();
 
             // Save the model.
-            // await ViewModel.Save("classificationModel.zip");
+            await ViewModel.Save("recommendationModel.zip");
 
             // Test and evaluate the model
             TestingBox.IsChecked = true;
