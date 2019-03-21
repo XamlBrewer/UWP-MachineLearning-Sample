@@ -5,6 +5,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
+      xmlns:oxyplot="using:OxyPlot"
+      xmlns:axes="using:OxyPlot.Axes"
+      xmlns:series="using:OxyPlot.Series"
       mc:Ignorable="d"
       Foreground="{StaticResource PageForegroundBrush}">
 
@@ -97,12 +100,6 @@
                           Grid.Row="3"
                           Grid.Column="1"
                           FontFamily="Segoe UI" />
-                <TextBlock Grid.Row="4">Plotting the result</TextBlock>
-                <CheckBox x:Name="PlottingBox"
-                          IsEnabled="False"
-                          IsChecked="False"
-                          Grid.Row="4"
-                          Grid.Column="1" />
                 <Button x:Name="RestartButton"
                         Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
@@ -138,7 +135,33 @@
                           Background="Transparent"
                           BorderThickness="0"
                           Margin="0 0 40 60"
-                          Grid.Column="1" />
+                          Grid.Column="1">
+                <oxy:PlotView.Model>
+                    <oxyplot:PlotModel Subtitle="Recommended Hotels"
+                                       PlotAreaBorderColor="{x:Bind OxyForeground}"
+                                       TextColor="{x:Bind OxyForeground}"
+                                       TitleColor="{x:Bind OxyForeground}"
+                                       SubtitleColor="{x:Bind OxyForeground}">
+                        <oxyplot:PlotModel.Axes>
+                            <axes:CategoryAxis Position="Left"
+                                               TextColor="{x:Bind OxyForeground}"
+                                               TicklineColor="{x:Bind OxyForeground}"
+                                               TitleColor="{x:Bind OxyForeground}" />
+                            <axes:LinearAxis Position="Bottom"
+                                             Title="Predicted Score (higher is better)"
+                                             TextColor="{x:Bind OxyForeground}"
+                                             TicklineColor="{x:Bind OxyForeground}"
+                                             TitleColor="{x:Bind OxyForeground}" />
+                        </oxyplot:PlotModel.Axes>
+                        <oxyplot:PlotModel.Series>
+                            <series:BarSeries LabelPlacement="Inside"
+                                              LabelFormatString="{}{0:0.00}"
+                                              TextColor="{x:Bind OxyText}"
+                                              FillColor="{x:Bind OxyFill}" />
+                        </oxyplot:PlotModel.Series>
+                    </oxyplot:PlotModel>
+                </oxy:PlotView.Model>
+            </oxy:PlotView>
         </Grid>
     </Grid>
 </Page>

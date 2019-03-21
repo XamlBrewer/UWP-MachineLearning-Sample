@@ -1,5 +1,7 @@
 ﻿using Mvvm.Services;
 using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
@@ -10,6 +12,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 {
     public sealed partial class RecommendationPage : Page
     {
+        private OxyColor OxyForeground => OxyColors.SteelBlue;
+
+        private OxyColor OxyText => OxyColors.Wheat;
+
+        private OxyColor OxyFill => OxyColors.Firebrick;
+
         public RecommendationPage()
         {
             this.InitializeComponent();
@@ -26,7 +34,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             SettingUpBox.IsChecked = false;
             TrainingBox.IsChecked = false;
             TestingBox.IsChecked = false;
-            PlottingBox.IsChecked = false;
             RestartButton.IsEnabled = false;
             PredictButton.IsEnabled = false;
 
@@ -56,22 +63,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Test and evaluate the model
             TestingBox.IsChecked = true;
             // var metrics = await ViewModel.Evaluate(testDataPath);
-
-            // Diagram
-            PlottingBox.IsChecked = true;
-            var foreground = OxyColors.SteelBlue;
-            var plotModel = new PlotModel
-            {
-                PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1),
-                PlotAreaBorderColor = foreground,
-                TextColor = foreground,
-                TitleColor = foreground,
-                SubtitleColor = foreground
-            };
-
-            // ...
-
-            Diagram.Model = plotModel;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             BusyIndicator.PauseAnimation();
@@ -106,7 +97,23 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                     .Select(p => p)
                     .OrderByDescending(p => p.Score)
                     .ToList()
-                    .Take(10);
+                    .Take(10)
+                    .Reverse();
+
+            // Update diagram
+            var categories = new List<string>();
+            var bars = new List<BarItem>();
+            foreach (var prediction in recommendationsResult)
+            {
+                categories.Add(prediction.Hotel);
+                bars.Add(new BarItem { Value = prediction.Score });
+            }
+
+            var plotModel = Diagram.Model;
+
+            (plotModel.Axes[0] as CategoryAxis).ItemsSource = categories;
+            (plotModel.Series[0] as BarSeries).ItemsSource = bars;
+            plotModel.InvalidatePlot(true);
         }
     }
 }
