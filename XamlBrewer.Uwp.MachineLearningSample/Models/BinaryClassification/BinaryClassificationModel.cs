@@ -40,6 +40,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                     separatorChar: ';', 
                     hasHeader: true);
 
+            // Cache the data view in memory. For an iterative algorithm such as SDCA this makes a huge difference.
+            trainData = MLContext.Data.Cache(trainData);
+
             ITransformer model =  pipeline.Fit(trainData);
             return new PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>(MLContext, model);
         }
