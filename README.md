@@ -7,7 +7,7 @@ The UWP app demonstrates the following Machine Learning scenarios:
 * Multiclass Classification
 * Binary Classification
 * Regression
-* Recommendation (in progress)
+* Recommendation
 * Feature Distribution Analysis with Boxplot Diagrams
 * Feature Correlation Analysis with Heatmap Diagrams
 
@@ -20,6 +20,8 @@ The UWP app demonstrates the following Machine Learning scenarios:
 ![Screenshot](Assets/BinaryClassification.png?raw=true)
 
 ![Screenshot](Assets/Regression.png?raw=true)
+
+![Screenshot](Assets/Recommendation.png?raw=true)
 
 ![Screenshot](Assets/BoxPlot.png?raw=true)
 
