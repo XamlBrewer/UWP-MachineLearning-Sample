@@ -26,7 +26,7 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Recommendation (WORK IN PROGRESS)" />
+                <Run Text="Recommendation" />
         </TextBlock>
 
         <Path Data="{StaticResource RecommendationIcon}"
@@ -43,7 +43,8 @@
                    TextWrapping="WrapWholeWords">
             <Run>Recommends hotels on the Las Vegas Strip for the selected traveler type, based on 2015 TripAdvisor ratings.</Run>
             <LineBreak />
-            <Run Foreground="Firebrick">Warning: currently behaves not so good when in x86 mode.</Run>
+            <Run FontSize="18"
+                 Foreground="Firebrick">Warning: does not behave well in x86 mode.</Run>
         </TextBlock>
 
         <!-- Main -->
@@ -81,14 +82,14 @@
                           IsChecked="False"
                           Grid.Row="0"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="1">Setting up the model</TextBlock>
-                <CheckBox x:Name="SettingUpBox"
+                <TextBlock Grid.Row="1">Building and training the model</TextBlock>
+                <CheckBox x:Name="TrainingBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="1"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="2">Training the model</TextBlock>
-                <CheckBox x:Name="TrainingBox"
+                <TextBlock Grid.Row="2">Persisting the model</TextBlock>
+                <CheckBox x:Name="SavingBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="2"
@@ -112,17 +113,15 @@
                                             Grid.Column="0"
                                             Margin="0 -180"
                                             FontFamily="Segoe UI" />
-                <ComboBox Grid.Row="7"
-                          x:Name="HotelsCombo"
-                          Header="Hotel" />
                 <ComboBox x:Name="TravelerTypesCombo"
+                          SelectionChanged="TravelerTypesCombo_SelectionChanged"
                           Grid.Row="7"
-                          Grid.Column="1"
+                          Grid.Column="0"
                           Header="Traveler Type" />
-                <Button x:Name="PredictButton"
-                        Click="Calculate_Click"
-                        Grid.Row="8"
-                        Grid.Column="0">Predict</Button>
+                <ComboBox Grid.Row="8"
+                          x:Name="HotelsCombo"
+                          SelectionChanged="HotelsCombo_SelectionChanged"
+                          Header="Hotel" />
                 <TextBox x:Name="ResultBlock"
                          Header="Score (0-5)"
                          Background="Transparent"

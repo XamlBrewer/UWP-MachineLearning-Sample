@@ -1,4 +1,5 @@
-﻿using Mvvm;
+﻿using Microsoft.ML.Data;
+using Mvvm;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             return Task.Run(() =>
             {
                 _model.Build();
+            });
+        }
+
+        public Task<RegressionMetrics> Evaluate(string testDataPath)
+        {
+            return Task.Run(() =>
+            {
+                return _model.Evaluate(testDataPath);
             });
         }
 
