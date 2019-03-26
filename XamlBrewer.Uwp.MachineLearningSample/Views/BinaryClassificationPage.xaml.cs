@@ -37,6 +37,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             LinearSvmBox.IsChecked = false;
             LogisticRegressionBox.IsChecked = false;
             SdcaBox.IsChecked = false;
+            StartButton.IsEnabled = false;
+            CalculateButton.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
@@ -110,6 +112,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Update diagram
             Diagram.InvalidatePlot();
+
+            StartButton.IsEnabled = true;
+            CalculateButton.IsEnabled = true;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             BusyIndicator.PauseAnimation();

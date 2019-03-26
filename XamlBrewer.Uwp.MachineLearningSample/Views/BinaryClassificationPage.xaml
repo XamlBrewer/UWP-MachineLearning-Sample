@@ -98,7 +98,8 @@
                           IsChecked="False"
                           Grid.Row="4"
                           Grid.Column="1" />
-                <Button Click="Page_Loaded"
+                <Button x:Name="StartButton"
+                        Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
                 <lottie:LottieAnimationView x:Name="BusyIndicator"
                                             FileName="Assets/loading.json"
@@ -109,7 +110,8 @@
                                             Grid.Column="0"
                                             Margin="0 -240"
                                             FontFamily="Segoe UI" />
-                <Button Click="Calculate_Click"
+                <Button x:Name="CalculateButton"
+                        Click="Calculate_Click"
                         VerticalAlignment="Top"
                         Grid.Row="6">View Disagreements</Button>
                 <TextBlock x:Name="Votes"
