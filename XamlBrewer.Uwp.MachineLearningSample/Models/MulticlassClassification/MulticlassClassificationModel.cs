@@ -21,7 +21,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             // Main algorithm
             // .Append(MLContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent())
             // or
-                .Append(MLContext.MulticlassClassification.Trainers.LogisticRegression())
+                .Append(MLContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy())
             // or
             // .Append(MLContext.MulticlassClassification.Trainers.NaiveBayes()) // yields weird metrics...
 
@@ -40,15 +40,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(
-                Path.Combine(storageFolder.Path, modelName),
-                FileMode.Create,
-                FileAccess.Write,
-                FileShare.Write))
-                MLContext.Model.Save(Model.Transformer, fs);
+            string modelPath = Path.Combine(storageFolder.Path, modelName);
+
+            MLContext.Model.Save(Model.Transformer, inputSchema: null, filePath: modelPath);
         }
 
-        public MultiClassClassifierMetrics Evaluate(string testDataPath)
+        public MulticlassClassificationMetrics Evaluate(string testDataPath)
         {
             var testData = MLContext.Data.LoadFromTextFile<MulticlassClassificationData>(testDataPath);
 

@@ -42,7 +42,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 for (int i = 0; i < dataView.Schema.Count; i++)
                 {
                     var column = dataView.Schema[i];
-                    result.Add(dataView.GetColumn<float>(_mlContext, column.Name).Select(f => (double)f).ToList());
+                    result.Add(dataView.GetColumn<float>(column).Select(f => (double)f).ToList());
                 }
 
                 return result;
@@ -72,7 +72,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 for (int i = 0; i < dataView.Schema.Count; i++)
                 {
                     var column = dataView.Schema[i];
-                    result.Add(dataView.GetColumn<float>(_mlContext, column.Name).Select(f => (double)f).ToList());
+                    result.Add(dataView.GetColumn<float>(column).Select(f => (double)f).ToList());
                 }
 
                 return result;

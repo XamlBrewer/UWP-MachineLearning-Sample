@@ -9,7 +9,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public PredictionModel(MLContext mlContext, ITransformer transformer)
         {
             Transformer = transformer;
-            Engine = Transformer.CreatePredictionEngine<TSrc, TDst>(mlContext);
+            Engine = mlContext.Model.CreatePredictionEngine<TSrc, TDst>(Transformer);
         }
 
         public ITransformer Transformer { get; }
