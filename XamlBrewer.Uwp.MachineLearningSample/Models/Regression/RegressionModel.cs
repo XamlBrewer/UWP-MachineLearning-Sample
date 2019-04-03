@@ -47,10 +47,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 .Append(_mlContext.Transforms.ReplaceMissingValues("Ws", "Ws", MissingValueReplacingEstimator.ReplacementMode.Mean))
                 .Append(_mlContext.Transforms.ReplaceMissingValues("Bmp", "Bmp", MissingValueReplacingEstimator.ReplacementMode.Mean))
                 .Append(_mlContext.Transforms.ReplaceMissingValues("NBA_DraftNumber", "NBA_DraftNumber", MissingValueReplacingEstimator.ReplacementMode.Mean))
-                .Append(_mlContext.Transforms.Normalize("NBA_DraftNumber", "NBA_DraftNumber", NormalizingEstimator.NormalizationMode.Binning))
-                .Append(_mlContext.Transforms.Normalize("Age", "Age", NormalizingEstimator.NormalizationMode.MinMax))
-                .Append(_mlContext.Transforms.Normalize("Ws", "Ws", NormalizingEstimator.NormalizationMode.MeanVariance))
-                .Append(_mlContext.Transforms.Normalize("Bmp", "Bmp", NormalizingEstimator.NormalizationMode.MeanVariance))
+                .Append(_mlContext.Transforms.NormalizeBinning("NBA_DraftNumber", "NBA_DraftNumber"))
+                .Append(_mlContext.Transforms.NormalizeMinMax("Age", "Age"))
+                .Append(_mlContext.Transforms.NormalizeMeanVariance("Ws", "Ws"))
+                .Append(_mlContext.Transforms.NormalizeMeanVariance("Bmp", "Bmp"))
                 .Append(_mlContext.Transforms.Concatenate(
                     "Features",
                     new[] { "NBA_DraftNumber", "Age", "Ws", "Bmp" }))
