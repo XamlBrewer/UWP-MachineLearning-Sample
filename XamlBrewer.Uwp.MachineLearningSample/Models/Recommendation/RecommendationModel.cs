@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.DataView;
-using Microsoft.ML;
+﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Mvvm;
 using System.Collections.Generic;
@@ -47,7 +46,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             var pipeline = _mlContext.Transforms.Conversion.MapValueToKey("Hotel")
                             .Append(_mlContext.Transforms.Conversion.MapValueToKey("TravelerType"))
                             .Append(_mlContext.Recommendation().Trainers.MatrixFactorization(
-                                              labelColumn: DefaultColumnNames.Label,
+                                              labelColumnName: "Label",
                                               matrixColumnIndexColumnName: "Hotel",
                                               matrixRowIndexColumnName: "TravelerType",
                                               // Optional fine tuning:
@@ -69,7 +68,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             // Place a breakpoint here to see the Schema.
             // var prediction = _model.Transform(trainingData);
 
-            predictionEngine = _model.CreatePredictionEngine<RecommendationData, RecommendationPrediction>(_mlContext);
+            predictionEngine = _mlContext.Model.CreatePredictionEngine<RecommendationData, RecommendationPrediction>(_model);
         }
 
         public RegressionMetrics Evaluate(string testDataPath)
@@ -98,14 +97,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(
-                    Path.Combine(storageFolder.Path, modelName),
-                    FileMode.Create,
-                    FileAccess.Write,
-                    FileShare.Write))
-            {
-                _model.SaveTo(_mlContext, fs);
-            }
+            string modelPath = Path.Combine(storageFolder.Path, modelName);
+
+            _mlContext.Model.Save(_model, inputSchema: null, filePath: modelPath);
         }
 
         public RecommendationPrediction Predict(RecommendationData recommendationData)

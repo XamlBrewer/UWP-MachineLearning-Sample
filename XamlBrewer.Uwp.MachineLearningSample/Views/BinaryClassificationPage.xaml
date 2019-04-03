@@ -38,7 +38,7 @@
         <TextBlock Grid.Row="1"
                    FontSize="24"
                    TextWrapping="WrapWholeWords"
-                   FontFamily="Segoe UI">Creates and compares four different models and a random one to predict the quality of wine using 11 physicochemical features.</TextBlock>
+                   FontFamily="Segoe UI">Creates and compares four different models and a "prior value" model to predict the quality of wine using 11 physicochemical features.</TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"

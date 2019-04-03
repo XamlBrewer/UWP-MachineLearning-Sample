@@ -12,8 +12,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         /// </summary>
         public static IEstimator<ITransformer> FloatToBoolLabelNormalizer(this MLContext mLContext)
         {
-            var normalizer = mLContext.Transforms.Normalize(
-                new NormalizingEstimator.BinningColumnOptions(outputColumnName: "Label", numBins: 2));
+            var normalizer = mLContext.Transforms.NormalizeBinning(
+                outputColumnName: "Label", maximumBinCount: 2);
 
             return normalizer.Append(mLContext.Transforms.CustomMapping(new MapFloatToBool().GetMapping(), "MapFloatToBool"));
         }

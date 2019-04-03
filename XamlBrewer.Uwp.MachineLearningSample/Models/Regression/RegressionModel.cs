@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.DataView;
-using Microsoft.ML;
+﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
@@ -44,14 +43,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public void BuildAndTrain()
         {
-            var pipeline = _mlContext.Transforms.ReplaceMissingValues("Age", "Age", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean)
-                .Append(_mlContext.Transforms.ReplaceMissingValues("Ws", "Ws", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean))
-                .Append(_mlContext.Transforms.ReplaceMissingValues("Bmp", "Bmp", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean))
-                .Append(_mlContext.Transforms.ReplaceMissingValues("NBA_DraftNumber", "NBA_DraftNumber", MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean))
-                .Append(_mlContext.Transforms.Normalize("NBA_DraftNumber", "NBA_DraftNumber", NormalizingEstimator.NormalizerMode.Binning))
-                .Append(_mlContext.Transforms.Normalize("Age", "Age", NormalizingEstimator.NormalizerMode.MinMax))
-                .Append(_mlContext.Transforms.Normalize("Ws", "Ws", NormalizingEstimator.NormalizerMode.MeanVariance))
-                .Append(_mlContext.Transforms.Normalize("Bmp", "Bmp", NormalizingEstimator.NormalizerMode.MeanVariance))
+            var pipeline = _mlContext.Transforms.ReplaceMissingValues("Age", "Age", MissingValueReplacingEstimator.ReplacementMode.Mean)
+                .Append(_mlContext.Transforms.ReplaceMissingValues("Ws", "Ws", MissingValueReplacingEstimator.ReplacementMode.Mean))
+                .Append(_mlContext.Transforms.ReplaceMissingValues("Bmp", "Bmp", MissingValueReplacingEstimator.ReplacementMode.Mean))
+                .Append(_mlContext.Transforms.ReplaceMissingValues("NBA_DraftNumber", "NBA_DraftNumber", MissingValueReplacingEstimator.ReplacementMode.Mean))
+                .Append(_mlContext.Transforms.NormalizeBinning("NBA_DraftNumber", "NBA_DraftNumber"))
+                .Append(_mlContext.Transforms.NormalizeMinMax("Age", "Age"))
+                .Append(_mlContext.Transforms.NormalizeMeanVariance("Ws", "Ws"))
+                .Append(_mlContext.Transforms.NormalizeMeanVariance("Bmp", "Bmp"))
                 .Append(_mlContext.Transforms.Concatenate(
                     "Features",
                     new[] { "NBA_DraftNumber", "Age", "Ws", "Bmp" }))
@@ -59,24 +58,19 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 // .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(new OnlineGradientDescentTrainer.Options { })); // InvalidOperationException if you don't normalize.
                 // .Append(_mlContext.Regression.Trainers.StochasticDualCoordinateAscent());       
                 // .Append(_mlContext.Regression.Trainers.PoissonRegression());
-                .Append(_mlContext.Regression.Trainers.GeneralizedAdditiveModels());
+                .Append(_mlContext.Regression.Trainers.Gam());
 
             Model = pipeline.Fit(trainingData);
 
-            predictionEngine = Model.CreatePredictionEngine<RegressionData, RegressionPrediction>(_mlContext);
+            predictionEngine = _mlContext.Model.CreatePredictionEngine<RegressionData, RegressionPrediction>(Model);
         }
 
         public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(
-                    Path.Combine(storageFolder.Path, modelName),
-                    FileMode.Create,
-                    FileAccess.Write,
-                    FileShare.Write))
-            {
-                Model.SaveTo(_mlContext, fs);
-            }
+            string modelPath = Path.Combine(storageFolder.Path, modelName);
+
+            _mlContext.Model.Save(Model, inputSchema: null, filePath: modelPath);
         }
 
         public IEnumerable<RegressionPrediction> PredictTrainingData()

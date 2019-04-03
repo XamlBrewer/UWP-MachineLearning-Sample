@@ -33,7 +33,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public Task<MultiClassClassifierMetrics> Evaluate(string testDataPath)
+        public Task<MulticlassClassificationMetrics> Evaluate(string testDataPath)
         {
             return Task.Run(() =>
             {

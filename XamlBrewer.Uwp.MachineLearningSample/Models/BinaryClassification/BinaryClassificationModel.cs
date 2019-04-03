@@ -16,7 +16,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> BuildAndTrain(string trainingDataPath, IEstimator<ITransformer> algorithm)
         {
             IEstimator<ITransformer> pipeline =
-                MLContext.Transforms.ReplaceMissingValues("FixedAcidity", replacementKind: MissingValueReplacingEstimator.ColumnOptions.ReplacementMode.Mean)
+                MLContext.Transforms.ReplaceMissingValues("FixedAcidity", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean)
                 .Append(MLContext.FloatToBoolLabelNormalizer())
                 .Append(MLContext.Transforms.Concatenate("Features",
                     new[]
@@ -50,8 +50,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public void Save(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(Path.Combine(storageFolder.Path, modelName), FileMode.Create, FileAccess.Write, FileShare.Write))
-                MLContext.Model.Save(model.Transformer, fs);
+            string modelPath = Path.Combine(storageFolder.Path, modelName);
+
+            MLContext.Model.Save(model.Transformer, inputSchema: null, filePath: modelPath);
         }
 
         public CalibratedBinaryClassificationMetrics Evaluate(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)

@@ -14,7 +14,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     public sealed partial class BinaryClassificationPage : Page
     {
         private string _testDataPath;
-        private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _randomModel;
+        //private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _priorModel;
         private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _perceptronBinaryModel;
         private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _linearSvmModel;
         private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _logisticRegressionModel;
@@ -51,13 +51,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Prepare diagram.
             PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries);
 
-            // Random
-            _randomModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.Random());
-            await ViewModel.Save(_randomModel, "randomModel.zip");
-            var metrics = await ViewModel.Evaluate(_randomModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
+            // Prior
+            // blocked by https://github.com/dotnet/machinelearning/issues/3119
+            //_priorModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.Prior());
+            //await ViewModel.Save(_priorModel, "priorModel.zip");
+            //var metrics = await ViewModel.Evaluate(_priorModel, _testDataPath);
+            //accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
+            //entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
+            //f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
 
             // Perceptron
             PerceptronBox.IsChecked = true;
@@ -79,7 +80,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Linear SVM
             LinearSvmBox.IsChecked = true;
-            _linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LinearSupportVectorMachines());
+            _linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LinearSvm());
             await ViewModel.Save(_linearSvmModel, "linearSvmModel.zip");
             nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_linearSvmModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = nonCalibratedMetrics.Accuracy });
@@ -91,9 +92,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Logistic Regression
             LogisticRegressionBox.IsChecked = true;
-            _logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LogisticRegression());
+            _logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LbfgsLogisticRegression());
             await ViewModel.Save(_logisticRegressionModel, "logisticRegressionModel.zip");
-            metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
+            var metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
             entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.F1Score });
@@ -103,7 +104,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Stochastic Dual Coordinate Ascent
             SdcaBox.IsChecked = true;
-            _sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.StochasticDualCoordinateAscent());
+            _sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.SdcaLogisticRegression());
             await ViewModel.Save(_sdcabModel, "sdcabModel.zip");
             metrics = await ViewModel.Evaluate(_sdcabModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 4, Value = metrics.Accuracy });
@@ -141,7 +142,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Key = "ModelAxis",
                 ItemsSource = new[]
                     {
-                        "Random",
+                        "Prior",
                         "Perceptron",
                         "Linear SVM",
                         "Logistic Regression",

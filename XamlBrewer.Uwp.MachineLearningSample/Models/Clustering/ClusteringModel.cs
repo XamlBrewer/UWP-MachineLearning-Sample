@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.DataView;
-using Microsoft.ML;
+﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using System.Collections.Generic;
@@ -44,7 +43,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             Pipeline = _mlContext.Transforms.Concatenate("Features", new[] { "AnnualIncome", "SpendingScore" })
                 .Append(_mlContext.Clustering.Trainers.KMeans(
                     featureColumnName: "Features",
-                    clustersCount: 5));
+                    numberOfClusters: 5));
         }
 
         public void Train(IDataView trainingDataView)
@@ -55,14 +54,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public void Save(string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
-            using (var fs = new FileStream(
-                    Path.Combine(storageFolder.Path, modelName),
-                    FileMode.Create,
-                    FileAccess.Write,
-                    FileShare.Write))
-            {
-                Model.SaveTo(_mlContext, fs);
-            }
+            string modelPath = Path.Combine(storageFolder.Path, modelName);
+
+            _mlContext.Model.Save(Model, inputSchema: null, filePath: modelPath);
         }
 
         public IEnumerable<ClusteringPrediction> Predict(IDataView dataView)
@@ -73,7 +67,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public ClusteringPrediction Predict(ClusteringData clusteringData)
         {
-            var predictionFunc = Model.CreatePredictionEngine<ClusteringData, ClusteringPrediction>(_mlContext);
+            var predictionFunc = _mlContext.Model.CreatePredictionEngine<ClusteringData, ClusteringPrediction>(Model);
             return predictionFunc.Predict(clusteringData);
         }
     }
