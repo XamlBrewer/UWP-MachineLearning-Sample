@@ -65,9 +65,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             _perceptronBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.AveragedPerceptron());
             await ViewModel.Save(_perceptronBinaryModel, "perceptronModel.zip");
             var nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_perceptronBinaryModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = double.NaN });// metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.F1Score });
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = double.NaN });// metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.F1Score });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -83,9 +83,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             _linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LinearSvm());
             await ViewModel.Save(_linearSvmModel, "linearSvmModel.zip");
             nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_linearSvmModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = nonCalibratedMetrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = double.NaN });// metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = nonCalibratedMetrics.F1Score });
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = double.NaN });// metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.F1Score });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -95,9 +95,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             _logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LbfgsLogisticRegression());
             await ViewModel.Save(_logisticRegressionModel, "logisticRegressionModel.zip");
             var metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.F1Score });
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.F1Score });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -107,9 +107,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             _sdcabModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.SdcaLogisticRegression());
             await ViewModel.Save(_sdcabModel, "sdcabModel.zip");
             metrics = await ViewModel.Evaluate(_sdcabModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 4, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 4, Value = metrics.Entropy });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 4, Value = metrics.F1Score });
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
+            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.F1Score });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -142,7 +142,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Key = "ModelAxis",
                 ItemsSource = new[]
                     {
-                        "Prior",
+                        // "Prior",
                         "Perceptron",
                         "Linear SVM",
                         "Logistic Regression",
