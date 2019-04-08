@@ -54,6 +54,8 @@
             <LineBreak />
             <Run>* Recommendation,</Run>   
             <LineBreak />
+            <Run>* Recommendation using Field-Aware Factorization Machine,</Run>   
+            <LineBreak />
             <Run>* Feature Distribution Analysis with box plots, and</Run>   
             <LineBreak />
             <Run>* Feature Correlation Analysis with heat maps.</Run>               

@@ -67,6 +67,11 @@
             <Hyperlink NavigateUri="http://www.thenounproject.com"
                        FontFamily="Segoe UI">Rose Alice Design from the Noun Project</Hyperlink>
             <Run>.</Run>       
+            <LineBreak />
+            <Run>'CPC' icon for the Field-Aware Factorization Machine Recommendation page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com"
+                       FontFamily="Segoe UI">Debashis Howlader from the Noun Project</Hyperlink>
+            <Run>.</Run>       
             <LineBreak />            
             <Run>'Box Plot' icon for the Feature Distribution Analysis page by </Run>
             <Hyperlink NavigateUri="http://www.thenounproject.com">Kirby Wu from the Noun Project</Hyperlink>

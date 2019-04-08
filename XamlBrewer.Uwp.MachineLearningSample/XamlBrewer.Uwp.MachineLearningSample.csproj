@@ -121,6 +121,9 @@
     </Compile>
     <Compile Include="Models\BinaryClassification\BinaryClassificationModel.cs" />
     <Compile Include="Models\BinaryClassification\MLContextExtensions.cs" />
+    <Compile Include="Models\FieldAwareFactorization\FfmRecommendationData.cs" />
+    <Compile Include="Models\FieldAwareFactorization\FfmRecommendationModel.cs" />
+    <Compile Include="Models\FieldAwareFactorization\FfmRecommendationPrediction.cs" />
     <Compile Include="Models\PredictionModel.cs" />
     <Compile Include="Models\Clustering\ClusteringModel.cs" />
     <Compile Include="Models\FeatureAnalysis\ClusteringRawData.cs" />
@@ -148,6 +151,7 @@
     <Compile Include="Services\MachineLearning\MlDotNet.cs" />
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
+    <Compile Include="ViewModels\FieldAwareFactorizationPageViewModel.cs" />
     <Compile Include="ViewModels\RecommendationPageViewModel.cs" />
     <Compile Include="ViewModels\RegressionPageViewModel.cs" />
     <Compile Include="ViewModels\HeatMapPageViewModel.cs" />
@@ -158,6 +162,9 @@
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\FieldAwareFactorizationPage.xaml.cs">
+      <DependentUpon>FieldAwareFactorizationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RecommendationPage.xaml.cs">
       <DependentUpon>RecommendationPage.xaml</DependentUpon>
     </Compile>
@@ -242,6 +249,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Services\Theming\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FieldAwareFactorizationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

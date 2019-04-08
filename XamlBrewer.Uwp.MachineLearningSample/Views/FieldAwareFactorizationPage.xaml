@@ -1,13 +1,15 @@
-﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.BinaryClassificationPage"
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.FieldAwareFactorizationPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
+      xmlns:oxyplot="using:OxyPlot"
+      xmlns:axes="using:OxyPlot.Axes"
+      xmlns:series="using:OxyPlot.Series"
       mc:Ignorable="d"
-      Foreground="{StaticResource PageForegroundBrush}"
-      FontFamily="Segoe UI">
+      Foreground="{StaticResource PageForegroundBrush}">
 
     <Grid Background="Transparent"
           Padding="48 34 0 0">
@@ -24,10 +26,10 @@
                    Margin="6 0 0 0"
                    TextLineBounds="TrimToCapHeight"
                    FontFamily="Segoe UI">
-                <Run Text="Binary Classification" />
+                <Run Text="FFM Recommendation" />
         </TextBlock>
 
-        <Path Data="{StaticResource BinaryClassificationIcon}"
+        <Path Data="{StaticResource FfmIcon}"
               Fill="{StaticResource PageTitleBrush}"
               VerticalAlignment="Top"
               HorizontalAlignment="Right"
@@ -39,7 +41,12 @@
         <TextBlock Grid.Row="1"
                    FontSize="24"
                    TextWrapping="WrapWholeWords"
-                   FontFamily="Segoe UI">Creates and compares four different models to predict the quality of wine using 11 physicochemical features.</TextBlock>
+                   FontFamily="Segoe UI">
+            <Run>Uses a Field-Aware Factorization Machine to recommend hotels on the Las Vegas Strip for the selected traveler type, based on 2015 TripAdvisor ratings.</Run>
+            <LineBreak />
+            <Run Foreground="Firebrick"
+                 FontFamily="Segoe UI">(Work in progress -> fields to be added)</Run>
+        </TextBlock>
 
         <!-- Main -->
         <Grid Grid.Row="2"
@@ -67,6 +74,8 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0">Preparing the data</TextBlock>
                 <CheckBox x:Name="DatasetBox"
@@ -74,61 +83,85 @@
                           IsChecked="False"
                           Grid.Row="0"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="1">Perceptron</TextBlock>
-                <CheckBox x:Name="PerceptronBox"
+                <TextBlock Grid.Row="1">Building and training the model</TextBlock>
+                <CheckBox x:Name="TrainingBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="1"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="2">Linear SVM</TextBlock>
-                <CheckBox x:Name="LinearSvmBox"
+                <TextBlock Grid.Row="2">Persisting the model</TextBlock>
+                <CheckBox x:Name="SavingBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="2"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="3">Logistic Regression</TextBlock>
-                <CheckBox x:Name="LogisticRegressionBox"
+                <TextBlock Grid.Row="3">Evaluating the model</TextBlock>
+                <CheckBox x:Name="TestingBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="3"
                           Grid.Column="1"
                           FontFamily="Segoe UI" />
-                <TextBlock Grid.Row="4">Stochastic Dual Coordinate Ascent</TextBlock>
-                <CheckBox x:Name="SdcaBox"
-                          IsEnabled="False"
-                          IsChecked="False"
-                          Grid.Row="4"
-                          Grid.Column="1" />
-                <Button x:Name="StartButton"
+                <Button x:Name="RestartButton"
                         Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
                 <lottie:LottieAnimationView x:Name="BusyIndicator"
                                             FileName="Assets/loading.json"
                                             Visibility="Collapsed"
-                                            Height="240"
+                                            Height="180"
                                             HorizontalAlignment="Left"
                                             Grid.Row="5"
                                             Grid.Column="0"
-                                            Margin="0 -240"
+                                            Margin="0 -180"
                                             FontFamily="Segoe UI" />
-                <Button x:Name="CalculateButton"
-                        Click="Calculate_Click"
-                        VerticalAlignment="Top"
-                        Grid.Row="6">View Disagreements</Button>
-                <TextBlock x:Name="Votes"
-                           Foreground="{StaticResource PageForegroundBrush}"
-                           FontSize="16"
-                           Grid.Row="6"
-                           Grid.Column="1"
-                           HorizontalAlignment="Left"
-                           FontFamily="Courier New"
-                           FontWeight="SemiBold" />
+                <ComboBox x:Name="TravelerTypesCombo"
+                          SelectionChanged="TravelerTypesCombo_SelectionChanged"
+                          Grid.Row="7"
+                          Grid.Column="0"
+                          Header="Traveler Type" />
+                <ComboBox Grid.Row="8"
+                          x:Name="HotelsCombo"
+                          SelectionChanged="HotelsCombo_SelectionChanged"
+                          Header="Hotel" />
+                <TextBox x:Name="ResultBlock"
+                         Header="Probability of Recommending (-1 to 1)"
+                         Background="Transparent"
+                         Foreground="Firebrick"
+                         IsTabStop="False"
+                         Grid.Row="8"
+                         Grid.Column="1" />
             </Grid>
             <oxy:PlotView x:Name="Diagram"
                           Background="Transparent"
                           BorderThickness="0"
                           Margin="0 0 40 60"
-                          Grid.Column="1" />
+                          Grid.Column="1">
+                <oxy:PlotView.Model>
+                    <oxyplot:PlotModel Subtitle="Recommended Hotels"
+                                       PlotAreaBorderColor="{x:Bind OxyForeground}"
+                                       TextColor="{x:Bind OxyForeground}"
+                                       TitleColor="{x:Bind OxyForeground}"
+                                       SubtitleColor="{x:Bind OxyForeground}">
+                        <oxyplot:PlotModel.Axes>
+                            <axes:CategoryAxis Position="Left"
+                                               TextColor="{x:Bind OxyForeground}"
+                                               TicklineColor="{x:Bind OxyForeground}"
+                                               TitleColor="{x:Bind OxyForeground}" />
+                            <axes:LinearAxis Position="Bottom"
+                                             Title="Probability of Recommending (higher is better)"
+                                             TextColor="{x:Bind OxyForeground}"
+                                             TicklineColor="{x:Bind OxyForeground}"
+                                             TitleColor="{x:Bind OxyForeground}" />
+                        </oxyplot:PlotModel.Axes>
+                        <oxyplot:PlotModel.Series>
+                            <series:BarSeries LabelPlacement="Inside"
+                                              LabelFormatString="{}{0:0.00}"
+                                              TextColor="{x:Bind OxyText}"
+                                              FillColor="{x:Bind OxyFill}" />
+                        </oxyplot:PlotModel.Series>
+                    </oxyplot:PlotModel>
+                </oxy:PlotView.Model>
+            </oxy:PlotView>
         </Grid>
     </Grid>
 </Page>
