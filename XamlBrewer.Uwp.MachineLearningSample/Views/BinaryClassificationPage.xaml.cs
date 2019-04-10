@@ -14,7 +14,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     public sealed partial class BinaryClassificationPage : Page
     {
         private string _testDataPath;
-        //private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _priorModel;
         private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _perceptronBinaryModel;
         private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _linearSvmModel;
         private PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> _logisticRegressionModel;
@@ -51,14 +50,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Prepare diagram.
             PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries);
 
-            // Prior
-            // blocked by https://github.com/dotnet/machinelearning/issues/3119
-            //_priorModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.Prior());
-            //await ViewModel.Save(_priorModel, "priorModel.zip");
-            //var metrics = await ViewModel.Evaluate(_priorModel, _testDataPath);
-            //accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
-            //entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Entropy });
-            //f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
+            //// This raises a ArgumentOutOfRangeException because of different Label type expected:
+            //// var priorModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.Prior());
+            //// https://github.com/dotnet/machinelearning/issues/3119
+
+            //// These raise an exception on System.Diagnostics.Process
+            //// 'PlatformNotSupportedException: Retrieving information about local processes is not supported on this platform.'
+            ////
+            //// var fastTreeBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.FastTree());
+            //// var fastForestBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.FastForest());
+            //// https://github.com/dotnet/machinelearning/issues/2444
 
             // Perceptron
             PerceptronBox.IsChecked = true;
@@ -71,12 +72,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Update diagram
             Diagram.InvalidatePlot();
-
-            //// These raise an exception on System.Diagnostics.Process
-            //// 'PlatformNotSupportedException: Retrieving information about local processes is not supported on this platform.'
-            ////
-            //// var fastForestBinaryModel = new ModelBuilder(trainingDataLocation, new FastForestBinaryClassifier()).BuildAndTrain();
-            //// var fastTreeBinaryModel = new ModelBuilder(trainingDataLocation, new FastTreeBinaryClassifier()).BuildAndTrain();
 
             // Linear SVM
             LinearSvmBox.IsChecked = true;
@@ -142,7 +137,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 Key = "ModelAxis",
                 ItemsSource = new[]
                     {
-                        // "Prior",
                         "Perceptron",
                         "Linear SVM",
                         "Logistic Regression",
