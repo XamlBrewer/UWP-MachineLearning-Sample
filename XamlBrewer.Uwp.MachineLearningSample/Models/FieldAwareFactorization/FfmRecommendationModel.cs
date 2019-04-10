@@ -14,7 +14,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         private MLContext _mlContext = new MLContext(seed: null);
 
-        private IDataView _trainingData;
+        private IDataView _allData;
 
         private ITransformer _model;
 
@@ -33,12 +33,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                    Hotel = x[13]
                });
 
-            _trainingData = _mlContext.Data.LoadFromEnumerable(data);
+            _allData = _mlContext.Data.LoadFromEnumerable(data);
 
             // Keep in memory.
-            _trainingData = _mlContext.Data.Cache(_trainingData);
+            _allData = _mlContext.Data.Cache(_allData);
 
-            return _mlContext.Data.CreateEnumerable<FfmRecommendationData>(_trainingData, reuseRowObject: false);
+            return _mlContext.Data.CreateEnumerable<FfmRecommendationData>(_allData, reuseRowObject: false);
         }
 
         public void Build()
@@ -48,28 +48,21 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                             .Append(_mlContext.Transforms.Concatenate("Features", "TravelerTypeOneHot", "HotelOneHot"))
                             .Append(_mlContext.BinaryClassification.Trainers.FieldAwareFactorizationMachine(new string[] { "Features" }));
 
-            // Place a breakpoint here to peek the training data.
-            var preview = pipeline.Preview(_trainingData, maxRows: 10);
+            var trainingData = _mlContext.Data.ShuffleRows(_allData);
+            trainingData = _mlContext.Data.TakeRows(trainingData, 450);
 
-            _model = pipeline.Fit(_trainingData);
+            // Place a breakpoint here to peek the training data.
+            var preview = pipeline.Preview(trainingData, maxRows: 10);
+
+            _model = pipeline.Fit(trainingData);
             _predictionEngine = _mlContext.Model.CreatePredictionEngine<FfmRecommendationData, FfmRecommendationPrediction>(_model);
         }
 
         public CalibratedBinaryClassificationMetrics Evaluate(string testDataPath)
         {
-            var data = File.ReadAllLines(testDataPath)
-               .Skip(1)
-               .Select(x => x.Split(';'))
-               .Select(x => new FfmRecommendationData
-               {
-                   Label = double.Parse(x[4]) > _ratingTreshold,
-                   TravelerType = x[6],
-                   Hotel = x[13]
-               })
-               .OrderBy(x => (x.GetHashCode())) // Cheap Randomization.
-               .TakeLast(200);
+            var testData = _mlContext.Data.ShuffleRows(_allData);
+            testData = _mlContext.Data.TakeRows(testData, 100);
 
-            var testData = _mlContext.Data.LoadFromEnumerable(data);
             var scoredData = _model.Transform(testData);
             var metrics = _mlContext.BinaryClassification.Evaluate(
                 data: scoredData, 
