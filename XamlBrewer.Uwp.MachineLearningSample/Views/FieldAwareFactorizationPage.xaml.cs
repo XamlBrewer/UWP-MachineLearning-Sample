@@ -37,6 +37,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             TestingBox.IsChecked = false;
             RestartButton.IsEnabled = false;
             TravelerTypesCombo.SelectedIndex = -1;
+            SeasonsCombo.SelectedIndex = -1;
             ResultBlock.Text = string.Empty;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -51,6 +52,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var dataPath = await MlDotNet.FilePath(@"ms-appx:///Data/LasVegasTripAdvisorReviews.csv");
             var data = await ViewModel.Load(dataPath);
             TravelerTypesCombo.ItemsSource = ViewModel.TravelerTypes;
+            SeasonsCombo.ItemsSource = ViewModel.Seasons;
             HotelsCombo.ItemsSource = ViewModel.Hotels;
 
             // Create and train the model      
@@ -69,9 +71,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             BusyIndicator.PauseAnimation();
             RestartButton.IsEnabled = true;
             TravelerTypesCombo.SelectedIndex = 0;
+            SeasonsCombo.SelectedIndex = 0;
         }
 
         private async void TravelerTypesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await MakeIndividualPrediction();
+            await MakeGroupPrediction();
+        }
+
+        private async void SeasonsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             await MakeIndividualPrediction();
             await MakeGroupPrediction();
@@ -84,7 +93,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async Task MakeIndividualPrediction()
         {
-            if (HotelsCombo.SelectedValue == null || TravelerTypesCombo.SelectedValue == null)
+            if (HotelsCombo.SelectedValue == null || TravelerTypesCombo.SelectedValue == null || SeasonsCombo.SelectedValue == null)
             {
                 return;
             }
@@ -93,7 +102,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var recommendationData = new FfmRecommendationData
             {
                 Hotel = HotelsCombo.SelectedValue.ToString(),
-                TravelerType = TravelerTypesCombo.SelectedValue.ToString()
+                TravelerType = TravelerTypesCombo.SelectedValue.ToString(),
+                Season = SeasonsCombo.SelectedValue.ToString()
             };
 
             var result = await ViewModel.Predict(recommendationData);
@@ -102,7 +112,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private async Task MakeGroupPrediction()
         {
-            if (TravelerTypesCombo.SelectedValue == null)
+            if (TravelerTypesCombo.SelectedValue == null || SeasonsCombo.SelectedValue == null)
             {
                 return;
             }
@@ -114,7 +124,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 recommendations.Add(new FfmRecommendationData
                 {
                     Hotel = hotel,
-                    TravelerType = TravelerTypesCombo.SelectedValue.ToString()
+                    TravelerType = TravelerTypesCombo.SelectedValue.ToString(),
+                    Season = SeasonsCombo.SelectedValue.ToString()
                 });
             }
             var predictions = await ViewModel.Predict(recommendations);

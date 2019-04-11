@@ -13,6 +13,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 
         public List<string> TravelerTypes { get; private set; }
 
+        public List<string> Seasons { get; private set; }
+
         public List<string> Hotels { get; private set; }
 
         public Task<IEnumerable<FfmRecommendationData>> Load(string trainingDataPath)
@@ -22,6 +24,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 var data = _model.Load(trainingDataPath);
                 TravelerTypes = data.Select(r => r.TravelerType).Distinct().ToList();
                 TravelerTypes.Sort();
+                Seasons = data.Select(r => r.Season).Distinct().ToList();
                 Hotels = data.Select(r => r.Hotel).Distinct().ToList();
                 Hotels.Sort();
 

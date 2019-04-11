@@ -8,6 +8,8 @@
 
         public string TravelerType;
 
+        public string Season;
+
         public string Hotel;
     }
 }

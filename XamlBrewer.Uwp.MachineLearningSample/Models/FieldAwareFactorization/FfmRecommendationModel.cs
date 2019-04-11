@@ -29,24 +29,29 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                .Select(x => new FfmRecommendationData
                {
                    Label = double.Parse(x[4]) > _ratingTreshold,
+                   Season = x[5],
                    TravelerType = x[6],
                    Hotel = x[13]
                });
 
             _allData = _mlContext.Data.LoadFromEnumerable(data);
 
-            // Keep in memory.
-            _allData = _mlContext.Data.Cache(_allData);
-
             return _mlContext.Data.CreateEnumerable<FfmRecommendationData>(_allData, reuseRowObject: false);
         }
 
         public void Build()
         {
+            // The following corresponds to the Recommendation sample:
+            //var pipeline = _mlContext.Transforms.Categorical.OneHotEncoding("TravelerTypeOneHot", "TravelerType")
+            //                .Append(_mlContext.Transforms.Categorical.OneHotEncoding("HotelOneHot", "Hotel"))
+            //                .Append(_mlContext.Transforms.Concatenate("Features", "TravelerTypeOneHot", "HotelOneHot"))
+            //                .Append(_mlContext.BinaryClassification.Trainers.FieldAwareFactorizationMachine(new string[] { "Features" }));
+
             var pipeline = _mlContext.Transforms.Categorical.OneHotEncoding("TravelerTypeOneHot", "TravelerType")
-                            .Append(_mlContext.Transforms.Categorical.OneHotEncoding("HotelOneHot", "Hotel"))
-                            .Append(_mlContext.Transforms.Concatenate("Features", "TravelerTypeOneHot", "HotelOneHot"))
-                            .Append(_mlContext.BinaryClassification.Trainers.FieldAwareFactorizationMachine(new string[] { "Features" }));
+                .Append(_mlContext.Transforms.Categorical.OneHotEncoding("SeasonOneHot", "Season"))
+                .Append(_mlContext.Transforms.Categorical.OneHotEncoding("HotelOneHot", "Hotel"))
+                .Append(_mlContext.Transforms.Concatenate("Features", "TravelerTypeOneHot", "SeasonOneHot", "HotelOneHot"))
+                .Append(_mlContext.BinaryClassification.Trainers.FieldAwareFactorizationMachine(new string[] { "Features" }));
 
             var trainingData = _mlContext.Data.ShuffleRows(_allData);
             trainingData = _mlContext.Data.TakeRows(trainingData, 450);

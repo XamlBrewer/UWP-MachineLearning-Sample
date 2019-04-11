@@ -42,10 +42,7 @@
                    FontSize="24"
                    TextWrapping="WrapWholeWords"
                    FontFamily="Segoe UI">
-            <Run>Uses a Field-Aware Factorization Machine to recommend hotels on the Las Vegas Strip for the selected traveler type, based on 2015 TripAdvisor ratings.</Run>
-            <LineBreak />
-            <Run Foreground="Firebrick"
-                 FontFamily="Segoe UI">(Work in progress -> fields to be added)</Run>
+            <Run>Uses a Field-Aware Factorization Machine to recommend hotels on the Las Vegas Strip for the selected traveler type and season, based on 2015 TripAdvisor ratings.</Run>
         </TextBlock>
 
         <!-- Main -->
@@ -118,7 +115,13 @@
                           SelectionChanged="TravelerTypesCombo_SelectionChanged"
                           Grid.Row="7"
                           Grid.Column="0"
-                          Header="Traveler Type" />
+                          Header="Traveler Type"
+                          FontFamily="Segoe UI" />
+                <ComboBox x:Name="SeasonsCombo"
+                          SelectionChanged="SeasonsCombo_SelectionChanged"
+                          Grid.Row="7"
+                          Grid.Column="1"
+                          Header="Season" />
                 <ComboBox Grid.Row="8"
                           x:Name="HotelsCombo"
                           SelectionChanged="HotelsCombo_SelectionChanged"
