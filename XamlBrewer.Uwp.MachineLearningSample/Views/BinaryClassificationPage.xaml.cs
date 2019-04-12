@@ -48,7 +48,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             _testDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/winequality_white_test.csv");
 
             // Prepare diagram.
-            PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries);
+            PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries areaUnderCurveSeries, out ColumnSeries f1ScoreSeries, out ColumnSeries positiveRecallSeries);
 
             //// This raises a ArgumentOutOfRangeException because of different Label type expected:
             //// var priorModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.Prior());
@@ -67,8 +67,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             await ViewModel.Save(_perceptronBinaryModel, "perceptronModel.zip");
             var nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_perceptronBinaryModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = double.NaN });// metrics.Entropy });
+            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.AreaUnderRocCurve });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.F1Score });
+            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.PositiveRecall });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -79,8 +80,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             await ViewModel.Save(_linearSvmModel, "linearSvmModel.zip");
             nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_linearSvmModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = double.NaN });// metrics.Entropy });
+            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.AreaUnderRocCurve });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.F1Score });
+            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.PositiveRecall });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -91,8 +93,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             await ViewModel.Save(_logisticRegressionModel, "logisticRegressionModel.zip");
             var metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Entropy });
+            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.AreaUnderRocCurve });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.F1Score });
+            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.PositiveRecall });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -103,8 +106,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             await ViewModel.Save(_sdcabModel, "sdcabModel.zip");
             metrics = await ViewModel.Evaluate(_sdcabModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Accuracy });
-            entropySeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.Entropy });
+            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.AreaUnderRocCurve });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.F1Score });
+            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 3, Value = metrics.PositiveRecall });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -116,7 +120,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             BusyIndicator.PauseAnimation();
         }
 
-        private void PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries entropySeries, out ColumnSeries f1ScoreSeries)
+        private void PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries areaUnderCurveSeries, out ColumnSeries f1ScoreSeries, out ColumnSeries positiveRecallSeries)
         {
             var foreground = OxyColors.SteelBlue;
             var plotModel = new PlotModel
@@ -166,15 +170,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
             plotModel.Series.Add(accuracySeries);
 
-            entropySeries = new ColumnSeries
+            areaUnderCurveSeries = new ColumnSeries
             {
-                Title = "Entropy",
+                Title = "Area under ROC curve",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 FillColor = OxyColors.Firebrick,
                 TextColor = OxyColors.Wheat
             };
-            plotModel.Series.Add(entropySeries);
+            plotModel.Series.Add(areaUnderCurveSeries);
 
             f1ScoreSeries = new ColumnSeries
             {
@@ -185,6 +189,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 TextColor = OxyColors.Wheat
             };
             plotModel.Series.Add(f1ScoreSeries);
+
+            positiveRecallSeries = new ColumnSeries
+            {
+                Title = "Positive Recall",
+                LabelPlacement = LabelPlacement.Inside,
+                LabelFormatString = "{0:.00}",
+                FillColor = OxyColors.MediumSeaGreen,
+                TextColor = OxyColors.Wheat
+            };
+            plotModel.Series.Add(positiveRecallSeries);
 
             Diagram.Model = plotModel;
         }
