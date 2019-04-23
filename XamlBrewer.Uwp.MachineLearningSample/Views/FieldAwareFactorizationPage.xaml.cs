@@ -107,6 +107,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
 
             var result = await ViewModel.Predict(recommendationData);
+            if (!result.PredictedLabel)
+            {
+                // Bring to a range from -1 (highly discouraged) to +1 (highly recommended).
+                result.Probability = -result.Probability;
+            }
+
             ResultBlock.Text = result != null ? result.Probability.ToString() : string.Empty;
         }
 

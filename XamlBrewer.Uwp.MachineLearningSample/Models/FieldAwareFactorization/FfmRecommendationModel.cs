@@ -70,9 +70,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             var scoredData = _model.Transform(testData);
             var metrics = _mlContext.BinaryClassification.Evaluate(
-                data: scoredData, 
-                labelColumnName: "Label", 
-                scoreColumnName: "Probability", 
+                data: scoredData,
+                labelColumnName: "Label",
+                scoreColumnName: "Probability",
                 predictedLabelColumnName: "PredictedLabel");
 
             // Place a breakpoint here to inspect the quality metrics.
@@ -95,14 +95,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             }
 
             // Single prediction
-            var recommendationPrediction = _predictionEngine.Predict(recommendationData);
-            if (!recommendationPrediction.PredictedLabel)
-            {
-                // Reverse probability if not recommended.
-                recommendationPrediction.Probability = recommendationPrediction.Probability * -1;
-            }
-
-            return recommendationPrediction;
+            return _predictionEngine.Predict(recommendationData);
         }
 
         public IEnumerable<FfmRecommendationPrediction> Predict(IEnumerable<FfmRecommendationData> recommendationData)
