@@ -1,4 +1,5 @@
 ﻿using Microsoft.ML;
+using Microsoft.ML.Data;
 using Mvvm.Services;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -65,11 +66,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             PerceptronBox.IsChecked = true;
             _perceptronBinaryModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.AveragedPerceptron());
             await ViewModel.Save(_perceptronBinaryModel, "perceptronModel.zip");
-            var nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_perceptronBinaryModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.Accuracy });
-            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.AreaUnderRocCurve });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.F1Score });
-            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = nonCalibratedMetrics.PositiveRecall });
+            BinaryClassificationMetrics metrics = await ViewModel.EvaluateNonCalibrated(_perceptronBinaryModel, _testDataPath);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.Accuracy });
+            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.AreaUnderRocCurve });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.F1Score });
+            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 0, Value = metrics.PositiveRecall });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -78,11 +79,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             LinearSvmBox.IsChecked = true;
             _linearSvmModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LinearSvm());
             await ViewModel.Save(_linearSvmModel, "linearSvmModel.zip");
-            nonCalibratedMetrics = await ViewModel.EvaluateNonCalibrated(_linearSvmModel, _testDataPath);
-            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.Accuracy });
-            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.AreaUnderRocCurve });
-            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.F1Score });
-            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = nonCalibratedMetrics.PositiveRecall });
+            metrics = await ViewModel.EvaluateNonCalibrated(_linearSvmModel, _testDataPath);
+            accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.Accuracy });
+            areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.AreaUnderRocCurve });
+            f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.F1Score });
+            positiveRecallSeries.Items.Add(new ColumnItem { CategoryIndex = 1, Value = metrics.PositiveRecall });
 
             // Update diagram
             Diagram.InvalidatePlot();
@@ -91,7 +92,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             LogisticRegressionBox.IsChecked = true;
             _logisticRegressionModel = await ViewModel.BuildAndTrain(trainingDataLocation, ViewModel.MLContext.BinaryClassification.Trainers.LbfgsLogisticRegression());
             await ViewModel.Save(_logisticRegressionModel, "logisticRegressionModel.zip");
-            var metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
+            metrics = await ViewModel.Evaluate(_logisticRegressionModel, _testDataPath);
             accuracySeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.Accuracy });
             areaUnderCurveSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.AreaUnderRocCurve });
             f1ScoreSeries.Items.Add(new ColumnItem { CategoryIndex = 2, Value = metrics.F1Score });
