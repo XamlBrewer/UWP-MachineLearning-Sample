@@ -13,10 +13,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
     {
         public MLContext MLContext { get; } = new MLContext(seed: null);
 
-        public PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> BuildAndTrain(string trainingDataPath, IEstimator<ITransformer> algorithm)
+        public PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> BuildAndTrain(
+            string trainingDataPath,
+            IEstimator<ITransformer> algorithm)
         {
             IEstimator<ITransformer> pipeline =
-                MLContext.Transforms.ReplaceMissingValues("FixedAcidity", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean)
+                MLContext.Transforms.ReplaceMissingValues(
+                    outputColumnName: "FixedAcidity",
+                    replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean)
                 .Append(MLContext.FloatToBoolLabelNormalizer())
                 .Append(MLContext.Transforms.Concatenate("Features",
                     new[]
@@ -36,42 +40,59 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             // No TextLoader.
             var trainData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
-                    path: trainingDataPath, 
-                    separatorChar: ';', 
+                    path: trainingDataPath,
+                    separatorChar: ';',
                     hasHeader: true);
 
             // Cache the data view in memory. For an iterative algorithm such as SDCA this makes a huge difference.
             trainData = MLContext.Data.Cache(trainData);
 
-            ITransformer model =  pipeline.Fit(trainData);
+            ITransformer model = pipeline.Fit(trainData);
             return new PredictionModel<BinaryClassificationData, BinaryClassificationPrediction>(MLContext, model);
         }
 
-        public void Save(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string modelName)
+        public void Save(
+            PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model,
+            string modelName)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
             string modelPath = Path.Combine(storageFolder.Path, modelName);
 
-            MLContext.Model.Save(model.Transformer, inputSchema: null, filePath: modelPath);
+            MLContext.Model.Save(
+                model: model.Transformer,
+                inputSchema: null,
+                filePath: modelPath);
         }
 
-        public CalibratedBinaryClassificationMetrics Evaluate(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
+        public CalibratedBinaryClassificationMetrics Evaluate(
+            PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model,
+            string testDataLocation)
         {
-            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(testDataLocation, separatorChar: ';', hasHeader: true);
+            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
+                path: testDataLocation,
+                separatorChar: ';',
+                hasHeader: true);
 
             var scoredData = model.Transformer.Transform(testData);
             return MLContext.BinaryClassification.Evaluate(scoredData);
         }
 
-        public BinaryClassificationMetrics EvaluateNonCalibrated(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, string testDataLocation)
+        public BinaryClassificationMetrics EvaluateNonCalibrated(
+            PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model,
+            string testDataLocation)
         {
-            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(testDataLocation, separatorChar: ';', hasHeader: true);
+            var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
+                path: testDataLocation,
+                separatorChar: ';',
+                hasHeader: true);
 
             var scoredData = model.Transformer.Transform(testData);
             return MLContext.BinaryClassification.EvaluateNonCalibrated(scoredData);
         }
 
-        public IEnumerable<BinaryClassificationPrediction> Predict(PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model, IEnumerable<BinaryClassificationData> data)
+        public IEnumerable<BinaryClassificationPrediction> Predict(
+            PredictionModel<BinaryClassificationData, BinaryClassificationPrediction> model,
+            IEnumerable<BinaryClassificationData> data)
         {
             foreach (BinaryClassificationData datum in data)
                 yield return model.Engine.Predict(datum);
@@ -80,11 +101,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public IEnumerable<BinaryClassificationData> GetSample(string sampleDataPath)
         {
             var testData = MLContext.Data.LoadFromTextFile<BinaryClassificationData>(
-                sampleDataPath, 
-                separatorChar: ';', 
+                sampleDataPath,
+                separatorChar: ';',
                 hasHeader: true);
             return MLContext.Data.CreateEnumerable<BinaryClassificationData>(
-                data: testData, 
+                data: testData,
                 reuseRowObject: false);
         }
     }
