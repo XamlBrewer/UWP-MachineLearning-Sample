@@ -1,0 +1,126 @@
+﻿<Page x:Class="XamlBrewer.Uwp.MachineLearningSample.AutomationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:lottie="using:LottieUWP"
+      xmlns:oxy="using:OxyPlot.Windows"
+      mc:Ignorable="d"
+      Foreground="{StaticResource PageForegroundBrush}"
+      FontFamily="Segoe UI">
+
+    <Grid Background="Transparent"
+          Padding="48 34 0 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Foreground="{StaticResource PageTitleBrush}"
+                   FontSize="48"
+                   FontWeight="Light"
+                   HorizontalAlignment="Left"
+                   Margin="6 0 0 0"
+                   TextLineBounds="TrimToCapHeight"
+                   FontFamily="Segoe UI">
+                <Run Text="Automated Learning" />
+        </TextBlock>
+
+        <Path Data="{StaticResource AutomationIcon}"
+              Fill="{StaticResource PageTitleBrush}"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Right"
+              Height="48"
+              Width="48"
+              Margin="0 0 20 0"
+              Stretch="Uniform" />
+
+        <TextBlock Grid.Row="1"
+                   FontSize="24"
+                   TextWrapping="WrapWholeWords"
+                   FontFamily="Segoe UI">
+            <Run>Uses the AutoML API to create and compare different binary classification models to predict the quality of wine using 11 physicochemical features.</Run>
+            <LineBreak />
+            <Run Foreground="Red">(Work in progress)</Run>
+        </TextBlock>
+
+        <!-- Main -->
+        <Grid Grid.Row="2"
+              ColumnSpacing="20"
+              RowSpacing="20"
+              Margin="0 40 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0"
+                  ColumnSpacing="20"
+                  RowSpacing="20"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0">Preparing the data</TextBlock>
+                <CheckBox x:Name="DatasetBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="0"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="1">Loading the DataView</TextBlock>
+                <CheckBox x:Name="DataViewBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="1"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="2">Setting up the experiment</TextBlock>
+                <CheckBox x:Name="SetUpExperimentBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="2"
+                          Grid.Column="1" />
+                <TextBlock Grid.Row="3">Running the experiment</TextBlock>
+                <CheckBox x:Name="RunExperimentBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="3"
+                          Grid.Column="1"
+                          FontFamily="Segoe UI" />
+                <!--<TextBlock Grid.Row="4">Stochastic Dual Coordinate Ascent</TextBlock>
+                <CheckBox x:Name="SdcaBox"
+                          IsEnabled="False"
+                          IsChecked="False"
+                          Grid.Row="4"
+                          Grid.Column="1" />-->
+                <Button x:Name="StartButton"
+                        Click="Page_Loaded"
+                        Grid.Row="5">Restart</Button>
+                <lottie:LottieAnimationView x:Name="BusyIndicator"
+                                            FileName="Assets/loading.json"
+                                            Visibility="Collapsed"
+                                            Height="240"
+                                            HorizontalAlignment="Left"
+                                            Grid.Row="5"
+                                            Grid.Column="0"
+                                            Margin="0 -240"
+                                            FontFamily="Segoe UI" />
+            </Grid>
+            <oxy:PlotView x:Name="Diagram"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Margin="0 0 40 60"
+                          Grid.Column="1" />
+        </Grid>
+    </Grid>
+</Page>

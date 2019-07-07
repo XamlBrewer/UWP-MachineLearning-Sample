@@ -73,6 +73,11 @@
                        FontFamily="Segoe UI">Debashis Howlader from the Noun Project</Hyperlink>
             <Run>.</Run>       
             <LineBreak />            
+            <Run>'Robot' icon for the Automated Learning page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com"
+                       FontFamily="Segoe UI">iconcheese from the Noun Project</Hyperlink>
+            <Run>.</Run>       
+            <LineBreak />  
             <Run>'Box Plot' icon for the Feature Distribution Analysis page by </Run>
             <Hyperlink NavigateUri="http://www.thenounproject.com">Kirby Wu from the Noun Project</Hyperlink>
             <Run>.</Run>      

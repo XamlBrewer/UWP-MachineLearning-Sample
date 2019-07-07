@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
-    public static class MLContextExtensions
+    public static partial class MLContextExtensions
     {
         /// <summary>
         /// Divides the numeric Label in two 'buckets' and transforms it to a Boolean.
