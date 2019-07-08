@@ -40,9 +40,9 @@
                    FontSize="24"
                    TextWrapping="WrapWholeWords"
                    FontFamily="Segoe UI">
-            <Run>Uses the AutoML API to create and compare different binary classification models to predict the quality of wine using 11 physicochemical features.</Run>
+            <Run>Uses the AutoML API to create and compare different multiclass classification models to predict the quality of wine using 11 physicochemical features.</Run>
             <LineBreak />
-            <Run Foreground="Red">(Work in progress)</Run>
+            <Run Foreground="Firebrick">(Work in progress)</Run>
         </TextBlock>
 
         <!-- Main -->
@@ -97,12 +97,10 @@
                           Grid.Row="3"
                           Grid.Column="1"
                           FontFamily="Segoe UI" />
-                <!--<TextBlock Grid.Row="4">Stochastic Dual Coordinate Ascent</TextBlock>
-                <CheckBox x:Name="SdcaBox"
-                          IsEnabled="False"
-                          IsChecked="False"
-                          Grid.Row="4"
-                          Grid.Column="1" />-->
+                <TextBlock x:Name="ProgressTextBlock"
+                           Foreground="Firebrick"
+                           Grid.Row="4"
+                           Grid.Column="1" />
                 <Button x:Name="StartButton"
                         Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>

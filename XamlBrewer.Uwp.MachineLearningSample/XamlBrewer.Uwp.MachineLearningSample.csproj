@@ -121,7 +121,6 @@
     </Compile>
     <Compile Include="Models\Automation\AutomationModel.cs" />
     <Compile Include="Models\Automation\AutomationData.cs" />
-    <Compile Include="Models\Automation\MLContextExtensions.cs" />
     <Compile Include="Models\BinaryClassification\BinaryClassificationModel.cs" />
     <Compile Include="Models\BinaryClassification\MLContextExtensions.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationData.cs" />

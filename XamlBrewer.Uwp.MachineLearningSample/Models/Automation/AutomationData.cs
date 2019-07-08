@@ -37,7 +37,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         [LoadColumn(10)]
         public float Alcohol;
 
-        [LoadColumn(11), ColumnName("Valuation")]
-        public float Valuation;
+        [LoadColumn(11)]
+        public float Label;
     }
 }

@@ -1,16 +1,20 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.AutoML;
+using Microsoft.ML.Data;
 using Microsoft.ML.Transforms;
 using Mvvm;
+using System;
 using System.Linq;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
-    internal class AutomationModel : ViewModelBase
+    internal class AutomationModel : ViewModelBase, IProgress<RunDetail<MulticlassClassificationMetrics>>
     {
         private IDataView _trainingDataView;
         private IDataView _validationDataView;
-        private BinaryClassificationExperiment _experiment;
+        private MulticlassClassificationExperiment _experiment;
+
+        public event EventHandler<ProgressEventArgs> Progressed;
 
         public MLContext MLContext { get; } = new MLContext(seed: null);
 
@@ -21,7 +25,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 MLContext.Transforms.ReplaceMissingValues(
                     outputColumnName: "FixedAcidity",
                     replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean)
-                .Append(MLContext.ValuationToBoolLabelNormalizer()) //--> multiple 'Label' columns confuse the experiment.
                 .Append(MLContext.Transforms.Concatenate("Features",
                     new[]
                     {
@@ -46,6 +49,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             _trainingDataView = model.Transform(trainingData);
             _trainingDataView = MLContext.Data.Cache(_trainingDataView);
 
+            // Check the content on a breakpoint:
+            var sneakPeek = _trainingDataView.Preview();
+
             // Test data
             var validationData = MLContext.Data.LoadFromTextFile<AutomationData>(
                 path: validationDataPath,
@@ -58,14 +64,17 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public void SetUpExperiment()
         {
-            var settings = new BinaryExperimentSettings
+            var settings = new MulticlassExperimentSettings
             {
-                MaxExperimentTimeInSeconds = 120,
-                OptimizingMetric = BinaryClassificationMetric.AreaUnderRocCurve,
+                MaxExperimentTimeInSeconds = 180,
+                OptimizingMetric = MulticlassClassificationMetric.LogLoss,
                 CacheDirectory = null
             };
 
-            _experiment = MLContext.Auto().CreateBinaryClassificationExperiment(settings);
+            // Because I can.
+            //settings.Trainers.Remove(BinaryClassificationTrainer.AveragedPerceptron);
+
+            _experiment = MLContext.Auto().CreateMulticlassClassificationExperiment(settings);
         }
 
         public void RunExperiment()
@@ -73,7 +82,20 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             // Yields a silly exception on schema mismatch.
             // var result = _experiment.Execute(_trainingDataView, _validationDataView);
 
-            var result = _experiment.Execute(_trainingDataView);
+            var result = _experiment.Execute(
+                trainData: _trainingDataView,
+                labelColumnName: "Label",
+                progressHandler: this);
         }
+
+        public void Report(RunDetail<MulticlassClassificationMetrics> value)
+        {
+            Progressed?.Invoke(this, new ProgressEventArgs { CurrentExperiment = value.TrainerName });
+        }
+    }
+
+    internal class ProgressEventArgs : EventArgs
+    {
+        public string CurrentExperiment { get; set; }
     }
 }

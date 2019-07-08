@@ -2,6 +2,8 @@
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System.ComponentModel;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
 
@@ -15,9 +17,24 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         public AutomationPage()
         {
             this.InitializeComponent();
-            this.DataContext = new AutomationPageViewModel();
+            var dataContext = new AutomationPageViewModel();
+            this.DataContext = dataContext;
+            dataContext.PropertyChanged += DataContext_PropertyChanged;
 
             Loaded += Page_Loaded;
+        }
+
+        private void DataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "CurrentExperiment")
+            {
+                _ = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                        () =>
+                            {
+                                ProgressTextBlock.Text = (sender as AutomationPageViewModel).CurrentExperiment;
+                            }
+                        );
+            }
         }
 
         private AutomationPageViewModel ViewModel => DataContext as AutomationPageViewModel;
@@ -28,6 +45,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             DataViewBox.IsChecked = false;
             SetUpExperimentBox.IsChecked = false;
             RunExperimentBox.IsChecked = false;
+            ProgressTextBlock.Text = string.Empty;
             StartButton.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -35,7 +53,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Prepare diagram.
             PrepareDiagram();
-            
+
             // Prepare datasets.
             DatasetBox.IsChecked = true;
             _trainingDataPath = await MlDotNet.FilePath(@"ms-appx:///Data/winequality_white_train.csv");
@@ -51,8 +69,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Run experiment.
             RunExperimentBox.IsChecked = true;
+            ProgressTextBlock.Text = "Starting";
             await ViewModel.RunExperiment();
-                       
+            ProgressTextBlock.Text = string.Empty;
+
             // Update diagram
             Diagram.InvalidatePlot();
 
@@ -106,7 +126,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var accuracySeries = new ColumnSeries
             {
-                Title = "Accuracy",
+                Title = "Log Loss",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 FillColor = OxyColors.DarkOrange,
@@ -116,7 +136,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var areaUnderCurveSeries = new ColumnSeries
             {
-                Title = "Area under ROC curve",
+                Title = "Log Loss Resuction",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 FillColor = OxyColors.Firebrick,
@@ -126,7 +146,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var f1ScoreSeries = new ColumnSeries
             {
-                Title = "F1 Score",
+                Title = "Micro Accuracy",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 FillColor = OxyColors.MidnightBlue,
@@ -136,7 +156,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             var positiveRecallSeries = new ColumnSeries
             {
-                Title = "Positive Recall",
+                Title = "Macro Accuracy",
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 FillColor = OxyColors.MediumSeaGreen,
