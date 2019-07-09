@@ -5,6 +5,7 @@ using Microsoft.ML.Transforms;
 using Mvvm;
 using System;
 using System.Linq;
+using XamlBrewer.Uwp.MachineLearningSample.Models.Automation;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
@@ -71,8 +72,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 CacheDirectory = null
             };
 
-            // Because I can.
-            //settings.Trainers.Remove(BinaryClassificationTrainer.AveragedPerceptron);
+            // These two trainers yield no metrics in UWP:
+            settings.Trainers.Remove(MulticlassClassificationTrainer.FastTreeOva);
+            settings.Trainers.Remove(MulticlassClassificationTrainer.FastForestOva);
 
             _experiment = MLContext.Auto().CreateMulticlassClassificationExperiment(settings);
         }
@@ -90,12 +92,22 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public void Report(RunDetail<MulticlassClassificationMetrics> value)
         {
-            Progressed?.Invoke(this, new ProgressEventArgs { CurrentExperiment = value.TrainerName });
+            Progressed?.Invoke(this, new ProgressEventArgs
+            {
+                Model = new AutomationExperiment
+                {
+                    Trainer = value.TrainerName,
+                    LogLoss = value.ValidationMetrics?.LogLoss,
+                    LogLossReduction = value.ValidationMetrics?.LogLossReduction,
+                    MicroAccuracy = value.ValidationMetrics?.MicroAccuracy,
+                    MacroAccuracy = value.ValidationMetrics?.MacroAccuracy
+                }
+            });
         }
     }
 
     internal class ProgressEventArgs : EventArgs
     {
-        public string CurrentExperiment { get; set; }
+        public AutomationExperiment Model { get; set; }
     }
 }

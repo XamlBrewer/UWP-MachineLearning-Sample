@@ -13,6 +13,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
     {
         private string _trainingDataPath;
         private string _validationDataPath;
+        private int _experimentNumber;
 
         public AutomationPage()
         {
@@ -28,10 +29,20 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         {
             if (e.PropertyName == "CurrentExperiment")
             {
+                _experimentNumber++;
+
                 _ = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                         () =>
                             {
-                                ProgressTextBlock.Text = (sender as AutomationPageViewModel).CurrentExperiment;
+                                var currentExperiment = (sender as AutomationPageViewModel).CurrentExperiment;
+                                ProgressTextBlock.Text = currentExperiment.Trainer;
+
+                                // Update diagram
+                                (Diagram.Model.Series[0] as LineSeries).Points.Add(new DataPoint(_experimentNumber, currentExperiment.LogLoss == null ? 0 : currentExperiment.LogLoss.Value));
+                                (Diagram.Model.Series[1] as LineSeries).Points.Add(new DataPoint(_experimentNumber, currentExperiment.LogLossReduction == null ? 0 : currentExperiment.LogLossReduction.Value));
+                                (Diagram.Model.Series[2] as LineSeries).Points.Add(new DataPoint(_experimentNumber, currentExperiment.MicroAccuracy == null ? 0 : currentExperiment.MicroAccuracy.Value));
+                                (Diagram.Model.Series[3] as LineSeries).Points.Add(new DataPoint(_experimentNumber, currentExperiment.MacroAccuracy == null ? 0 : currentExperiment.MacroAccuracy.Value));
+                                Diagram.InvalidatePlot();
                             }
                         );
             }
@@ -47,6 +58,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             RunExperimentBox.IsChecked = false;
             ProgressTextBlock.Text = string.Empty;
             StartButton.IsEnabled = false;
+            _experimentNumber = 0;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
@@ -73,9 +85,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             await ViewModel.RunExperiment();
             ProgressTextBlock.Text = string.Empty;
 
-            // Update diagram
-            Diagram.InvalidatePlot();
-
             StartButton.IsEnabled = true;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -87,7 +96,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var foreground = OxyColors.SteelBlue;
             var plotModel = new PlotModel
             {
-                Subtitle = "Model Comparison",
+                Subtitle = "Evaluation Metrics",
                 PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1),
                 PlotAreaBorderColor = foreground,
                 TextColor = foreground,
@@ -97,22 +106,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample
                 LegendPosition = LegendPosition.TopCenter,
                 LegendOrientation = LegendOrientation.Horizontal
             };
-            plotModel.Axes.Add(new CategoryAxis
+            plotModel.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                Key = "ModelAxis",
-                ItemsSource = new[]
-                    {
-                        "Model 1",
-                        "Model 2",
-                        "Model 3",
-                        "Model 4",
-                        "Model 5",
-                        "Model 6"
-                    },
                 TextColor = foreground,
-                TicklineColor = foreground,
-                TitleColor = foreground
+                TicklineColor = OxyColors.Transparent,
+                TitleColor = foreground,
+                Title = "Experiments",
+                MinorStep = 1,
+                MajorStep = 1
             });
 
             var linearAxis = new LinearAxis
@@ -124,45 +126,33 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             };
             plotModel.Axes.Add(linearAxis);
 
-            var accuracySeries = new ColumnSeries
+            plotModel.Series.Add(new LineSeries
             {
                 Title = "Log Loss",
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.DarkOrange,
-                TextColor = OxyColors.Wheat
-            };
-            plotModel.Series.Add(accuracySeries);
+                Color = OxyColors.DarkOrange,
+                TextColor = OxyColors.Transparent
+            });
 
-            var areaUnderCurveSeries = new ColumnSeries
+            plotModel.Series.Add(new LineSeries
             {
-                Title = "Log Loss Resuction",
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.Firebrick,
-                TextColor = OxyColors.Wheat
-            };
-            plotModel.Series.Add(areaUnderCurveSeries);
+                Title = "Log Loss Reduction",
+                Color = OxyColors.Firebrick,
+                TextColor = OxyColors.Transparent
+            });
 
-            var f1ScoreSeries = new ColumnSeries
+            plotModel.Series.Add(new LineSeries
             {
                 Title = "Micro Accuracy",
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.MidnightBlue,
-                TextColor = OxyColors.Wheat
-            };
-            plotModel.Series.Add(f1ScoreSeries);
+                Color = OxyColors.MidnightBlue,
+                TextColor = OxyColors.Transparent
+            });
 
-            var positiveRecallSeries = new ColumnSeries
+            plotModel.Series.Add(new LineSeries
             {
                 Title = "Macro Accuracy",
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                FillColor = OxyColors.MediumSeaGreen,
-                TextColor = OxyColors.Wheat
-            };
-            plotModel.Series.Add(positiveRecallSeries);
+                Color = OxyColors.MediumSeaGreen,
+                TextColor = OxyColors.Transparent
+            });
 
             Diagram.Model = plotModel;
         }

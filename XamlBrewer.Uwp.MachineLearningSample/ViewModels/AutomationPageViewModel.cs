@@ -2,25 +2,40 @@
 using Mvvm;
 using System.Threading.Tasks;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
+using XamlBrewer.Uwp.MachineLearningSample.Models.Automation;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
 {
     internal class AutomationPageViewModel : ViewModelBase
     {
         private AutomationModel _model = new AutomationModel();
-        private string currentExperiment = string.Empty;
+        private AutomationExperiment currentExperiment;
+        private AutomationExperiment bestExperiment;
 
         public AutomationPageViewModel()
         {
-            _model.Progressed += (s, e) => CurrentExperiment = e.CurrentExperiment;
+            _model.Progressed += (s, e) =>
+            {
+                CurrentExperiment = e.Model;
+                if (BestExperiment == null || BestExperiment.LogLoss > CurrentExperiment.LogLoss)
+                {
+                    BestExperiment = CurrentExperiment;
+                }
+            };
         }
 
         public MLContext MLContext => _model.MLContext;
 
-        public string CurrentExperiment
+        public AutomationExperiment CurrentExperiment
         {
             get { return currentExperiment; }
             set { SetProperty(ref currentExperiment, value); }
+        }
+
+        public AutomationExperiment BestExperiment
+        {
+            get { return bestExperiment; }
+            set { SetProperty(ref bestExperiment, value); }
         }
 
         public Task CreateDataViews(string trainingDataPath, string validationDataPath)
