@@ -61,5 +61,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 _model.RunExperiment();
             });
         }
+
+        public Task HyperParameterize()
+        {
+            return Task.Run(() =>
+            {
+                _model.HyperParameterize();
+            });
+        }
     }
 }

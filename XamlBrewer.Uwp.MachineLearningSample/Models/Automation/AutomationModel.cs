@@ -88,6 +88,29 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 trainData: _trainingDataView,
                 labelColumnName: "Label",
                 progressHandler: this);
+
+            // And the winner is  ... LightGbmMulti.
+        }
+
+        public void HyperParameterize()
+        {
+            var settings = new MulticlassExperimentSettings
+            {
+                MaxExperimentTimeInSeconds = 180,
+                OptimizingMetric = MulticlassClassificationMetric.LogLoss,
+                CacheDirectory = null
+            };
+
+            // There can be only one:
+            settings.Trainers.Clear();
+            settings.Trainers.Add(MulticlassClassificationTrainer.LightGbm);
+
+            var experiment = MLContext.Auto().CreateMulticlassClassificationExperiment(settings);
+
+            var result = experiment.Execute(
+                trainData: _trainingDataView,
+                labelColumnName: "Label",
+                progressHandler: this);
         }
 
         public void Report(RunDetail<MulticlassClassificationMetrics> value)

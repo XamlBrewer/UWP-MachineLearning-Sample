@@ -156,5 +156,16 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             Diagram.Model = plotModel;
         }
+
+        private async void HyperParametrisation_Clicked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            BusyIndicator.PlayAnimation();
+            _experimentNumber = 0;
+            PrepareDiagram();
+            await ViewModel.HyperParameterize();
+            BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            BusyIndicator.PauseAnimation();
+        }
     }
 }
