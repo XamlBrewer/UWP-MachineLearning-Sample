@@ -58,6 +58,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             RunExperimentBox.IsChecked = false;
             ProgressTextBlock.Text = string.Empty;
             StartButton.IsEnabled = false;
+            AlgorithmTextBlock.Text = string.Empty;
+            HyperButton.IsEnabled = false;
             _experimentNumber = 0;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -82,10 +84,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             // Run experiment.
             RunExperimentBox.IsChecked = true;
             ProgressTextBlock.Text = "Starting";
-            await ViewModel.RunExperiment();
+            AlgorithmTextBlock.Text = "The winner is " + await ViewModel.RunExperiment() + ". 🏆";
             ProgressTextBlock.Text = string.Empty;
 
             StartButton.IsEnabled = true;
+            HyperButton.IsEnabled = true;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             BusyIndicator.PauseAnimation();
@@ -161,11 +164,15 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         {
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
+            StartButton.IsEnabled = false;
+            HyperButton.IsEnabled = false;
             _experimentNumber = 0;
             PrepareDiagram();
             await ViewModel.HyperParameterize();
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             BusyIndicator.PauseAnimation();
+            StartButton.IsEnabled = true;
+            HyperButton.IsEnabled = true;
         }
     }
 }

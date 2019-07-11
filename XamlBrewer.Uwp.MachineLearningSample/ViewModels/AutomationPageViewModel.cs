@@ -54,11 +54,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             });
         }
 
-        public Task RunExperiment()
+        public Task<string> RunExperiment()
         {
             return Task.Run(() =>
             {
-                _model.RunExperiment();
+                return _model.RunExperiment();
             });
         }
 

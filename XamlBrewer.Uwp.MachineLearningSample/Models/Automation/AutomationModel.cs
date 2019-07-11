@@ -1,10 +1,13 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.AutoML;
 using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using Mvvm;
 using System;
+using System.IO;
 using System.Linq;
+using Windows.Storage;
 using XamlBrewer.Uwp.MachineLearningSample.Models.Automation;
 
 namespace XamlBrewer.Uwp.MachineLearningSample.Models
@@ -79,7 +82,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             _experiment = MLContext.Auto().CreateMulticlassClassificationExperiment(settings);
         }
 
-        public void RunExperiment()
+        public string RunExperiment()
         {
             // Yields a silly exception on schema mismatch.
             // var result = _experiment.Execute(_trainingDataView, _validationDataView);
@@ -89,7 +92,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 labelColumnName: "Label",
                 progressHandler: this);
 
-            // And the winner is  ... LightGbmMulti.
+            return result.BestRun.TrainerName;
         }
 
         public void HyperParameterize()
@@ -101,9 +104,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 CacheDirectory = null
             };
 
-            // There can be only one:
+            // There can be only one.
             settings.Trainers.Clear();
+            
+            // It's hard to discover it parameters.
             settings.Trainers.Add(MulticlassClassificationTrainer.LightGbm);
+            
+            // This one's easier:
+            // settings.Trainers.Add(MulticlassClassificationTrainer.LbfgsMaximumEntropy);
 
             var experiment = MLContext.Auto().CreateMulticlassClassificationExperiment(settings);
 
@@ -111,6 +119,22 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 trainData: _trainingDataView,
                 labelColumnName: "Label",
                 progressHandler: this);
+
+            var model = result.BestRun.Model as TransformerChain<ITransformer>;
+
+            var storageFolder = ApplicationData.Current.LocalFolder;
+            string modelPath = Path.Combine(storageFolder.Path, "Automation.zip");
+
+            MLContext.Model.Save(
+                model: model,
+                inputSchema: null,
+                filePath: modelPath);
+
+            var singleFeaturePredictor = model.First() as TransformerChain<ISingleFeaturePredictionTransformer<object>>;
+            var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<OneVersusAllModelParameters>;
+            var algorithm = multiclassPredictor.Model;
+            // ... and the rest is not publicly exposed.
+            // So it's breakpoint time.
         }
 
         public void Report(RunDetail<MulticlassClassificationMetrics> value)

@@ -1,5 +1,5 @@
 # UWP-MachineLearning-Sample
-Demonstrates how to use ML.NET and Oxyplot to implement some Machine Learning use cases in an MVVM UWP app. Currently works against ML.NET v1.0.0.
+Demonstrates how to use ML.NET and Oxyplot to implement some Machine Learning use cases in an MVVM UWP app. Currently works against ML.NET v1.2.0.
 
 ## Look mom, no Python
 The UWP app demonstrates the following Machine Learning scenarios:
@@ -9,6 +9,7 @@ The UWP app demonstrates the following Machine Learning scenarios:
 * Regression
 * Recommendation
 * Recommendation using Field-Aware Factorization Machine
+* Automated model generation with AutoML
 * Feature Distribution Analysis with Boxplot Diagrams
 * Feature Correlation Analysis with Heatmap Diagrams
 
@@ -25,6 +26,8 @@ The UWP app demonstrates the following Machine Learning scenarios:
 ![Screenshot](Assets/Recommendation.png?raw=true)
 
 ![Screenshot](Assets/FfmRecommendation.png?raw=true)
+
+![Screenshot](Assets/AutoML.png?raw=true)
 
 ![Screenshot](Assets/BoxPlot.png?raw=true)
 
