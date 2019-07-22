@@ -132,6 +132,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             var singleFeaturePredictor = model.First() as TransformerChain<ISingleFeaturePredictionTransformer<object>>;
             var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<OneVersusAllModelParameters>;
+            // When using MulticlassClassificationTrainer.LbfgsMaximumEntropy:
+            // var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<MaximumEntropyModelParameters>;
             var algorithm = multiclassPredictor.Model;
             // ... and the rest is not publicly exposed.
             // So it's breakpoint time.
