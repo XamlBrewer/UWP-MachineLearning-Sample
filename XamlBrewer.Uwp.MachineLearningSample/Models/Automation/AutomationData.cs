@@ -4,7 +4,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     public class AutomationData
     {
-        [LoadColumn(0)]
+        [LoadColumn(0), ColumnName("OriginalFixedAcidity")]
         public float FixedAcidity;
 
         [LoadColumn(1)]

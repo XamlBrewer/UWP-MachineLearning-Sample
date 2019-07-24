@@ -28,21 +28,25 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             IEstimator<ITransformer> pipeline =
                 MLContext.Transforms.ReplaceMissingValues(
                     outputColumnName: "FixedAcidity",
+                    inputColumnName: "OriginalFixedAcidity",
                     replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean)
-                .Append(MLContext.Transforms.Concatenate("Features",
-                    new[]
-                    {
-                        "FixedAcidity",
-                        "VolatileAcidity",
-                        "CitricAcid",
-                        "ResidualSugar",
-                        "Chlorides",
-                        "FreeSulfurDioxide",
-                        "TotalSulfurDioxide",
-                        "Density",
-                        "Ph",
-                        "Sulphates",
-                        "Alcohol"}));
+                .Append(MLContext.Transforms.DropColumns("OriginalFixedAcidity"));
+
+            // No need to add this, it will be done automatically.
+            //.Append(MLContext.Transforms.Concatenate("Features",
+            //    new[]
+            //    {
+            //        "FixedAcidity",
+            //        "VolatileAcidity",
+            //        "CitricAcid",
+            //        "ResidualSugar",
+            //        "Chlorides",
+            //        "FreeSulfurDioxide",
+            //        "TotalSulfurDioxide",
+            //        "Density",
+            //        "Ph",
+            //        "Sulphates",
+            //        "Alcohol"}));
 
             // Training data
             var trainingData = MLContext.Data.LoadFromTextFile<AutomationData>(
@@ -106,10 +110,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             // There can be only one.
             settings.Trainers.Clear();
-            
-            // It's hard to discover it parameters.
+
+            // It's hard to discover its parameters.
             settings.Trainers.Add(MulticlassClassificationTrainer.LightGbm);
-            
+
             // This one's easier:
             // settings.Trainers.Add(MulticlassClassificationTrainer.LbfgsMaximumEntropy);
 
