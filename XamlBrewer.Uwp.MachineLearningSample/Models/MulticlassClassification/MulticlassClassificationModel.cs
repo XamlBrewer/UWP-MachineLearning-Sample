@@ -14,6 +14,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         private IEstimator<ITransformer> _pipeline;
 
+        private IDataView _trainingData;
+
         public void Build()
         {
             _pipeline = MLContext.Transforms.Conversion.MapValueToKey("Label")
@@ -32,8 +34,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public void Train(string trainingDataPath)
         {
-            var trainData = MLContext.Data.LoadFromTextFile<MulticlassClassificationData>(trainingDataPath);
-            ITransformer transformer = _pipeline.Fit(trainData);
+            _trainingData = MLContext.Data.LoadFromTextFile<MulticlassClassificationData>(trainingDataPath);
+            ITransformer transformer = _pipeline.Fit(_trainingData);
             Model = new PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction>(MLContext, transformer);
         }
 
@@ -42,7 +44,17 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             var storageFolder = ApplicationData.Current.LocalFolder;
             string modelPath = Path.Combine(storageFolder.Path, modelName);
 
-            MLContext.Model.Save(Model.Transformer, inputSchema: null, filePath: modelPath);
+            MLContext.Model.Save(
+                model: Model.Transformer, 
+                inputSchema: _trainingData.Schema, 
+                filePath: modelPath);
+
+            // For the sake of argument: reload.
+            var model = MLContext.Model.Load(
+                filePath: modelPath,
+                inputSchema: out DataViewSchema inputSchema);
+
+            // Place breakpoint here to inspect model and input schema:
         }
 
         public MulticlassClassificationMetrics Evaluate(string testDataPath)
