@@ -8,6 +8,43 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     internal class MulticlassClassificationModel : ViewModelBase
     {
+        // Console app style
+        private void AllTheCode(string trainingDataPath, string testDataPath, string zipFilePath)
+        {
+            var mlContext = new MLContext(seed: null);
+
+            var trainingData = mlContext.Data.LoadFromTextFile<MulticlassClassificationData>(trainingDataPath);
+
+            var pipeline = MLContext.Transforms.Conversion.MapValueToKey("Label")
+                .Append(MLContext.Transforms.Text.FeaturizeText("Features", "Text"))
+                // Main algorithm
+                // .Append(MLContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent())
+                // or
+                .Append(MLContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy())
+                // or
+                // .Append(MLContext.MulticlassClassification.Trainers.NaiveBayes())
+                .Append(MLContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+
+            var model = pipeline.Fit(_trainingData);
+
+            var testData = MLContext.Data.LoadFromTextFile<MulticlassClassificationData>(testDataPath);
+            var scoredData = model.Transform(testData);
+            var qualityMetrics = mlContext.MulticlassClassification.Evaluate(scoredData);
+
+            mlContext.Model.Save(
+                model: model,
+                inputSchema: trainingData.Schema,
+                filePath: zipFilePath);
+
+            var modelFromZip = mlContext.Model.Load(
+                filePath: zipFilePath,
+                inputSchema: out DataViewSchema inputSchema);
+
+            var predictionModel = new PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction>
+                (mlContext, modelFromZip);
+            var prediction = predictionModel.Engine.Predict(new MulticlassClassificationData("text"));
+        }
+
         private MLContext MLContext { get; } = new MLContext(seed: null);
 
         private PredictionModel<MulticlassClassificationData, MulticlassClassificationPrediction> Model { get; set; }
@@ -24,11 +61,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             // .Append(MLContext.MulticlassClassification.Trainers.StochasticDualCoordinateAscent())
             // or
                 .Append(MLContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy())
-            // or
-            // .Append(MLContext.MulticlassClassification.Trainers.NaiveBayes()) // yields weird metrics...
+                // or
+                // .Append(MLContext.MulticlassClassification.Trainers.NaiveBayes()) // yields weird metrics...
 
-                
-            // Convert the predicted value back into a language.
+
+                // Convert the predicted value back into a language.
                 .Append(MLContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
         }
 
@@ -45,8 +82,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             string modelPath = Path.Combine(storageFolder.Path, modelName);
 
             MLContext.Model.Save(
-                model: Model.Transformer, 
-                inputSchema: _trainingData.Schema, 
+                model: Model.Transformer,
+                inputSchema: _trainingData.Schema,
                 filePath: modelPath);
 
             // For the sake of argument: reload.

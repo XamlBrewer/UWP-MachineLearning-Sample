@@ -11,6 +11,34 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
     internal class ClusteringModel
     {
+        // Console App Style
+        // private void AllTheCode(string trainingDataPath, string zipFilePath)
+        // {
+        //    var mlContext = new MLContext(seed: null);
+
+        //    var readerOptions = new TextLoader.Options()
+        //    {
+        //        Separators = new[] { ',' },
+        //        HasHeader = true,
+        //        Columns = new[]
+        //            {
+        //    new TextLoader.Column("AnnualIncome", DataKind.Single, 3),
+        //    new TextLoader.Column("SpendingScore", DataKind.Single, 4),
+        // }
+        //    };
+
+        //    var trainingDataView = mlContext.Data.LoadFromTextFile(trainingDataPath, readerOptions);
+
+        //    var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "AnnualIncome", "SpendingScore" })
+        //                    .Append(_mlContext.Clustering.Trainers.KMeans(
+        //                        featureColumnName: "Features",
+        //                        numberOfClusters: 5));
+
+        //    var model = pipeline.Fit(trainingDataView);
+
+        //    mlContext.Model.Save(model, inputSchema: null, zipFilePath);
+        // }
+
         private MLContext _mlContext = new MLContext(seed: null);
 
         public EstimatorChain<ClusteringPredictionTransformer<KMeansModelParameters>> Pipeline { get; private set; }
