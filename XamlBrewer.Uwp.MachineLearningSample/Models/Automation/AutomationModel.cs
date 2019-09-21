@@ -112,10 +112,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             settings.Trainers.Clear();
 
             // It's hard to discover its parameters.
-            settings.Trainers.Add(MulticlassClassificationTrainer.LightGbm);
+            // And there's a bug in 1.3.1 ...
+            // settings.Trainers.Add(MulticlassClassificationTrainer.LightGbm);
 
             // This one's easier:
-            // settings.Trainers.Add(MulticlassClassificationTrainer.LbfgsMaximumEntropy);
+            settings.Trainers.Add(MulticlassClassificationTrainer.LbfgsMaximumEntropy);
 
             var experiment = MLContext.Auto().CreateMulticlassClassificationExperiment(settings);
 
@@ -135,9 +136,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 filePath: modelPath);
 
             var singleFeaturePredictor = model.First() as TransformerChain<ISingleFeaturePredictionTransformer<object>>;
-            var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<OneVersusAllModelParameters>;
+            /// var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<OneVersusAllModelParameters>;
             // When using MulticlassClassificationTrainer.LbfgsMaximumEntropy:
-            // var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<MaximumEntropyModelParameters>;
+            var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<MaximumEntropyModelParameters>;
             var algorithm = multiclassPredictor.Model;
             // ... and the rest is not publicly exposed.
             // So it's breakpoint time.

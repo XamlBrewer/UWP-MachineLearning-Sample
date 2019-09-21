@@ -12,7 +12,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
     {
         private readonly double _ratingTreshold = 3;
 
-        private MLContext _mlContext = new MLContext(seed: null);
+        private readonly MLContext _mlContext = new MLContext(seed: null);
 
         private IDataView _allData;
 
