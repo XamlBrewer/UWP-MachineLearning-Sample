@@ -7,6 +7,7 @@ The UWP app demonstrates the following Machine Learning scenarios:
 * Multiclass Classification
 * Binary Classification
 * Regression
+* Feature Contribution Calculation (under construction)
 * Recommendation
 * Recommendation using Field-Aware Factorization Machine
 * Automated model generation with AutoML

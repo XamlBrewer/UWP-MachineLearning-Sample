@@ -13,6 +13,7 @@ namespace Mvvm
             Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("ClassificationIcon"), Text = "Multi Classification", NavigationDestination = typeof(ClassificationPage) });
             Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("BinaryClassificationIcon"), Text = "Binary Classification", NavigationDestination = typeof(BinaryClassificationPage) });
             Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("RegressionIcon"), Text = "Regression", NavigationDestination = typeof(RegressionPage) });
+            Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("FeatureContributionIcon"), Text = "Feature Contribution", NavigationDestination = typeof(FeatureContributionPage) });
             Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("RecommendationIcon"), Text = "Recommendation", NavigationDestination = typeof(RecommendationPage) });
             Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("FfmIcon"), Text = "FFM Recommendation", NavigationDestination = typeof(FieldAwareFactorizationPage) });
             Menu.Add(new MenuItem() { Glyph = Icon.GetIcon("AutomationIcon"), Text = "Automated Learning", NavigationDestination = typeof(AutomationPage) });

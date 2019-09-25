@@ -52,6 +52,8 @@
             <LineBreak />
             <Run>* Regression,</Run>
             <LineBreak />
+            <Run>* Feature Contribution Calculation (under construction),</Run>
+            <LineBreak />            
             <Run>* Recommendation,</Run>   
             <LineBreak />
             <Run>* Recommendation using Field-Aware Factorization Machine,</Run>   

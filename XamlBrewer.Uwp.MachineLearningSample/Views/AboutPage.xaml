@@ -63,6 +63,10 @@
             <Hyperlink NavigateUri="http://www.thenounproject.com">Knut M. Synstad from the Noun Project</Hyperlink>
             <Run>.</Run>       
             <LineBreak />
+            <Run>'Weights' icon for the Feature Contribution Calculation page by </Run>
+            <Hyperlink NavigateUri="http://www.thenounproject.com">Aleksandr Vector from the Noun Project</Hyperlink>
+            <Run>.</Run>       
+            <LineBreak />            
             <Run>'review' icon for the Recommendation page by </Run>
             <Hyperlink NavigateUri="http://www.thenounproject.com"
                        FontFamily="Segoe UI">Rose Alice Design from the Noun Project</Hyperlink>
