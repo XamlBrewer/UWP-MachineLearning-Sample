@@ -18,5 +18,13 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
                 return _model.BuildAndTrain(trainingDataPath);
             });
         }
+
+        public Task CreatePredictionModel()
+        {
+            return Task.Run(() =>
+            {
+                _model.CreatePredictionModel();
+            });
+        }
     }
 }

@@ -36,8 +36,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         {
             TrainingBox.IsChecked = false;
             WeightsBox.IsChecked = false;
-            SavingBox.IsChecked = false;
-            TestingBox.IsChecked = false;
+            PredictionBox.IsChecked = false;
             RestartButton.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -70,7 +69,6 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             }
 
             // Visualize the feature weights for the model.   
-
             WeightsBox.IsChecked = true;
             var categories = new List<string>();
             var bars = new List<BarItem>();
@@ -86,9 +84,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             (plotModel.Series[0] as BarSeries).ItemsSource = bars;
             plotModel.InvalidatePlot(true);
 
-            //// Save the model.
-            //SavingBox.IsChecked = true;
-            //await ViewModel.Save("recommendationModel.zip");
+            // Creating the prediction model
+            PredictionBox.IsChecked = true;
+            await ViewModel.CreatePredictionModel();
 
             //// Test and evaluate the model
             //TestingBox.IsChecked = true;

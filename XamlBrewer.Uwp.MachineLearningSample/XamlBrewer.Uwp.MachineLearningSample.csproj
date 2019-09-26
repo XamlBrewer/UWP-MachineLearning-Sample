@@ -127,6 +127,7 @@
     <Compile Include="Models\FeatureContribution\FeatureContribution.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionModel.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionData.cs" />
+    <Compile Include="Models\FeatureContribution\FeatureContributionScoredData.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationData.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationModel.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationPrediction.cs" />

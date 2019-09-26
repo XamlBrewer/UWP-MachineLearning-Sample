@@ -88,19 +88,12 @@
                           IsChecked="False"
                           Grid.Row="1"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="2">Persisting the model</TextBlock>
-                <CheckBox x:Name="SavingBox"
+                <TextBlock Grid.Row="2">Creating the prediction model</TextBlock>
+                <CheckBox x:Name="PredictionBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="2"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="3">Evaluating the model</TextBlock>
-                <CheckBox x:Name="TestingBox"
-                          IsEnabled="False"
-                          IsChecked="False"
-                          Grid.Row="3"
-                          Grid.Column="1"
-                          FontFamily="Segoe UI" />
                 <Button x:Name="RestartButton"
                         Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
@@ -128,8 +121,7 @@
                                        LegendOrientation="Horizontal"
                                        LegendPosition="TopCenter">
                         <oxyplot:PlotModel.Axes>
-                            <axes:CategoryAxis Title="Features"
-                                               Position="Left"
+                            <axes:CategoryAxis Position="Left"
                                                TextColor="{x:Bind OxyForeground}"
                                                TicklineColor="{x:Bind OxyForeground}"
                                                TitleColor="{x:Bind OxyForeground}" />
