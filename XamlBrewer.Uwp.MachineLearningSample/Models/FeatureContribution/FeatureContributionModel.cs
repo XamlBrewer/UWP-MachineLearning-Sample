@@ -1,5 +1,6 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using Mvvm;
 using System.Collections.Generic;
@@ -16,9 +17,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
     {
         public MLContext MLContext { get; } = new MLContext(seed: null);
 
-        private ITransformer _regressionModel;
+        private RegressionPredictionTransformer<LinearRegressionModelParameters> _regressionModel;
 
-        public void BuildAndTrain(string trainingDataPath)
+        public List<float> BuildAndTrain(string trainingDataPath)
         {
             IEstimator<ITransformer> pipeline =
                 MLContext.Transforms.ReplaceMissingValues(
@@ -55,12 +56,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             // Choose a regression algorithm.
             // Compatible trainers: https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.transforms.featurecontributioncalculatingestimator?view=ml-dotnet
-            var algorithm = MLContext.Regression.Trainers.Ols();
+            var algorithm = MLContext.Regression.Trainers.Sdca();
 
             // Train the model and score it on the transformed data.
             _regressionModel = algorithm.Fit(transformedData);
 
-            // TODO: return the weights -> update diagram
+            return _regressionModel.Model.Weights.ToList();
         }
     }
 }

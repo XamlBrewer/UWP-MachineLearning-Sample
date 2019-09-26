@@ -82,8 +82,8 @@
                           IsChecked="False"
                           Grid.Row="0"
                           Grid.Column="1" />
-                <TextBlock Grid.Row="1">Building and training the model</TextBlock>
-                <CheckBox x:Name="TrainingBox2"
+                <TextBlock Grid.Row="1">Visualizing the weights</TextBlock>
+                <CheckBox x:Name="WeightsBox"
                           IsEnabled="False"
                           IsChecked="False"
                           Grid.Row="1"
@@ -120,27 +120,35 @@
                           Margin="0 0 40 60"
                           Grid.Column="1">
                 <oxy:PlotView.Model>
-                    <oxyplot:PlotModel Subtitle="Recommended Hotels"
-                                       PlotAreaBorderColor="{x:Bind OxyForeground}"
+                    <oxyplot:PlotModel PlotAreaBorderColor="{x:Bind OxyForeground}"
                                        TextColor="{x:Bind OxyForeground}"
                                        TitleColor="{x:Bind OxyForeground}"
-                                       SubtitleColor="{x:Bind OxyForeground}">
+                                       SubtitleColor="{x:Bind OxyForeground}"
+                                       LegendPlacement="Outside"
+                                       LegendOrientation="Horizontal"
+                                       LegendPosition="TopCenter">
                         <oxyplot:PlotModel.Axes>
-                            <axes:CategoryAxis Position="Left"
+                            <axes:CategoryAxis Title="Features"
+                                               Position="Left"
                                                TextColor="{x:Bind OxyForeground}"
                                                TicklineColor="{x:Bind OxyForeground}"
                                                TitleColor="{x:Bind OxyForeground}" />
                             <axes:LinearAxis Position="Bottom"
-                                             Title="Predicted Score (higher is better)"
                                              TextColor="{x:Bind OxyForeground}"
                                              TicklineColor="{x:Bind OxyForeground}"
                                              TitleColor="{x:Bind OxyForeground}" />
                         </oxyplot:PlotModel.Axes>
                         <oxyplot:PlotModel.Series>
-                            <series:BarSeries LabelPlacement="Inside"
+                            <series:BarSeries Title="Model Weight"
+                                              LabelPlacement="Inside"
                                               LabelFormatString="{}{0:0.00}"
                                               TextColor="{x:Bind OxyText}"
-                                              FillColor="{x:Bind OxyFill}" />
+                                              FillColor="{x:Bind OxyWeightsFill}" />
+                            <series:BarSeries Title="Prediction Contribution"
+                                              LabelPlacement="Inside"
+                                              LabelFormatString="{}{0:0.00}"
+                                              TextColor="{x:Bind OxyText}"
+                                              FillColor="{x:Bind OxyContributionsFill}" />
                         </oxyplot:PlotModel.Series>
                     </oxyplot:PlotModel>
                 </oxy:PlotView.Model>

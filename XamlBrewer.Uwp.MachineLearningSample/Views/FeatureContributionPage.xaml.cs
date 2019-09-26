@@ -2,6 +2,7 @@
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
         private OxyColor OxyText => OxyColors.Wheat;
 
-        private OxyColor OxyFill => OxyColors.Firebrick;
+        private OxyColor OxyWeightsFill => OxyColors.MidnightBlue;
+
+        private OxyColor OxyContributionsFill => OxyColors.Firebrick;
 
         public FeatureContributionPage()
         {
@@ -32,7 +35,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private async void Page_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             TrainingBox.IsChecked = false;
-            TrainingBox2.IsChecked = false;
+            WeightsBox.IsChecked = false;
             SavingBox.IsChecked = false;
             TestingBox.IsChecked = false;
             RestartButton.IsEnabled = false;
@@ -40,19 +43,48 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
 
-            // Create and train the regression model 
+            var featureContributions = new List<FeatureContribution> {
+                        new FeatureContribution("FixedAcidity"),
+                        new FeatureContribution("VolatileAcidity"),
+                        new FeatureContribution("CitricAcid"),
+                        new FeatureContribution("ResidualSugar"),
+                        new FeatureContribution("Chlorides"),
+                        new FeatureContribution("FreeSulfurDioxide"),
+                        new FeatureContribution("TotalSulfurDioxide"),
+                        new FeatureContribution("Density"),
+                        new FeatureContribution("Ph"),
+                        new FeatureContribution("Sulphates"),
+                        new FeatureContribution("Alcohol")};
+
+            // Clear the diagram.
             Diagram.Model.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
             Diagram.InvalidatePlot();
 
-            // Prepare the input files
+            // Create and train the regression model 
             TrainingBox.IsChecked = true;
             var dataPath = await MlDotNet.FilePath(@"ms-appx:///Data/winequality_white_train.csv");
-            await ViewModel.BuildAndTrain(dataPath);
+            var featureWeights = await ViewModel.BuildAndTrain(dataPath);
+            for (int i = 0; i < 11; i++)
+            {
+                featureContributions[i].Weight = featureWeights[i];
+            }
 
+            // Visualize the feature weights for the model.   
 
-            //// Create and train the model      
-            //TrainingBox.IsChecked = true;
-            //await ViewModel.Build();
+            WeightsBox.IsChecked = true;
+            var categories = new List<string>();
+            var bars = new List<BarItem>();
+            foreach (var featureContribution in featureContributions.OrderBy(f => Math.Abs(f.Weight)))
+            {
+                categories.Add(featureContribution.Name);
+                bars.Add(new BarItem { Value = featureContribution.Weight });
+            }
+
+            var plotModel = Diagram.Model;
+
+            (plotModel.Axes[0] as CategoryAxis).ItemsSource = categories;
+            (plotModel.Series[0] as BarSeries).ItemsSource = bars;
+            plotModel.InvalidatePlot(true);
 
             //// Save the model.
             //SavingBox.IsChecked = true;

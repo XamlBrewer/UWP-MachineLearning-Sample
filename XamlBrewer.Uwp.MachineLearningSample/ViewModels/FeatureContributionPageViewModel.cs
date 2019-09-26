@@ -11,11 +11,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
     {
         private readonly FeatureContributionModel _model = new FeatureContributionModel();
 
-        public Task BuildAndTrain(string trainingDataPath)
+        public Task<List<float>> BuildAndTrain(string trainingDataPath)
         {
             return Task.Run(() =>
             {
-                _model.BuildAndTrain(trainingDataPath);
+                return _model.BuildAndTrain(trainingDataPath);
             });
         }
     }
