@@ -96,16 +96,19 @@
                           Grid.Column="1" />
                 <Button x:Name="RestartButton"
                         Click="Page_Loaded"
-                        Grid.Row="5">Restart</Button>
+                        Grid.Row="3">Restart</Button>
                 <lottie:LottieAnimationView x:Name="BusyIndicator"
                                             FileName="Assets/loading.json"
                                             Visibility="Collapsed"
                                             Height="180"
                                             HorizontalAlignment="Left"
-                                            Grid.Row="5"
+                                            Grid.Row="3"
                                             Grid.Column="0"
                                             Margin="0 -180"
                                             FontFamily="Segoe UI" />
+                <Button x:Name="PredictButton"
+                        Click="Prediction_Clicked"
+                        Grid.Row="4">Predict</Button>
             </Grid>
             <oxy:PlotView x:Name="Diagram"
                           Background="Transparent"
@@ -124,7 +127,8 @@
                             <axes:CategoryAxis Position="Left"
                                                TextColor="{x:Bind OxyForeground}"
                                                TicklineColor="{x:Bind OxyForeground}"
-                                               TitleColor="{x:Bind OxyForeground}" />
+                                               TitleColor="{x:Bind OxyForeground}"
+                                               GapWidth=".25" />
                             <axes:LinearAxis Position="Bottom"
                                              TextColor="{x:Bind OxyForeground}"
                                              TicklineColor="{x:Bind OxyForeground}"

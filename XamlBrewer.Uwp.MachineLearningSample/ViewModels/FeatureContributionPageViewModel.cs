@@ -1,7 +1,5 @@
-﻿using Microsoft.ML.Data;
-using Mvvm;
+﻿using Mvvm;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
 
@@ -24,6 +22,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample.ViewModels
             return Task.Run(() =>
             {
                 _model.CreatePredictionModel();
+            });
+        }
+
+        public Task<FeatureContributionPrediction> GetRandomPrediction()
+        {
+            return Task.Run(() =>
+            {
+                return _model.GetRandomPrediction();
             });
         }
     }
