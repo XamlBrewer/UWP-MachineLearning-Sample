@@ -20,7 +20,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         private IDataView _transformedData;
         private ITransformer _transformationModel;
         private RegressionPredictionTransformer<LinearRegressionModelParameters> _regressionModel;
-        private PredictionEngine<FeatureContributionData, FeatureContributionScoredData> _predictionEngine;
+        private PredictionEngine<FeatureContributionData, FeatureContributionPrediction> _predictionEngine;
 
         public List<float> BuildAndTrain(string trainingDataPath)
         {
@@ -77,11 +77,11 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             // Don't normalize the contributions.
             // https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.transforms.featurecontributioncalculatingestimator?view=ml-dotnet
             // "Does this estimator need to look at the data to train its parameters? No"
-            var simpleScoredDataset = _regressionModel.Transform(MLContext.Data.TakeRows(_transformedData, 1));
+            var regressionData = _regressionModel.Transform(MLContext.Data.TakeRows(_transformedData, 1));
 
             var featureContributionCalculator = MLContext.Transforms
                 .CalculateFeatureContribution(_regressionModel, normalize: false) // Estimator
-                .Fit(simpleScoredDataset); // Transformer
+                .Fit(regressionData); // Transformer
 
             // Create the full transformer chain.
             var scoringPipeline = _transformationModel
@@ -89,10 +89,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 .Append(featureContributionCalculator);
 
             // Create the prediction engine.
-            _predictionEngine = MLContext.Model.CreatePredictionEngine<FeatureContributionData, FeatureContributionScoredData>(scoringPipeline);
+            _predictionEngine = MLContext.Model.CreatePredictionEngine<FeatureContributionData, FeatureContributionPrediction>(scoringPipeline);
         }
 
-        public FeatureContributionScoredData GetRandomPrediction()
+        public FeatureContributionPrediction GetRandomPrediction()
         {
             return _predictionEngine.Predict(_trainData.ElementAt(new Random().Next(100)));
         }
