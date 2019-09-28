@@ -94,7 +94,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
         public FeatureContributionPrediction GetRandomPrediction()
         {
-            return _predictionEngine.Predict(_trainData.ElementAt(new Random().Next(100)));
+            return _predictionEngine.Predict(_trainData.ElementAt(new Random().Next(3918)));
         }
     }
 }

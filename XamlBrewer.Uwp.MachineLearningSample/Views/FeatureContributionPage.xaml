@@ -42,9 +42,6 @@
                    FontSize="24"
                    TextWrapping="WrapWholeWords">
             <Run>Calculates feature contribution in a regression model to predict the quality of wine using 11 physicochemical features.</Run>
-            <LineBreak />
-            <Run FontSize="18"
-                 Foreground="Firebrick">Under construction.</Run>
         </TextBlock>
 
         <!-- Main -->
@@ -109,6 +106,12 @@
                 <Button x:Name="PredictButton"
                         Click="Prediction_Clicked"
                         Grid.Row="4">Predict</Button>
+                <TextBlock x:Name="LabelText"
+                           Grid.Row="5"
+                           />
+                <TextBlock x:Name="ScoreText"
+                           Grid.Row="6"
+                            />
             </Grid>
             <oxy:PlotView x:Name="Diagram"
                           Background="Transparent"

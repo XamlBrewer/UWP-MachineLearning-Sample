@@ -52,6 +52,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             PredictionBox.IsChecked = false;
             RestartButton.IsEnabled = false;
             PredictButton.IsEnabled = false;
+            LabelText.Text = string.Empty;
+            ScoreText.Text = string.Empty;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
             BusyIndicator.PlayAnimation();
@@ -112,6 +114,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             {
                 _featureContributions[i].Contribution = prediction.FeatureContributions[i];
             }
+
+            LabelText.Text = $"Label: {prediction.Label}";
+            ScoreText.Text = $"Score: {prediction.Score:N1}";
 
             Diagram.Model.Series[1].IsVisible = true;
             UpdatePlot();

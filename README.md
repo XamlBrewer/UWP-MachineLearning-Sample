@@ -7,14 +7,14 @@ The UWP app demonstrates the following Machine Learning scenarios:
 * Multiclass Classification
 * Binary Classification
 * Regression
-* Feature Contribution Calculation (under construction)
+* Feature Contribution Calculation
 * Recommendation
 * Recommendation using Field-Aware Factorization Machine
 * Automated model generation with AutoML
 * Feature Distribution Analysis with Boxplot Diagrams
 * Feature Correlation Analysis with Heatmap Diagrams
 
-## Seeing is believing
+## Seeing is believing:
 
 ![Screenshot](Assets/Clustering.png?raw=true)
 
@@ -23,6 +23,8 @@ The UWP app demonstrates the following Machine Learning scenarios:
 ![Screenshot](Assets/BinaryClassification.png?raw=true)
 
 ![Screenshot](Assets/Regression.png?raw=true)
+
+![Screenshot](Assets/FeatureContribution.png?raw=true)
 
 ![Screenshot](Assets/Recommendation.png?raw=true)
 
