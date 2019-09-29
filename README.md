@@ -8,6 +8,7 @@ The UWP app demonstrates the following Machine Learning scenarios:
 * Binary Classification
 * Regression
 * Feature Contribution Calculation
+* Permutation Feature Importance Calculation
 * Recommendation
 * Recommendation using Field-Aware Factorization Machine
 * Automated model generation with AutoML
@@ -25,6 +26,8 @@ The UWP app demonstrates the following Machine Learning scenarios:
 ![Screenshot](Assets/Regression.png?raw=true)
 
 ![Screenshot](Assets/FeatureContribution.png?raw=true)
+
+![Screenshot](Assets/FeatureImportance.png?raw=true)
 
 ![Screenshot](Assets/Recommendation.png?raw=true)
 

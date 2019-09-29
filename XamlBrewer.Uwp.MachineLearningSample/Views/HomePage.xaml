@@ -53,7 +53,9 @@
             <Run>* Regression,</Run>
             <LineBreak />
             <Run>* Feature Contribution Calculation,</Run>
-            <LineBreak />            
+            <LineBreak />          
+            <Run>* Permutation Feature Importance Calculation,</Run>
+            <LineBreak /> 
             <Run>* Recommendation,</Run>   
             <LineBreak />
             <Run>* Recommendation using Field-Aware Factorization Machine,</Run>   

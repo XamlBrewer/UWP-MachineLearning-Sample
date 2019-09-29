@@ -128,6 +128,9 @@
     <Compile Include="Models\FeatureContribution\FeatureContributionModel.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionData.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionPrediction.cs" />
+    <Compile Include="Models\FeatureImportance\FeatureImportance.cs" />
+    <Compile Include="Models\FeatureImportance\FeatureImportanceData.cs" />
+    <Compile Include="Models\FeatureImportance\FeatureImportanceModel.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationData.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationModel.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationPrediction.cs" />
@@ -159,6 +162,7 @@
     <Compile Include="Services\Navigation\Navigation.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
     <Compile Include="ViewModels\AutomationPageViewModel.cs" />
+    <Compile Include="ViewModels\FeatureImportancePageViewModel.cs" />
     <Compile Include="ViewModels\FieldAwareFactorizationPageViewModel.cs" />
     <Compile Include="ViewModels\FeatureContributionPageViewModel.cs" />
     <Compile Include="ViewModels\RecommendationPageViewModel.cs" />
@@ -173,6 +177,9 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AutomationPage.xaml.cs">
       <DependentUpon>AutomationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FeatureImportancePage.xaml.cs">
+      <DependentUpon>FeatureImportancePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FieldAwareFactorizationPage.xaml.cs">
       <DependentUpon>FieldAwareFactorizationPage.xaml</DependentUpon>
@@ -268,6 +275,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AutomationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FeatureImportancePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
