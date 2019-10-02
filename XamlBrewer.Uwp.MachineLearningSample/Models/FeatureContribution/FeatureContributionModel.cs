@@ -1,6 +1,7 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
+using Microsoft.ML.Trainers.LightGbm;
 using Microsoft.ML.Transforms;
 using Mvvm;
 using System;
@@ -19,7 +20,12 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         private IEnumerable<FeatureContributionData> _trainData;
         private IDataView _transformedData;
         private ITransformer _transformationModel;
+        // SDCA Version
         private RegressionPredictionTransformer<LinearRegressionModelParameters> _regressionModel;
+        // OLS Version
+        // private RegressionPredictionTransformer<OlsModelParameters> _regressionModel;
+        // Light GBM Version
+        // private RegressionPredictionTransformer<LightGbmRegressionModelParameters> _regressionModel;
         private PredictionEngine<FeatureContributionData, FeatureContributionPrediction> _predictionEngine;
 
         public List<float> BuildAndTrain(string trainingDataPath)
@@ -53,8 +59,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             _trainData = MLContext.Data.CreateEnumerable<FeatureContributionData>(trainData, true);
 
             // Cache the data view in memory. For an iterative algorithm such as SDCA this makes a huge difference.
-            // For OLS id does not matter.
-            // trainData = MLContext.Data.Cache(trainData);
+            trainData = MLContext.Data.Cache(trainData);
 
             _transformationModel = pipeline.Fit(trainData);
 
@@ -63,12 +68,22 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
 
             // Choose a regression algorithm.
             // Compatible trainers: https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.transforms.featurecontributioncalculatingestimator?view=ml-dotnet
+
+            // SDCA version:
             var algorithm = MLContext.Regression.Trainers.Sdca();
+            // OLS version:
+            // var algorithm = MLContext.Regression.Trainers.Ols();
+            // Light GBM version:
+            // var algorithm = MLContext.Regression.Trainers.LightGbm();
 
             // Train the model and score it on the transformed data.
             _regressionModel = algorithm.Fit(_transformedData);
 
+            // OLS and SDCA version:
             return _regressionModel.Model.Weights.ToList();
+
+            // Light GBM version (no model weights):
+            // return new List<float> { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
         }
 
         public void CreatePredictionModel()
