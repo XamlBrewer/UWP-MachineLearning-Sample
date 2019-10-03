@@ -124,11 +124,11 @@
     <Compile Include="Models\Automation\AutomationExperiment.cs" />
     <Compile Include="Models\BinaryClassification\BinaryClassificationModel.cs" />
     <Compile Include="Models\BinaryClassification\MLContextExtensions.cs" />
-    <Compile Include="Models\FeatureContribution\FeatureContribution.cs" />
+    <Compile Include="Models\FeatureImportance\FeatureImportance.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionModel.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionData.cs" />
     <Compile Include="Models\FeatureContribution\FeatureContributionPrediction.cs" />
-    <Compile Include="Models\FeatureImportance\FeatureImportance.cs" />
+    <Compile Include="Models\FeatureContribution\FeatureContribution.cs" />
     <Compile Include="Models\FeatureImportance\FeatureImportanceData.cs" />
     <Compile Include="Models\FeatureImportance\FeatureImportanceModel.cs" />
     <Compile Include="Models\FieldAwareFactorization\FfmRecommendationData.cs" />

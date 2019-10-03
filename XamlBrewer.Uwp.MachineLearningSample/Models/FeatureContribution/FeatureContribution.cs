@@ -1,14 +1,16 @@
 ﻿namespace XamlBrewer.Uwp.MachineLearningSample.Models
 {
-    public class FeatureImportance
+    public class FeatureContribution
     {
-        public FeatureImportance(string name)
+        public FeatureContribution(string name)
         {
             Name = name;
         }
 
         public string Name { get; set; }
 
-        public double R2Decrease { get; set; }
+        public float Weight { get; set; }
+
+        public float Contribution { get; set; }
     }
 }
