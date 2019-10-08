@@ -36,7 +36,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             RestartButton.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Clear the diagram.
             Diagram.Model.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
@@ -52,7 +52,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             UpdatePlot(featureImportances);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             RestartButton.IsEnabled = true;
         }
 

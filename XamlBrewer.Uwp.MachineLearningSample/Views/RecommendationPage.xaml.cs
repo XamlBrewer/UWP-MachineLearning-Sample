@@ -2,6 +2,7 @@
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             ResultBlock.Text = string.Empty;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Prepare diagram
             Diagram.Model.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
@@ -66,7 +67,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var metrics = await ViewModel.Evaluate(dataPath);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             RestartButton.IsEnabled = true;
             TravelerTypesCombo.SelectedIndex = 0;
         }

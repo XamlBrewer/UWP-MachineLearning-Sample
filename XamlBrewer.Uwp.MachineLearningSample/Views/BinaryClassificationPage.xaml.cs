@@ -41,7 +41,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             CalculateButton.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Prepare datasets.
             DatasetBox.IsChecked = true;
@@ -118,7 +118,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             CalculateButton.IsEnabled = true;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
         }
 
         private void PrepareDiagram(out ColumnSeries accuracySeries, out ColumnSeries areaUnderCurveSeries, out ColumnSeries f1ScoreSeries, out ColumnSeries positiveRecallSeries)

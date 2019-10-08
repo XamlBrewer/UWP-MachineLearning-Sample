@@ -3,6 +3,7 @@ using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.Models;
@@ -36,7 +37,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             BoxSlider.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Prepare the input files
             DatasetBox.IsChecked = true;
@@ -135,7 +136,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             Slider_ValueChanged(this, null);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             RestartButton.IsEnabled = true;
             DraftSlider.IsEnabled = true;
             AgeSlider.IsEnabled = true;

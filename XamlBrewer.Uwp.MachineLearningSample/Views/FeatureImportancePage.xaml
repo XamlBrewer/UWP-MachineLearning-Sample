@@ -3,8 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:lottie="using:Microsoft.Toolkit.Uwp.UI.Lottie"
       xmlns:oxyplot="using:OxyPlot"
       xmlns:axes="using:OxyPlot.Axes"
       xmlns:series="using:OxyPlot.Series"
@@ -88,15 +89,16 @@
                 <Button x:Name="RestartButton"
                         Click="Page_Loaded"
                         Grid.Row="3">Restart</Button>
-                <lottie:LottieAnimationView x:Name="BusyIndicator"
-                                            FileName="Assets/loading.json"
-                                            Visibility="Collapsed"
-                                            Height="180"
-                                            HorizontalAlignment="Left"
-                                            Grid.Row="3"
-                                            Grid.Column="0"
-                                            Margin="0 -180"
-                                            FontFamily="Segoe UI" />
+                <controls:AnimatedVisualPlayer x:Name="BusyIndicator"
+                                               Visibility="Collapsed"
+                                               Height="180"
+                                               HorizontalAlignment="Left"
+                                               Grid.Row="3"
+                                               Grid.Column="0"
+                                               Margin="0 -180">
+                    <lottie:LottieVisualSource x:Name="LottieJsonSource"
+                                               UriSource="ms-appx:///Assets/loading.json" />
+                </controls:AnimatedVisualPlayer>
             </Grid>
             <oxy:PlotView x:Name="Diagram"
                           Background="Transparent"

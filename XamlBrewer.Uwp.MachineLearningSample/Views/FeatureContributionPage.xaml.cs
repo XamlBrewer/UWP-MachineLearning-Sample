@@ -56,7 +56,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             ScoreText.Text = string.Empty;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Clear the diagram.
             Diagram.Model.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
@@ -82,7 +82,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             await ViewModel.CreatePredictionModel();
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             RestartButton.IsEnabled = true;
             PredictButton.IsEnabled = true;
         }

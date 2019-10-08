@@ -3,6 +3,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
@@ -41,7 +42,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             ResultBlock.Text = string.Empty;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Prepare diagram
             Diagram.Model.PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1);
@@ -68,7 +69,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             var metrics = await ViewModel.Evaluate(dataPath);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             RestartButton.IsEnabled = true;
             TravelerTypesCombo.SelectedIndex = 0;
             SeasonsCombo.SelectedIndex = 0;

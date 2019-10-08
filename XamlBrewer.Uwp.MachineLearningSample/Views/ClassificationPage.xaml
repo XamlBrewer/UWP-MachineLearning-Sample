@@ -3,8 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:lottie="using:Microsoft.Toolkit.Uwp.UI.Lottie"
       xmlns:oxyplot="using:OxyPlot"
       xmlns:axes="using:OxyPlot.Axes"
       xmlns:series="using:OxyPlot.Series"
@@ -104,15 +105,15 @@
                 <Button x:Name="RestartButton"
                         Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
-                <lottie:LottieAnimationView x:Name="BusyIndicator"
-                                            FileName="Assets/loading.json"
-                                            Visibility="Collapsed"
-                                            Height="240"
-                                            HorizontalAlignment="Left"
-                                            Grid.Row="5"
-                                            Grid.Column="0"
-                                            Margin="0 -240"
-                                            FontFamily="Segoe UI" />
+                <controls:AnimatedVisualPlayer x:Name="BusyIndicator"
+                                               Height="240"
+                                               HorizontalAlignment="Left"
+                                               Grid.Row="5"
+                                               Grid.Column="0"
+                                               Margin="0 -240">
+                    <lottie:LottieVisualSource x:Name="LottieJsonSource"
+                                               UriSource="ms-appx:///Assets/loading.json" />
+                </controls:AnimatedVisualPlayer>
                 <TextBox x:Name="TextInput"
                          Header="Type some text"
                          IsSpellCheckEnabled="False"

@@ -2,6 +2,7 @@
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System;
 using System.ComponentModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
@@ -63,7 +64,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             _experimentNumber = 0;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Prepare diagram.
             PrepareDiagram();
@@ -91,7 +92,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             HyperButton.IsEnabled = true;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
         }
 
         private void PrepareDiagram()
@@ -163,14 +164,14 @@ namespace XamlBrewer.Uwp.MachineLearningSample
         private async void HyperParametrisation_Clicked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
             StartButton.IsEnabled = false;
             HyperButton.IsEnabled = false;
             _experimentNumber = 0;
             PrepareDiagram();
             await ViewModel.HyperParameterize();
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             StartButton.IsEnabled = true;
             HyperButton.IsEnabled = true;
         }

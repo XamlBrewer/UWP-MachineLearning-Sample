@@ -1,6 +1,7 @@
 ﻿using Mvvm.Services;
 using OxyPlot;
 using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using XamlBrewer.Uwp.MachineLearningSample.ViewModels;
@@ -46,7 +47,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             PredictButton.IsEnabled = false;
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            BusyIndicator.PlayAnimation();
+            BusyIndicator.Resume();
 
             // Prepare diagram
             var plotModel = Diagram.Model;
@@ -86,7 +87,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             plotModel.InvalidatePlot(true);
 
             BusyIndicator.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            BusyIndicator.PauseAnimation();
+            BusyIndicator.Pause();
             RestartButton.IsEnabled = true;
             PredictButton.IsEnabled = true;
         }

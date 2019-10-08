@@ -3,8 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:lottie="using:LottieUWP"
       xmlns:oxy="using:OxyPlot.Windows"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:lottie="using:Microsoft.Toolkit.Uwp.UI.Lottie"
       mc:Ignorable="d"
       Foreground="{StaticResource PageForegroundBrush}"
       FontFamily="Segoe UI">
@@ -107,15 +108,16 @@
                 <Button x:Name="RestartButton"
                         Click="Page_Loaded"
                         Grid.Row="5">Restart</Button>
-                <lottie:LottieAnimationView x:Name="BusyIndicator"
-                                            FileName="Assets/loading.json"
-                                            Visibility="Collapsed"
-                                            Height="180"
-                                            HorizontalAlignment="Left"
-                                            Grid.Row="5"
-                                            Grid.Column="0"
-                                            Margin="0 -180"
-                                            FontFamily="Segoe UI" />
+                <controls:AnimatedVisualPlayer x:Name="BusyIndicator"
+                                               Visibility="Collapsed"
+                                               Height="180"
+                                               HorizontalAlignment="Left"
+                                               Grid.Row="5"
+                                               Grid.Column="0"
+                                               Margin="0 -180">
+                    <lottie:LottieVisualSource x:Name="LottieJsonSource"
+                                               UriSource="ms-appx:///Assets/loading.json" />
+                </controls:AnimatedVisualPlayer>
                 <TextBlock Grid.Row="7">Predict</TextBlock>
                 <Slider x:Name="DraftSlider"
                         Maximum="35000000"
