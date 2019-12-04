@@ -1,5 +1,7 @@
 # UWP-MachineLearning-Sample
-Demonstrates how to use ML.NET and Oxyplot to implement some Machine Learning use cases in an MVVM UWP app. Currently works against ML.NET v1.3.1 and is tested against v1.4.0-preview.
+Demonstrates how to use ML.NET and Oxyplot to implement some Machine Learning use cases in an MVVM UWP app. Currently works against ML.NET v1.3.1 and is tested against v1.4.0-preview. 
+
+If you want to see these same ML.NET scenarios in Jupyter Notebooks and XPlot, then visit https://github.com/XamlBrewer/ML.NET-Jupyter-Notebooks.
 
 ## Look mom, no Python
 The UWP app demonstrates the following Machine Learning scenarios:
