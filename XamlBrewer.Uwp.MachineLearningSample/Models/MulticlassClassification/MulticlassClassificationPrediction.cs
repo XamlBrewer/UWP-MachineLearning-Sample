@@ -10,10 +10,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
         public float Class;
 
         [ColumnName("Score")]
-        public float[] Distances;
+        public float[] Probabilities;
 
         public string PredictedLanguage => classNames[(int)Class];
 
-        public int Confidence => (int)(Distances[(int)Class] * 100);
+        public int Confidence => (int)(Probabilities[(int)Class] * 100);
     }
 }

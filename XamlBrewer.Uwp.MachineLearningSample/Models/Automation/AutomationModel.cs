@@ -135,7 +135,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 inputSchema: null,
                 filePath: modelPath);
 
-            var singleFeaturePredictor = model.First() as TransformerChain<ISingleFeaturePredictionTransformer<object>>;
+            var x = model.First();
+            var singleFeaturePredictor = model.First() as TransformerChain<IPredictionTransformer<object>>;
             /// var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<OneVersusAllModelParameters>;
             // When using MulticlassClassificationTrainer.LbfgsMaximumEntropy:
             var multiclassPredictor = singleFeaturePredictor.LastTransformer as MulticlassPredictionTransformer<MaximumEntropyModelParameters>;
