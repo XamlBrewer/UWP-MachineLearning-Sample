@@ -76,7 +76,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             {
                 MaxExperimentTimeInSeconds = 180,
                 OptimizingMetric = MulticlassClassificationMetric.LogLoss,
-                CacheDirectory = null
+                CacheDirectoryName = null,
             };
 
             // These two trainers yield no metrics in UWP:
@@ -105,7 +105,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             {
                 MaxExperimentTimeInSeconds = 180,
                 OptimizingMetric = MulticlassClassificationMetric.LogLoss,
-                CacheDirectory = null
+                CacheDirectoryName = null
             };
 
             // There can be only one.
