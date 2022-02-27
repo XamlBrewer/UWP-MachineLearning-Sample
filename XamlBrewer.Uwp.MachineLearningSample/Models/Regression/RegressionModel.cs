@@ -41,9 +41,9 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
             return _mlContext.Data.CreateEnumerable<RegressionData>(trainingData, reuseRowObject: false);
         }
 
-        public void BuildAndTrain()
+        public void BuildAndTrain(string regressionTrainer)
         {
-            var pipeline = _mlContext.Transforms.ReplaceMissingValues("Age", "Age", MissingValueReplacingEstimator.ReplacementMode.Mean)
+            var prepipeline = _mlContext.Transforms.ReplaceMissingValues("Age", "Age", MissingValueReplacingEstimator.ReplacementMode.Mean)
                 .Append(_mlContext.Transforms.ReplaceMissingValues("Ws", "Ws", MissingValueReplacingEstimator.ReplacementMode.Mean))
                 .Append(_mlContext.Transforms.ReplaceMissingValues("Bmp", "Bmp", MissingValueReplacingEstimator.ReplacementMode.Mean))
                 .Append(_mlContext.Transforms.ReplaceMissingValues("NBA_DraftNumber", "NBA_DraftNumber", MissingValueReplacingEstimator.ReplacementMode.Mean))
@@ -53,15 +53,43 @@ namespace XamlBrewer.Uwp.MachineLearningSample.Models
                 .Append(_mlContext.Transforms.NormalizeMeanVariance("Bmp", "Bmp"))
                 .Append(_mlContext.Transforms.Concatenate(
                     "Features",
-                    new[] { "NBA_DraftNumber", "Age", "Ws", "Bmp" }))
-                // .Append(_mlContext.Regression.Trainers.FastTree()); // PlatformNotSupportedException
-                // .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(new OnlineGradientDescentTrainer.Options { })); // InvalidOperationException if you don't normalize.
-                // .Append(_mlContext.Regression.Trainers.StochasticDualCoordinateAscent());       
-                // .Append(_mlContext.Regression.Trainers.PoissonRegression());
-                .Append(_mlContext.Regression.Trainers.Gam());
-
-            Model = pipeline.Fit(trainingData);
-
+                    new[] { "NBA_DraftNumber", "Age", "Ws", "Bmp" }));
+            // .Append(_mlContext.Regression.Trainers.FastTree()); // PlatformNotSupportedException
+            // .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(new OnlineGradientDescentTrainer.Options { })); // InvalidOperationException if you don't normalize.
+            // .Append(_mlContext.Regression.Trainers.StochasticDualCoordinateAscent());       
+            // .Append(_mlContext.Regression.Trainers.PoissonRegression());
+            //.Append(_mlContext.Regression.Trainers.Gam());
+            switch (regressionTrainer)
+            {
+                //case "FastTree": // PlatformNotSupportedException
+                //    var pipelineFastTree = prepipeline.Append(_mlContext.Regression.Trainers.FastTree());
+                //    Model = pipelineFastTree.Fit(trainingData);
+                //    break;
+                //case "FastTreeTweedie": // PlatformNotSupportedException
+                //    var pipelineFastTreeTweedie = prepipeline.Append(_mlContext.Regression.Trainers.FastTreeTweedie());
+                //    Model = pipelineFastTreeTweedie.Fit(trainingData);
+                //    break;
+                case "Gam":
+                    var pipelineGam = prepipeline.Append(_mlContext.Regression.Trainers.Gam());
+                    Model = pipelineGam.Fit(trainingData);
+                    break;
+                case "LightGbm":
+                    var pipelineLightGbm = prepipeline.Append(_mlContext.Regression.Trainers.LightGbm());
+                    Model = pipelineLightGbm.Fit(trainingData);
+                    break;
+                case "Ols":
+                    var pipelineOls = prepipeline.Append(_mlContext.Regression.Trainers.Ols());
+                    Model = pipelineOls.Fit(trainingData);
+                    break;
+                case "Sdca":
+                    var pipelineSdca = prepipeline.Append(_mlContext.Regression.Trainers.Sdca());
+                    Model = pipelineSdca.Fit(trainingData);
+                    break;
+                default:
+                    var pipeline = prepipeline.Append(_mlContext.Regression.Trainers.Gam());
+                    Model = pipeline.Fit(trainingData);
+                    break;
+            }
             predictionEngine = _mlContext.Model.CreatePredictionEngine<RegressionData, RegressionPrediction>(Model);
         }
 

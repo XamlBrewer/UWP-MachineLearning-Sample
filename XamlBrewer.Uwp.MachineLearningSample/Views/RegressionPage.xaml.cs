@@ -19,6 +19,8 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             this.DataContext = new RegressionPageViewModel();
 
             Loaded += Page_Loaded;
+            RegressionTrainersCombo.ItemsSource = new[] { "Gam", "LightGbm", "Ols", "Sdca" };
+            RegressionTrainersCombo.SelectedIndex = 0;
         }
 
         private RegressionPageViewModel ViewModel => DataContext as RegressionPageViewModel;
@@ -50,7 +52,7 @@ namespace XamlBrewer.Uwp.MachineLearningSample
 
             // Create and train the model      
             TrainingBox.IsChecked = true;
-            await ViewModel.BuildAndTrain();
+            await ViewModel.BuildAndTrain(RegressionTrainersCombo.SelectedItem.ToString());
 
             // Save the model.
             await ViewModel.Save("regressionModel.zip");
@@ -172,5 +174,10 @@ namespace XamlBrewer.Uwp.MachineLearningSample
             Diagram.Model.Annotations.Add(annotation);
             Diagram.InvalidatePlot();
         }
+
+        private void RegressionTrainersCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        }
+
     }
 }

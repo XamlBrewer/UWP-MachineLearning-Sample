@@ -105,9 +105,14 @@
                           IsChecked="False"
                           Grid.Row="4"
                           Grid.Column="1" />
-                <Button x:Name="RestartButton"
-                        Click="Page_Loaded"
-                        Grid.Row="5">Restart</Button>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="5">
+                    <ComboBox x:Name="RegressionTrainersCombo"
+                          SelectionChanged="RegressionTrainersCombo_SelectionChanged"
+                          Header="Regression trainer" />
+                    <Button x:Name="RestartButton" Margin="20"
+                        Click="Page_Loaded">Restart</Button>
+                </StackPanel>
                 <controls:AnimatedVisualPlayer x:Name="BusyIndicator"
                                                Visibility="Collapsed"
                                                Height="180"
